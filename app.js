@@ -2,7 +2,6 @@
 var axdcc = require("axdcc"),
     irc = require("irc"),
     dirty = require("dirty")
-    format = require('util').format
 
 var serverdb = dirty.Dirty("server.db");
 
