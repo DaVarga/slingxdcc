@@ -3,7 +3,6 @@ var axdcc = require("axdcc"),
     irc = require("irc"),
     dirty = require("dirty")
     format = require('util').format
-    stdin = process.openStdin();
 
 var serverdb = dirty.Dirty("server.db");
 
@@ -25,7 +24,6 @@ serverdb.on("load", function() {
         ircClients[key].on("registered", function() {
             packdbs[key] = dirty.Dirty(key.toString() + ".db");
             packdbs[key].on("load", function(length){
-                console.log(key + "Packs:" + length);
                 ircClients[key].on("message#", function(nick, to, text, message){
                     logPack(nick, to, text, key);
                 });
