@@ -2,7 +2,10 @@
 var axdcc = require("axdcc"),
     irc = require("irc"),
     dirty = require("dirty")
-    serverdb = dirty.Dirty("server.db");
+    format = require('util').format
+    stdin = process.openStdin();
+
+var serverdb = dirty.Dirty("server.db");
 
 var ircClients = [];
 var packdbs = [];
@@ -15,23 +18,38 @@ serverdb.on("load", function() {
             userName: nick,
             realName: nick,
             port: val.port,
-            debug: true,
+            debug: false,
             channels: val.channels,
             stripColors: true
         });
         ircClients[key].on("registered", function() {
             packdbs[key] = dirty.Dirty(key.toString() + ".db");
-            packdbs[key].on("load", function(){
+            packdbs[key].on("load", function(length){
+                console.log(key + "Packs:" + length);
                 ircClients[key].on("message#", function(nick, to, text, message){
-                    isPack(message);
+                    logPack(nick, to, text, key);
                 });
             });
         });
+        ircClients[key].on("error", function (message){
+            console.log(message);        
+        }); 
     });
 });
 
-function isPack(message){
+
+var packRegex = /#(\d+)\s+(\d+)x\s+\[\s*([0-9><\.GMKgmk]+)\]\s+(.*)/;
+
+function logPack(nick, to, msg, srvkey){
+    if(msg.charAt(0) != '#') return;
     //TODO
-    console.log(message);
+    packinfo = msg.match(packRegex);
+    if (packinfo === null) {
+        console.log(msg);
+    }else{
+        packdbs[srvkey].set(nick+'#'+packinfo[1], {nr:packinfo[1], nick:nick, downloads:packinfo[2], filesize:packinfo[3], filename:packinfo[4], lastseen:new Date().getTime()});
+    }
+    
+    
 }
 
