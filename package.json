@@ -6,7 +6,9 @@
   },
   "dependencies": {
     "axdcc": "0.2.17",
-    "irc": "0.3.6",
-    "dirty": "0.9.7"
+    "irc": "0.3.x",
+    "dirty": "0.9.x",
+    "dirty-query": "0.1.1",
+    "underscore": "1.5.x"
   }
 }

@@ -5,6 +5,8 @@ var irc = require("irc"),
 var serverdb = dirty.Dirty("config/server.db");
 var nick = "xdccer";
 
+var stdin = process.openStdin();
+
 
 
 serverdb.on("load", function() {
@@ -25,6 +27,11 @@ serverdb.on("load", function() {
     });
 })
 
+stdin.addListener("data", function(d) {
+    if(d.toString().substring(0, 1) == "S") {
+        console.log(logger.getPackets());
+    }
+});
 
 function ircError(message){
     console.log(message);
