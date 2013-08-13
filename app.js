@@ -29,7 +29,10 @@ serverdb.on("load", function() {
 
 stdin.addListener("data", function(d) {
     if(d.toString().substring(0, 1) == "S") {
-        console.log(logger.getPackets());
+        console.log(logger.searchPackets("1080p"));
+    }
+    if(d.toString().substring(0, 1) == "N") {
+        console.log(logger.numberOfPacks());
     }
 });
 
