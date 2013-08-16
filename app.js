@@ -9,6 +9,10 @@ var stdin = process.openStdin();
 
 
 
+
+
+
+
 serverdb.on("load", function() {
     serverdb.forEach(function(key, val) {
         var ircClient = new irc.Client(val.host, nick, {
@@ -29,7 +33,10 @@ serverdb.on("load", function() {
 
 stdin.addListener("data", function(d) {
     if(d.toString().substring(0, 1) == "S") {
-        console.log(logger.searchPackets("1080p"));
+        logger.searchPacketsPaged("1080p",10, d.toString().substring(1, 2),"lastseen","desc", true,function(pages, result){
+            console.log(pages);
+            console.log(result);
+        });
     }
     if(d.toString().substring(0, 1) == "N") {
         console.log(logger.numberOfPacks());
