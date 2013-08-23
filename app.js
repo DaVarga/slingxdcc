@@ -15,6 +15,7 @@ var express = require('express'),
     routes = require('./routes'),
     api = require('./routes/api'),
     https = require('https'),
+    http = require('http'),
     path = require('path'),
     fs = require('fs');
 
