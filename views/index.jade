@@ -19,11 +19,11 @@ block body
                     a(href="downloads") Downloads
                 li
                     a(href="settings") Settings
-            form.navbar-form.navbar-right(role="search",ng-controller='SearchCtrl')
+            form.navbar-form.navbar-right(role="search",ng-controller='SearchCtrl', ng-submit="setSearch(searchString)")
                 .input-group(style="width:350px")
                     input.form-control(type="text", placeholder="Search", ng-model="searchString")
                     span.input-group-btn
-                        button.btn.btn-default(type="button",ng-click="setSearch(searchString), setPage(1)")
+                        button.btn.btn-default(type="button",ng-click="setSearch(searchString)")
                             span.glyphicon.glyphicon-search
 
     .container

@@ -24,7 +24,9 @@ function SearchCtrl($rootScope,$scope) {
     if(typeof $rootScope.searchString == "undefined")$rootScope.searchString = '';
     $scope.setSearch = function (str){
         $rootScope.searchString = str;
+        $rootScope.$broadcast('setSearch');
     }
+
 }
 
 SearchCtrl.$inject = ['$rootScope','$scope'];
@@ -74,6 +76,11 @@ function PacketListCtrl($scope, $http, $rootScope) {
         $scope.currentPage = page;
         refreshPageScope();
     };
+
+    $scope.$on('setSearch', function(){
+        $scope.currentPage = 1;
+        refreshPageScope();
+    })
 
     $scope.range = function (numPages) {
 
