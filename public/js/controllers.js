@@ -21,10 +21,19 @@ function AppCtrl($scope, $http) {
 }
 
 function SearchCtrl($rootScope,$scope) {
+    $scope.history = [];
     if(typeof $rootScope.searchString == "undefined")$rootScope.searchString = '';
-    $scope.setSearch = function (str){
-        $rootScope.searchString = str;
+    $scope.setSearch = function (){
+        if($scope.history.indexOf($scope.searchString) == -1){
+            $scope.history.push($scope.searchString);
+        }
+        $rootScope.searchString = $scope.searchString;
         $rootScope.$broadcast('setSearch');
+    }
+
+    $scope.selectHistory = function(item){
+        $scope.searchString = item
+        $scope.setSearch();
     }
 
 }
