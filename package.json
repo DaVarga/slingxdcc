@@ -1,13 +1,12 @@
 {
   "name": "slingxdcc",
   "version": "0.0.1",
-  "scripts": {
-    "start": "node app.js"
-  },
+  "private": true,
   "dependencies": {
-    "axdcc": "0.2.x",
+    "express": "~3.2.6",
+    "jade": "~0.31.2",
     "irc": "0.3.x",
     "dirty": "0.9.x",
-    "dirty-query": "0.1.1"
+    "dirty-query": "0.1.x"
   }
 }
