@@ -56,16 +56,37 @@ function ServerAddCtrl($scope, $http){
     };
 
     $scope.addServer = function (){
-        $http.post('/api/server/', {
+        if ($scope.nServConf.key.length == 0 || $scope.nServConf.host.length == 0 || parseInt($scope.nServConf.port) > 65535 || parseInt($scope.nServConf.port) < 0 || $scope.nServConf.nick.length == 0) return;
+
+        var server = {
             srvkey        : $scope.nServConf.key,
             host          : $scope.nServConf.host,
             port          : $scope.nServConf.port,
             nick          : $scope.nServConf.nick,
-            channels      : $scope.nServConf.channels.join(' '),
-            observchannels: $scope.nServConf.observchannels.join(' ')
+            channels      : $scope.nServConf.channels.length > 0 ? $scope.nServConf.channels.join(' ') : [],
+            observchannels: $scope.nServConf.observchannels.length > 0 ? $scope.nServConf.observchannels.join(' ') : []
+        }
+
+        $http.post('/api/server/', server).success(function (data){
+            $scope.server.connected = false;
+            angular.copy($scope.server,$scope.servers[server.key]);
+            $scope.joinChanStr = "";
+            $scope.getServers();
         }).success(function (data){
-                $scope.nServConf.channels = server.channels;
-                $scope.nServConf.observchannels = server.observchannels;
+                $scope.servers[$scope.nServConf.key] = {}
+                $scope.nServConf.connected = false;
+                angular.copy($scope.nServConf, $scope.servers[$scope.nServConf.key]);
+                $scope.joinChanStr = "";
+                $scope.nServConf = {
+                    key           : "",
+                    host          : "",
+                    port          : "",
+                    nick          : "",
+                    channels      : [],
+                    observchannels: []
+                };
+
+                $scope.getServers();
             })
     };
 
@@ -96,8 +117,11 @@ function ServerAddCtrl($scope, $http){
         }
     }
 
+    //TODO
     $scope.isKeyUniqe = function (){
-        return (typeof $scope.servers[$scope.nServConf.key] === "undefined");
+        if(typeof $scope.nServConf.key !== "undefined" && $scope.nServConf.key.length > 0)
+            return (typeof $scope.servers[$scope.nServConf.key] === "undefined");
+        return true;
     }
 }
 
@@ -110,18 +134,21 @@ function ServerSettingsCtrl($scope, $http){
     }
 
     $scope.editServer = function (){
-        var server = $scope.server;
-        $http.post('/api/server/', {
-            srvkey        : server.key,
-            host          : server.host,
-            port          : server.port,
-            nick          : server.nick,
-            channels      : server.channels.join(' '),
-            observchannels: server.observchannels.join(' ')
-        }).success(function (data){
-                $scope.server.channels = server.channels;
-                $scope.server.observchannels = server.observchannels;
-            })
+        if ($scope.server.host.length == 0 || parseInt($scope.server.port) > 65535 || parseInt($scope.server.port) < 0 || $scope.server.nick.length == 0) return;
+        var server = {
+            srvkey        : $scope.server.key,
+            host          : $scope.server.host,
+            port          : $scope.server.port,
+            nick          : $scope.server.nick,
+            channels      : $scope.server.channels.length > 0 ? $scope.server.channels.join(' ') : [],
+            observchannels: $scope.server.observchannels.length > 0 ? $scope.server.observchannels.join(' ') : []
+        }
+        $http.post('/api/server/', server).success(function (data){
+            $scope.server.connected = false;
+            angular.copy($scope.server,$scope.servers[server.key]);
+            $scope.joinChanStr = "";
+            $scope.getServers();
+        })
     };
 
     $scope.removeServer = function (){
