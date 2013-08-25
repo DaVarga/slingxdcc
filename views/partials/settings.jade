@@ -10,19 +10,26 @@ div(ng-controller="SettingsCtrl")
 
                         .col-md-3
                             h3 Server settings
-                            form.form-horizontal(role="{{server.key}}settings")
+                            form.form-horizontal(role="{server.key}settings")
                                 .form-group
                                     label(for="host").col-md-2.control-label Host:
                                     .col-md-10
-                                        input(type="text",id="host" ng-model="server.host").form-control
+                                        input(type="text",id="host" ng-model="server.host", required).form-control
                                 .form-group
                                     label(for="port").col-md-2.control-label Port:
                                     .col-md-10
-                                        input(type="text",id="port" ng-model="server.port").form-control
+                                        input(type="text",id="port" ng-model="server.port", required).form-control
                                 .form-group
                                     label(for="nick").col-md-2.control-label Nick:
                                     .col-md-10
-                                        input(type="text",id="nick" ng-model="server.nick").form-control
+                                        input(type="text",id="nick" ng-model="server.nick", required).form-control
+                                button.btn.btn-danger(type="delete" ng-click="removeServer()", required)
+                                    span Delete &nbsp;
+                                    span.glyphicon.glyphicon-remove
+                                button.btn.btn-default(type="submit" ng-click="editServer()", required).pull-right
+                                    span Save &nbsp;
+                                    span.glyphicon.glyphicon-ok
+
                         .col-md-4
                             h3 Channels
                             ul.list-group
@@ -46,10 +53,51 @@ div(ng-controller="SettingsCtrl")
                             h3 Errors
                             .alert.alert-success(ng-class="{hide:hasErrors()}") No errors recorded
                             .alert.alert-danger(ng-repeat="error in server.error | reverse")
-                                strong {{error.args[2]}}:&nbsp;
-                                span {{error.args[1]}}
-                                span.pull-right {{error.time}}
+                                strong {{error.message.args[2]}}:&nbsp;
+                                span {{error.message.args[1]}}
+                                span.pull-right {{error.errtime | timeago}}
 
                 tab.pull-right
                     tab-heading &nbsp;
-                        span.glyphicon.glyphicon-plus-sign
+                        span.glyphicon.glyphicon-plus
+                    .row(ng-controller="ServerAddCtrl")
+                        .col-md-6
+                            h3 Add new server
+                            form.form-horizontal(role="addServer")
+                                .form-group(ng-class="{'has-warning':!isKeyUniqe()}")
+                                    label(for="host").col-md-2.control-label Name:
+                                    .col-md-10
+                                        input(type="text",id="host" ng-model="nServConf.key", placeholder="Server name must be unique", required).form-control
+                                .form-group
+                                    label(for="host").col-md-2.control-label Host:
+                                    .col-md-10
+                                        input(type="text",id="host" ng-model="nServConf.host", placeholder="Hostname or ip adress", required).form-control
+                                .form-group
+                                    label(for="port").col-md-2.control-label Port:
+                                    .col-md-10
+                                        input(type="text",id="port" ng-model="nServConf.port", placeholder="Port", required).form-control
+                                .form-group
+                                    label(for="nick").col-md-2.control-label Nick:
+                                    .col-md-10
+                                        input(type="text",id="nick" ng-model="nServConf.nick", placeholder="Nickname", required).form-control
+                                .alert.alert-warning.pull-left(ng-class="{hide:isKeyUniqe()}") Non unique key will overwrite existing sever
+                                button.btn.btn-default(type="submit" ng-click="addServer()").pull-right
+                                    span Save &nbsp;
+                                    span.glyphicon.glyphicon-ok
+
+                        .col-md-6
+                            h3 Channels
+                            ul.list-group
+                                li(ng-repeat="channel in nServConf.channels").list-group-item
+                                    .row
+                                        span.col-xs-8 {{channel}}
+                                        span(tooltip-placement="left", tooltip="{{isObserved(channel)|observTooltip}}").col-xs-2
+                                            span(ng-class="{false:'glyphicon-eye-close text-danger', true:'glyphicon-eye-open text-success'}[isObserved(channel)]",ng-click="toggleObserv(channel)").glyphicon
+                                        span(tooltip-placement="left", tooltip="Part {{channel}}").col-xs-2
+                                            span(ng-click="partChannel(channel)").text-danger.glyphicon.glyphicon-ban-circle
+                                li.list-group-item
+                                    form(role="joinChannel", ng-submit="joinChannels()").input-group
+                                        input.form-control(placeholder="Add channel", type="text", ng-model="joinChanStr")
+                                        span.input-group-btn
+                                            button.btn.btn-default(type="submit", tooltip-html-unsafe="Add multiple channels<br>separated by space", tooltip-trigger="mouseenter", tooltip-placement="right")
+                                                span.glyphicon.glyphicon-plus

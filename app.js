@@ -11,22 +11,15 @@
  * Module dependencies
  */
 
-var express = require('express'),
-    routes = require('./routes'),
-    api = require('./routes/api'),
-    https = require('https'),
-    http = require('http'),
-    path = require('path'),
-    fs = require('fs');
+var express = require('express'), routes = require('./routes'), api = require('./routes/api'), https = require('https'), http = require('http'), path = require('path'), fs = require('fs');
 
 var app = module.exports = express();
-
 
 /**
  * Configuration
  */
 
-// all environments
+    // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
@@ -37,15 +30,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(app.router);
 
 // development only
-if (app.get('env') === 'development') {
-  app.use(express.errorHandler());
+if (app.get('env') === 'development'){
+    app.use(express.errorHandler());
 }
 
 // production only
-if (app.get('env') === 'production') {
-  // TODO
-};
-
+if (app.get('env') === 'production'){
+    // TODO
+}
+;
 
 /**
  * Routes
@@ -70,7 +63,6 @@ app.get('/api/packet/pagelimit/', api.getPageLimit);
 
 app.get('/api/server/', api.getServer);
 
-
 app.put('/api/packet/sorting/', api.setSorting);
 app.put('/api/packet/filter/', api.setFilter);
 app.put('/api/packet/pagelimit/', api.setPageLimit);
@@ -78,11 +70,9 @@ app.put('/api/packet/pagelimit/', api.setPageLimit);
 app.put('/api/channel/', api.channels);
 
 app.post('/api/server/', api.addServer);
-app.delete('/api/server/', api.removeServer);
-
+app.delete('/api/server/:key', api.removeServer);
 
 app.get('*', routes.index);
-
 
 /**
  * Start Collector
@@ -93,18 +83,18 @@ var logger = require("./lib/xdcclogger");
 /**
  * Start Server
  */
-fs.readFile('./ssl/server.key',function (err,data){
+fs.readFile('./ssl/server.key', function (err, data){
     var errorkey = err;
     var key = data;
-    fs.readFile('./ssl/server.crt',function (err,data){
+    fs.readFile('./ssl/server.crt', function (err, data){
         var errorcrt = err;
         var crt = data;
-        if(errorcrt || errorkey){
-            http.createServer(app).listen(app.get('port'), function () {
+        if (errorcrt || errorkey){
+            http.createServer(app).listen(app.get('port'), function (){
                 console.log('No key or cert found, \n!!!Fallback!!! Http server listening on port ' + app.get('port'));
             });
         }else{
-            https.createServer({key:key,cert:crt},app).listen(app.get('port'), function () {
+            https.createServer({key: key, cert: crt}, app).listen(app.get('port'), function (){
                 console.log('Https server listening on port ' + app.get('port'));
             });
         }

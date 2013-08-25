@@ -11,7 +11,6 @@
  * Serve JSON to our AngularJS client
  */
 
-
 var logger = require("../lib/xdcclogger");
 var sortBy = "lastseen";
 var sortOrder = "desc";
@@ -19,91 +18,90 @@ var filterDiscon = true;
 var pageItemLimit = 20;
 // GET
 
-exports.packet = function (req, res) {
+exports.packet = function (req, res){
     var id = req.params.id;
     res.json(logger.getPacket(id));
 };
 
-
-exports.packetSearch = function (req, res) {
+exports.packetSearch = function (req, res){
     var string = req.params.string;
     var packets = logger.searchPackets(string, sortBy, sortOrder, filterDiscon);
     res.json(packets);
 };
 
-exports.packetSearchPaged = function (req, res) {
+exports.packetSearchPaged = function (req, res){
     var string = req.params.string;
     var page = parseInt(req.params.page);
-    logger.searchPacketsPaged(string, pageItemLimit, page, sortBy, sortOrder, filterDiscon, function(pages, result){
+    logger.searchPacketsPaged(string, pageItemLimit, page, sortBy, sortOrder, filterDiscon, function (pages, result){
         res.json({
             numPages: pages,
-            packets: result
+            packets : result
         });
     });
 };
 
-exports.packetList = function (req, res) {
+exports.packetList = function (req, res){
     var packets = logger.searchPackets(null, sortBy, sortOrder, filterDiscon);
     res.json(packets);
 };
 
-exports.packetListPaged = function (req, res) {
+exports.packetListPaged = function (req, res){
     var page = parseInt(req.params.page);
-    logger.searchPacketsPaged(null, pageItemLimit, page, sortBy, sortOrder, filterDiscon, function(pages, result){
+    logger.searchPacketsPaged(null, pageItemLimit, page, sortBy, sortOrder, filterDiscon, function (pages, result){
         res.json({
             numPages: pages,
-            packets: result
+            packets : result
         });
     });
 };
 
-exports.packetSearch = function (req, res) {
+exports.packetSearch = function (req, res){
     var string = req.params.string;
     var packets = logger.searchPackets(string, sortBy, sortOrder, filterDiscon);
     res.json(packets);
 };
 
-exports.getSorting = function (req, res) {
+exports.getSorting = function (req, res){
     res.json({
-        sortBy: sortBy,
+        sortBy   : sortBy,
         sortOrder: sortOrder
     });
 };
 
-exports.getFilter = function (req, res) {
+exports.getFilter = function (req, res){
     res.json(filterDiscon);
 };
 
-exports.getPageLimit = function (req, res) {
+exports.getPageLimit = function (req, res){
     res.json(pageItemLimit);
 };
 
-exports.getServer = function (req, res) {
+exports.getServer = function (req, res){
     res.json(logger.getIrcServers());
 };
 
-exports.getNumPackets = function (req, res) {
+exports.getNumPackets = function (req, res){
     var type = req.body.type;
     var returnval = {
-        type:"all",
-        number:0
+        type  : "all",
+        number: 0
     };
-    switch(type){
+    switch (type){
         case 'on':
             returnval = {
-                type:type,
-                number:logger.connectedPackets()
+                type  : type,
+                number: logger.connectedPackets()
             }
             break;
         case 'off':
             returnval = {
-                type:type,
-                number:logger.numberOfPackets() - logger.connectedPackets()
+                type  : type,
+                number: logger.numberOfPackets() - logger.connectedPackets()
             }
             break;
         default:
             returnval = {
-                number:logger.numberOfPackets()
+                number: logger.numberOfPackets()
             }
             break;
     }
@@ -112,63 +110,65 @@ exports.getNumPackets = function (req, res) {
 
 // PUT
 
-exports.setSorting = function (req, res) {
+exports.setSorting = function (req, res){
     sortBy = req.body.sortBy;
     sortOrder = req.body.sortOrder;
     res.json({
-        sortBy: sortBy,
+        sortBy   : sortBy,
         sortOrder: sortOrder
-    });;
+    });
+    ;
 };
 
-exports.setFilter = function (req, res) {
+exports.setFilter = function (req, res){
     filterDiscon = req.body.filterDiscon;
     res.json(filterDiscon);
 };
 
-exports.setPageLimit = function (req, res) {
+exports.setPageLimit = function (req, res){
     pageItemLimit = parseInt(req.body.limit);
     res.json(pageItemLimit);
 };
 
-exports.channels = function (req, res) {
+exports.channels = function (req, res){
     type = req.body.type
     srvkey = req.body.srvkey;
     channels = req.body.channels.toString().split(" ");
 
-    switch(type){
+    switch (type){
         case 'join':
-            logger.joinChannels(srvkey,channels);
+            logger.joinChannels(srvkey, channels);
             break;
         case 'part':
-            logger.partChannels(srvkey,channels);
+            logger.partChannels(srvkey, channels);
             break;
         case 'observ':
-            logger.observChannels(srvkey,channels);
+            logger.observChannels(srvkey, channels);
             break;
         case 'unobserv':
-            logger.unobservChannels(srvkey,channels);
+            logger.unobservChannels(srvkey, channels);
             break;
     }
-    res.json({type:type, srvkey:srvkey, channels:channels});
+    res.json({type: type, srvkey: srvkey, channels: channels});
 };
 
-
-
-
-
 // POST
-exports.addServer = function (req, res) {
-    logger.addServer(req.body.srvkey,{host:req.body.host, port:parseInt(req.body.port), nick:req.body.nick});
+exports.addServer = function (req, res){
+    logger.addServer(req.body.srvkey, {
+        host          : req.body.host,
+        port          : parseInt(req.body.port),
+        nick          : req.body.nick,
+        channels      : req.body.channels.toString().split(" "),
+        observchannels: req.body.observchannels.toString().split(" ")
+    });
     res.json(req.body);
 };
 
-
 // DELETE
-exports.removeServer = function (req, res) {
-    var srvkey = req.params.srvkey;
+exports.removeServer = function (req, res){
+    var srvkey = req.params.key;
     var servers = logger.getIrcServers();
-    if(servers[srvkey] !== "undefined"){
+    if (servers[srvkey] !== "undefined"){
         logger.removeServer(srvkey);
         res.json(true);
     }else{
