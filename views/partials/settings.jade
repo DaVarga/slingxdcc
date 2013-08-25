@@ -1,0 +1,55 @@
+div(ng-controller="SettingsCtrl")
+    .row
+        .col-lg-12
+            h1 Servers
+            tabset
+                tab(ng-repeat="serv in servers")
+                    tab-heading
+                        span(ng-class="{true:'label-success', false:'label-danger'}[serv.connected]").label {{serv.key}}
+                    .row(ng-controller="ServerSettingsCtrl", ng-init="init(serv)")
+
+                        .col-md-3
+                            h3 Server settings
+                            form.form-horizontal(role="{{server.key}}settings")
+                                .form-group
+                                    label(for="host").col-md-2.control-label Host:
+                                    .col-md-10
+                                        input(type="text",id="host" ng-model="server.host").form-control
+                                .form-group
+                                    label(for="port").col-md-2.control-label Port:
+                                    .col-md-10
+                                        input(type="text",id="port" ng-model="server.port").form-control
+                                .form-group
+                                    label(for="nick").col-md-2.control-label Nick:
+                                    .col-md-10
+                                        input(type="text",id="nick" ng-model="server.nick").form-control
+                        .col-md-4
+                            h3 Channels
+                            ul.list-group
+                                li(ng-repeat="channel in server.channels").list-group-item
+                                    .row
+                                        span.col-xs-8 {{channel}}
+                                        span(tooltip-placement="left", tooltip="{{isObserved(channel)|observTooltip}}").col-xs-2
+                                            span(ng-class="{false:'glyphicon-eye-close text-danger', true:'glyphicon-eye-open text-success'}[isObserved(channel)]",ng-click="toggleObserv(channel)").glyphicon
+                                        span(tooltip-placement="left", tooltip="Part {{channel}}").col-xs-2
+                                            span(ng-click="partChannel(channel)").text-danger.glyphicon.glyphicon-ban-circle
+                                li.list-group-item
+                                    form(role="joinChannel", ng-submit="joinChannels()").input-group
+                                        input.form-control(placeholder="Add channel", type="text", ng-model="joinChanStr")
+                                        span.input-group-btn
+                                            button.btn.btn-default(type="submit", tooltip-html-unsafe="Add multiple channels<br>separated by space", tooltip-trigger="mouseenter", tooltip-placement="right")
+                                                span.glyphicon.glyphicon-plus
+
+
+
+                        .col-md-5
+                            h3 Errors
+                            .alert.alert-success(ng-class="{hide:hasErrors()}") No errors recorded
+                            .alert.alert-danger(ng-repeat="error in server.error | reverse")
+                                strong {{error.args[2]}}:&nbsp;
+                                span {{error.args[1]}}
+                                span.pull-right {{error.time}}
+
+                tab.pull-right
+                    tab-heading &nbsp;
+                        span.glyphicon.glyphicon-plus-sign

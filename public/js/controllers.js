@@ -22,11 +22,17 @@ function AppCtrl($scope, $http) {
 
 function SearchCtrl($rootScope,$scope) {
     $scope.history = [];
+    $scope.selected = undefined;
     if(typeof $rootScope.searchString == "undefined")$rootScope.searchString = '';
+
     $scope.setSearch = function (){
-        if($scope.history.indexOf($scope.searchString) == -1){
-            $scope.history.push($scope.searchString);
+        var searchindex = $scope.history.indexOf($scope.searchString);
+
+        if(searchindex != -1){
+            $scope.history.splice(searchindex,1);
         }
+
+        $scope.history.push($scope.searchString);
         $rootScope.searchString = $scope.searchString;
         $rootScope.$broadcast('setSearch');
     }
@@ -39,6 +45,76 @@ function SearchCtrl($rootScope,$scope) {
 }
 
 SearchCtrl.$inject = ['$rootScope','$scope'];
+
+function ServerSettingsCtrl($rootScope,$scope,$http){
+    $scope.joinChanStr = "";
+    $scope.init = function (server){
+        $scope.server = server;
+    }
+
+    $scope.joinChannels = function(){
+        if($scope.joinChanStr.length > 0){
+            $http.put('/api/channel/',{srvkey:$scope.server.key, channels:$scope.joinChanStr, type:"join"}).success(function(data){
+                $scope.server.channels = $scope.server.channels.concat($scope.joinChanStr.split(" "));
+                $scope.joinChanStr = "";
+            });
+        }
+    }
+
+    $scope.partChannel = function(channel){
+        $http.put('/api/channel/',{srvkey:$scope.server.key, channels:channel, type:"part"}).success(function(data){
+            $scope.server.channels.splice($scope.server.channels.indexOf(channel),1);
+        });
+    }
+
+    $scope.toggleObserv = function(channel){
+        if($scope.isObserved(srvkey,channel)){
+            $http.put('/api/channel/',{srvkey:$scope.server.key, channels:channel, type:"unobserv"}).success(function(data){
+                $scope.server.observchannels.splice($scope.server.observchannels.indexOf(channel),1);
+            });
+        }else{
+            $http.put('/api/channel/',{srvkey:$scope.server.key, channels:channel, type:"observ"}).success(function(data){
+                $scope.server.observchannels.push(channel);
+            });
+        }
+    }
+
+    $scope.hasErrors = function(){
+        if($scope.server.error.length > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    $scope.isObserved = function(channel){
+        if($scope.server.observchannels.indexOf(channel) != -1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+}
+
+
+ServerSettingsCtrl.$inject = ['$rootScope','$scope','$http'];
+
+function SettingsCtrl($rootScope,$scope,$http) {
+    getServers();
+
+
+    function getServers(){
+        $http.get('/api/server/').
+            success(function(data, status, headers, config) {
+                for(var i in data){
+                    data[i].key = i;
+                }
+                $scope.servers = data;
+            })
+    }
+}
+
+SettingsCtrl.$inject = ['$rootScope','$scope','$http'];
 
 function PacketListCtrl($scope, $http, $rootScope) {
 
@@ -67,22 +143,8 @@ function PacketListCtrl($scope, $http, $rootScope) {
         });
     };
 
-    $scope.prevPage = function () {
-        if ($scope.currentPage > 1) {
-            $scope.currentPage--;
-            refreshPageScope();
-        }
-    };
-
-    $scope.nextPage = function () {
-        if ($scope.currentPage < $scope.numPages) {
-            $scope.currentPage++;
-            refreshPageScope();
-        }
-    };
-
-    $rootScope.setPage = function (page) {
-        $scope.currentPage = page;
+    $scope.setPage = function (pageNo) {
+        $scope.currentPage = pageNo;
         refreshPageScope();
     };
 

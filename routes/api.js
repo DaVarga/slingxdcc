@@ -132,10 +132,11 @@ exports.setPageLimit = function (req, res) {
 };
 
 exports.channels = function (req, res) {
+    type = req.body.type
     srvkey = req.body.srvkey;
-    channels = req.body.channels.split(" ");
+    channels = req.body.channels.toString().split(" ");
 
-    switch(req.headers['type']){
+    switch(type){
         case 'join':
             logger.joinChannels(srvkey,channels);
             break;
@@ -149,7 +150,7 @@ exports.channels = function (req, res) {
             logger.unobservChannels(srvkey,channels);
             break;
     }
-    res.json({srvkey:srvkey, channels:channels});
+    res.json({type:type, srvkey:srvkey, channels:channels});
 };
 
 
