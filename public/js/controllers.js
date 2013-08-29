@@ -63,8 +63,8 @@ function ServerAddCtrl($scope, $http){
             host          : $scope.nServConf.host,
             port          : $scope.nServConf.port,
             nick          : $scope.nServConf.nick,
-            channels      : $scope.nServConf.channels.length > 0 ? $scope.nServConf.channels.join(' ') : [],
-            observchannels: $scope.nServConf.observchannels.length > 0 ? $scope.nServConf.observchannels.join(' ') : []
+            channels      : $scope.nServConf.channels.length > 0 ? $scope.nServConf.channels.join(' ') : "",
+            observchannels: $scope.nServConf.observchannels.length > 0 ? $scope.nServConf.observchannels.join(' ') : ""
         }
 
         $http.post('/api/server/', server).success(function (data){
@@ -140,8 +140,8 @@ function ServerSettingsCtrl($scope, $http){
             host          : $scope.server.host,
             port          : $scope.server.port,
             nick          : $scope.server.nick,
-            channels      : $scope.server.channels.length > 0 ? $scope.server.channels.join(' ') : [],
-            observchannels: $scope.server.observchannels.length > 0 ? $scope.server.observchannels.join(' ') : []
+            channels      : $scope.server.channels.length > 0 ? $scope.server.channels.join(' ') : "",
+            observchannels: $scope.server.observchannels.length > 0 ? $scope.server.observchannels.join(' ') : ""
         }
         $http.post('/api/server/', server).success(function (data){
             $scope.server.connected = false;

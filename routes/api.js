@@ -133,21 +133,22 @@ exports.setPageLimit = function (req, res){
 exports.channels = function (req, res){
     type = req.body.type
     srvkey = req.body.srvkey;
-    channels = req.body.channels.toString().split(" ");
-
-    switch (type){
-        case 'join':
-            logger.joinChannels(srvkey, channels);
-            break;
-        case 'part':
-            logger.partChannels(srvkey, channels);
-            break;
-        case 'observ':
-            logger.observChannels(srvkey, channels);
-            break;
-        case 'unobserv':
-            logger.unobservChannels(srvkey, channels);
-            break;
+    channels = req.body.channels.length > 0 ? req.body.channels.toString().split(" ") : [];
+    if(channels.length > 0){
+        switch (type){
+            case 'join':
+                logger.joinChannels(srvkey, channels);
+                break;
+            case 'part':
+                logger.partChannels(srvkey, channels);
+                break;
+            case 'observ':
+                logger.observChannels(srvkey, channels);
+                break;
+            case 'unobserv':
+                logger.unobservChannels(srvkey, channels);
+                break;
+        }
     }
     res.json({type: type, srvkey: srvkey, channels: channels});
 };
@@ -158,8 +159,8 @@ exports.addServer = function (req, res){
         host          : req.body.host,
         port          : parseInt(req.body.port),
         nick          : req.body.nick,
-        channels      : req.body.channels.toString().split(" "),
-        observchannels: req.body.observchannels.toString().split(" ")
+        channels      : req.body.channels.length > 0 ? req.body.channels.toString().split(" ") : [],
+        observchannels: req.body.observchannels.length > 0 ? req.body.observchannels.toString().split(" ") : []
     });
     res.json(req.body);
 };
