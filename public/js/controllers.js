@@ -11,38 +11,16 @@
 /* Controllers */
 
 function AppCtrl($scope, $http){
+    $scope.search = {
+        searchTabs : []
+    };
+
     $http({method: 'GET', url: '/api/packet/'}).success(function (data, status, headers, config){
         $scope.totalpackets = data.number;
     }).error(function (data, status, headers, config){
             $scope.totalpackets = 'Error!'
         });
 }
-
-function SearchCtrl($rootScope, $scope){
-    $scope.history = [];
-    $scope.selected = undefined;
-    if (typeof $rootScope.searchString == "undefined")$rootScope.searchString = '';
-
-    $scope.setSearch = function (){
-        var searchindex = $scope.history.indexOf($scope.searchString);
-
-        if (searchindex != -1){
-            $scope.history.splice(searchindex, 1);
-        }
-
-        $scope.history.push($scope.searchString);
-        $rootScope.searchString = $scope.searchString;
-        $rootScope.$broadcast('setSearch');
-    }
-
-    $scope.selectHistory = function (item){
-        $scope.searchString = item
-        $scope.setSearch();
-    }
-
-}
-
-SearchCtrl.$inject = ['$rootScope', '$scope'];
 
 function ServerAddCtrl($scope, $http){
     $scope.joinChanStr = "";
@@ -219,12 +197,82 @@ function SettingsCtrl($scope, $http){
 
 SettingsCtrl.$inject = ['$scope', '$http'];
 
-function PacketListCtrl($scope, $http, $rootScope){
+function SearchBarCtrl($scope){
+    $scope.history = [];
+    $scope.search.searchTabs = [];
 
-    $scope.currentPage = 1;
-    $scope.loadDone = 0.5;
-    if (typeof $rootScope.searchString == "undefined")$rootScope.searchString = '';
-    refreshPageScope();
+    $scope.setSearch = function (){
+        if ($scope.history.indexOf($scope.searchString.toLowerCase()) != -1){
+            $scope.history.splice($scope.history.indexOf($scope.searchString.toLowerCase()), 1);
+        }
+
+        $scope.history.push($scope.searchString.toLowerCase());
+        var add = true;
+        angular.forEach($scope.search.searchTabs, function(val,key){
+            if(val.string == $scope.searchString.toLowerCase()){
+                add = false;
+            }
+        });
+        if($scope.searchString.length == 0) add = false;
+        if(add){
+            $scope.search.searchTabs.push({
+                string: $scope.searchString.toLowerCase(),
+                active: true
+            });
+        }
+    }
+
+    $scope.selectHistory = function (item){
+        $scope.searchString = item
+        $scope.setSearch();
+    }
+
+
+}
+
+SearchBarCtrl.$inject = ['$scope'];
+
+function PacketListCtrl($scope, $http){
+    var loadDone = false;
+
+    $scope.init = function (search){
+        $scope.cursearch = search;
+        $scope.setPage(1);
+        $scope.refreshSortScope();
+    }
+
+    $scope.setPage = function (pageNo){
+        $scope.currentPage = pageNo;
+        refreshPageScope();
+    };
+
+    $scope.getOpacity = function(){
+        if(loadDone){
+            return 1;
+        }else{
+            return 0.5;
+        }
+    }
+    $scope.getCurrentPage = function(){
+        return $scope.currentPage;
+    }
+
+    $scope.refreshSortScope = function(){
+        $http({method: 'GET', url: '/api/packet/sorting/'}).success(function (data, status, headers, config){
+            $scope.sorting = data;
+
+            if(typeof $scope.sorted === "undefined"){
+                $scope.sorted = function (col){
+                    if ($scope.sorting.sortBy == col){
+                        return $scope.sorting.sortOrder;
+                    }else{
+                        return 'none';
+                    }
+                };
+            }
+        });
+    }
+
 
     $scope.setSorting = function (by){
         var value = {
@@ -241,58 +289,24 @@ function PacketListCtrl($scope, $http, $rootScope){
         }
         $http.put('/api/packet/sorting/', value).success(function (){
             $scope.sorting = value;
-            $scope.currentPage = 1;
-            refreshPageScope();
+            $scope.setPage(1);
         });
     };
 
-    $scope.setPage = function (pageNo){
-        $scope.currentPage = pageNo;
-        refreshPageScope();
-    };
-
-    $scope.$on('setSearch', function (){
-        $scope.currentPage = 1;
-        refreshPageScope();
-    })
-
     function refreshPageScope(){
-        $scope.loadDone = 0.5;
+        loadDone = false;
         var url;
-        if ($scope.searchString.length > 0){
-            url = '/api/packet/search/' + $scope.searchString + '/' + $scope.currentPage + '/';
+        if ($scope.cursearch.string.length > 0){
+            url = '/api/packet/search/' + $scope.cursearch.string + '/' + $scope.currentPage + '/';
         }else{
             url = '/api/packet/list/' + $scope.currentPage + '/'
         }
         $http({method: 'GET', url: url}).success(function (data, status, headers, config){
             $scope.numPages = data.numPages;
             $scope.packets = data.packets;
-            $scope.loadDone = 1;
-            refreshSortScope()
-        }).error(function (data, status, headers, config){
-                $scope.name = 'Error!'
-                console.log("error!!!");
-            });
-    }
-
-    function refreshSortScope(){
-        $http({method: 'GET', url: '/api/packet/sorting/'}).success(function (data, status, headers, config){
-            $scope.sorting = data;
-            $scope.sorted = function (col){
-                if ($scope.sorting.sortBy == col){
-                    return $scope.sorting.sortOrder;
-                }else{
-                    return 'none';
-                }
-            }
-        }).error(function (data, status, headers, config){
-                $scope.name = 'Error!'
-                console.log("error!!!");
-            });
+            loadDone = true;
+        });
     }
 }
-PacketListCtrl.$inject = ['$scope', '$http', '$rootScope'];
 
-function MyCtrl2(){
-}
-MyCtrl2.$inject = [];
+PacketListCtrl.$inject = ['$scope', '$http'];
