@@ -11,9 +11,6 @@
 /* Controllers */
 
 function AppCtrl($scope, $http){
-    $scope.search = {
-        searchTabs : []
-    };
 
     $http({method: 'GET', url: '/api/packet/'}).success(function (data, status, headers, config){
         $scope.totalpackets = data.number;
@@ -197,9 +194,8 @@ function SettingsCtrl($scope, $http){
 
 SettingsCtrl.$inject = ['$scope', '$http'];
 
-function SearchBarCtrl($scope){
+function SearchBarCtrl($scope, $rootScope){
     $scope.history = [];
-    $scope.search.searchTabs = [];
 
     $scope.setSearch = function (){
         if ($scope.history.indexOf($scope.searchString.toLowerCase()) != -1){
@@ -207,44 +203,36 @@ function SearchBarCtrl($scope){
         }
 
         $scope.history.push($scope.searchString.toLowerCase());
-        var add = true;
-        angular.forEach($scope.search.searchTabs, function(val,key){
-            if(val.string == $scope.searchString.toLowerCase()){
-                add = false;
-            }
-        });
-        if($scope.searchString.length == 0) add = false;
-        if(add){
-            $scope.search.searchTabs.push({
-                string: $scope.searchString.toLowerCase(),
-                active: true
-            });
-        }
+        $rootScope.searchString = $scope.searchString;
+        $scope.$emit("setSearch");
     }
 
     $scope.selectHistory = function (item){
         $scope.searchString = item
-        $scope.setSearch();
+        $rootScope.searchString = $scope.searchString;
+        $rootScope.$emit("setSearch");
     }
 
 
 }
 
-SearchBarCtrl.$inject = ['$scope'];
+SearchBarCtrl.$inject = ['$scope', '$rootScope'];
 
-function PacketListCtrl($scope, $http){
+function PacketListCtrl($scope, $rootScope, $http){
     var loadDone = false;
+    $scope.searchString = "";
 
-    $scope.init = function (search){
-        $scope.cursearch = search;
+    $rootScope.$on("setSearch",function(){
+        $scope.searchString = $rootScope.searchString;
         $scope.setPage(1);
-        $scope.refreshSortScope();
-    }
+    });
 
     $scope.setPage = function (pageNo){
         $scope.currentPage = pageNo;
         refreshPageScope();
     };
+
+    $scope.setPage(1);
 
     $scope.getOpacity = function(){
         if(loadDone){
@@ -296,8 +284,8 @@ function PacketListCtrl($scope, $http){
     function refreshPageScope(){
         loadDone = false;
         var url;
-        if ($scope.cursearch.string.length > 0){
-            url = '/api/packet/search/' + $scope.cursearch.string + '/' + $scope.currentPage + '/';
+        if ($scope.searchString.length > 0){
+            url = '/api/packet/search/' + $scope.searchString + '/' + $scope.currentPage + '/';
         }else{
             url = '/api/packet/list/' + $scope.currentPage + '/'
         }
@@ -309,4 +297,4 @@ function PacketListCtrl($scope, $http){
     }
 }
 
-PacketListCtrl.$inject = ['$scope', '$http'];
+PacketListCtrl.$inject = ['$scope', '$rootScope', '$http'];
