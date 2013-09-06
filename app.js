@@ -8,12 +8,67 @@
  */
 
 /**
+ * Start Collector
+ */
+
+var logger = require("./lib/xdcclogger");
+
+/**
  * Module dependencies
  */
 
-var express = require('express'), routes = require('./routes'), api = require('./routes/api'), https = require('https'), http = require('http'), path = require('path'), fs = require('fs');
+var express = require('express'),
+    routes = require('./routes'),
+    api = require('./routes/api'),
+    https = require('https'),
+    http = require('http'),
+    path = require('path'),
+    fs = require('fs'),
+    io = require('socket.io');
 
 var app = module.exports = express();
+
+
+/**
+ * Create server
+ */
+var server;
+
+fs.readFile('./ssl/server.key', function (err, data){
+    var errorkey = err;
+    var key = data;
+    fs.readFile('./ssl/server.crt', function (err, data){
+        var errorcrt = err;
+        var crt = data;
+        if (errorcrt || errorkey){
+            server = http.createServer(app);
+            console.log('No key or cert found, \n!!!Fallback!!! Http');
+            // Hook Socket.io into Express
+            io.listen(server);
+
+            /**
+             * Start Server
+             */
+
+            server.listen(app.get('port'), function (){
+                console.log('Server listening on port ' + app.get('port'));
+            });
+        }else{
+            server = https.createServer({key: key, cert: crt}, app);
+            // Hook Socket.io into Express
+            io.listen(server);
+
+            /**
+             * Start Server
+             */
+
+            server.listen(app.get('port'), function (){
+                console.log('Server listening on port ' + app.get('port'));
+            });
+        }
+    });
+});
+
 
 /**
  * Configuration
@@ -73,33 +128,6 @@ app.post('/api/server/', api.addServer);
 app.delete('/api/server/:key', api.removeServer);
 
 app.get('*', routes.index);
-
-/**
- * Start Collector
- */
-
-var logger = require("./lib/xdcclogger");
-
-/**
- * Start Server
- */
-fs.readFile('./ssl/server.key', function (err, data){
-    var errorkey = err;
-    var key = data;
-    fs.readFile('./ssl/server.crt', function (err, data){
-        var errorcrt = err;
-        var crt = data;
-        if (errorcrt || errorkey){
-            http.createServer(app).listen(app.get('port'), function (){
-                console.log('No key or cert found, \n!!!Fallback!!! Http server listening on port ' + app.get('port'));
-            });
-        }else{
-            https.createServer({key: key, cert: crt}, app).listen(app.get('port'), function (){
-                console.log('Https server listening on port ' + app.get('port'));
-            });
-        }
-    });
-});
 
 
 
