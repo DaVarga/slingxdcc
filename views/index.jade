@@ -1,7 +1,7 @@
 extends layout
 
 block body
-    .navbar.navbar-inverse.navbar-static-top(role="navigation")
+    .navbar.navbar-inverse.navbar-static-top(role="navigation", ng-controller='SearchBarCtrl')
         .navbar-header
             button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-ex1-collapse")
                 span.sr-only Toggle navigation
@@ -19,15 +19,15 @@ block body
                     a(href="downloads") Downloads
                 li
                     a(href="settings") Settings
-            form.navbar-form.navbar-right(role="search",ng-controller='SearchBarCtrl', ng-submit="setSearch()", style="width:350px")
-                input.form-control(type="text", placeholder="Search", ng-model="searchString", typeahead="item for item in history | limitTo:8 | filter:$viewValue")
 
+            form.navbar-form.navbar-right(role="search", ng-submit="setSearch()", style="width:350px")
+                input.form-control(type="text", placeholder="Search", ng-model="searchString", typeahead="item for item in history | limitTo:8 | filter:$viewValue")
+            p.navbar-text.pull-right Packets # {{packetCount}}
 
     .container
-        div
-            div(ng-view)
+        div(ng-view)
 
-
+    script(src='/socket.io/socket.io.js')
     script(src='js/lib/angular/angular.js')
     script(src='js/app.js')
     script(src='js/services.js')

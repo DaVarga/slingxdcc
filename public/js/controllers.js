@@ -102,10 +102,16 @@ function ServerAddCtrl($scope, $http){
 
 ServerAddCtrl.$inject = ['$scope', '$http'];
 
-function ServerSettingsCtrl($scope, $http){
+function ServerSettingsCtrl($scope, $http, socket){
     $scope.joinChanStr = "";
     $scope.init = function (server){
         $scope.server = server;
+        socket.on('send:irc_error:'+$scope.server.key, function(data){
+            $scope.server.error = data.error;
+        })
+        socket.on('send:irc_connected:'+$scope.server.key, function(data){
+            $scope.server.connected = data.connected;
+        });
     }
 
     $scope.editServer = function (){
@@ -174,9 +180,10 @@ function ServerSettingsCtrl($scope, $http){
             return false;
         }
     }
+
 }
 
-ServerSettingsCtrl.$inject = ['$scope', '$http'];
+ServerSettingsCtrl.$inject = ['$scope', '$http', 'socket'];
 
 function SettingsCtrl($scope, $http){
     $scope.getServers = function (){
@@ -194,8 +201,9 @@ function SettingsCtrl($scope, $http){
 
 SettingsCtrl.$inject = ['$scope', '$http'];
 
-function SearchBarCtrl($scope, $rootScope){
+function SearchBarCtrl($scope, $rootScope, socket){
     $scope.history = [];
+    $scope.packetCount = 0;
 
     $scope.setSearch = function (){
         if ($scope.history.indexOf($scope.searchString.toLowerCase()) != -1){
@@ -213,14 +221,18 @@ function SearchBarCtrl($scope, $rootScope){
         $rootScope.$emit("setSearch");
     }
 
+    socket.on('send:packetCount', function(data){
+        $scope.packetCount = data.count;
+    });
+
 
 }
 
-SearchBarCtrl.$inject = ['$scope', '$rootScope'];
+SearchBarCtrl.$inject = ['$scope', '$rootScope', 'socket'];
 
 function PacketListCtrl($scope, $rootScope, $http){
     var loadDone = false;
-    $scope.searchString = "";
+    $scope.searchString = $rootScope.searchString ? $rootScope.searchString : "";
 
     $rootScope.$on("setSearch",function(){
         $scope.searchString = $rootScope.searchString;

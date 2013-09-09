@@ -44,7 +44,7 @@ div(ng-controller="SettingsCtrl")
                                     form(role="joinChannel", ng-submit="joinChannels()").input-group
                                         input.form-control(placeholder="Add channel", type="text", ng-model="joinChanStr")
                                         span.input-group-btn
-                                            button.btn.btn-default(type="submit", tooltip-html-unsafe="Add multiple channels<br>separated by space", tooltip-trigger="mouseenter", tooltip-placement="right")
+                                            button.btn.btn-default(type="submit", tooltip-html-unsafe="Add multiple channels<br>separated by space", tooltip-trigger="mouseenter", tooltip-placement="left")
                                                 span.glyphicon.glyphicon-plus
 
 
@@ -53,9 +53,12 @@ div(ng-controller="SettingsCtrl")
                             h3 Errors
                             .alert.alert-success(ng-class="{hide:hasErrors()}") No errors recorded
                             .alert.alert-danger(ng-repeat="error in server.error | reverse")
-                                strong {{error.message.args[2]}}:&nbsp;
-                                span {{error.message.args[1]}}
-                                span.pull-right {{error.errtime | timeago}}
+                                .row
+                                    .col-xs-9
+                                        strong {{error.message.args[2]}}:&nbsp;
+                                        span {{error.message.args[1]}}
+                                    .col-xs-3
+                                        span.pull-right {{error.errtime | timeago}}
 
                 tab.pull-right
                     tab-heading &nbsp;
@@ -99,5 +102,5 @@ div(ng-controller="SettingsCtrl")
                                     form(role="joinChannel", ng-submit="joinChannels()").input-group
                                         input.form-control(placeholder="Add channel", type="text", ng-model="joinChanStr")
                                         span.input-group-btn
-                                            button.btn.btn-default(type="submit", tooltip-html-unsafe="Add multiple channels<br>separated by space", tooltip-trigger="mouseenter", tooltip-placement="right")
+                                            button.btn.btn-default(type="submit", tooltip-html-unsafe="Add multiple channels<br>separated by space", tooltip-trigger="mouseenter", tooltip-placement="left")
                                                 span.glyphicon.glyphicon-plus

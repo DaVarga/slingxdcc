@@ -90,13 +90,13 @@ exports.getNumPackets = function (req, res){
         case 'on':
             returnval = {
                 type  : type,
-                number: logger.connectedPackets()
+                number: logger.numberOfConnPackets()
             }
             break;
         case 'off':
             returnval = {
                 type  : type,
-                number: logger.numberOfPackets() - logger.connectedPackets()
+                number: logger.numberOfPackets() - logger.numberOfConnPackets()
             }
             break;
         default:

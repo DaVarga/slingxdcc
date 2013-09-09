@@ -30,47 +30,6 @@ var app = module.exports = express();
 
 
 /**
- * Create server
- */
-var server;
-
-fs.readFile('./ssl/server.key', function (err, data){
-    var errorkey = err;
-    var key = data;
-    fs.readFile('./ssl/server.crt', function (err, data){
-        var errorcrt = err;
-        var crt = data;
-        if (errorcrt || errorkey){
-            server = http.createServer(app);
-            console.log('No key or cert found, \n!!!Fallback!!! Http');
-            // Hook Socket.io into Express
-            io.listen(server);
-
-            /**
-             * Start Server
-             */
-
-            server.listen(app.get('port'), function (){
-                console.log('Server listening on port ' + app.get('port'));
-            });
-        }else{
-            server = https.createServer({key: key, cert: crt}, app);
-            // Hook Socket.io into Express
-            io.listen(server);
-
-            /**
-             * Start Server
-             */
-
-            server.listen(app.get('port'), function (){
-                console.log('Server listening on port ' + app.get('port'));
-            });
-        }
-    });
-});
-
-
-/**
  * Configuration
  */
 
@@ -131,4 +90,38 @@ app.get('*', routes.index);
 
 
 
+
+/**
+ * Create server
+ */
+
+
+fs.readFile('./ssl/server.key', function (err, data){
+    var errorkey = err;
+    var key = data;
+    var server;
+    fs.readFile('./ssl/server.crt', function (err, data){
+        var errorcrt = err;
+        var crt = data;
+        if (errorcrt || errorkey){
+            server = http.createServer(app);
+            console.log('No key or cert found, \n!!!Fallback!!! Http');
+        }else{
+            server = https.createServer({key: key, cert: crt}, app);
+        }
+        // Hook Socket.io into Express
+        io = io.listen(server);
+
+        // Socket.io Communication
+        io.sockets.on('connection', require('./routes/socket'));
+
+        /**
+         * Start Server
+         */
+
+        server.listen(app.get('port'), function (){
+            console.log('Server listening on port ' + app.get('port'));
+        });
+    });
+});
 

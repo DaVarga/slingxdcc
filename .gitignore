@@ -15,4 +15,6 @@ pids
 logs
 results
 
+ssl
+
 npm-debug.log
