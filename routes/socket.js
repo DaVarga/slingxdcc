@@ -19,13 +19,13 @@ module.exports = function (socket) {
 
     logger.on("irc_error",function(srvkey){
         socket.emit('send:irc_error:'+srvkey, {
-            error: logger.getIrcServers()[srvkey].error
+            server: logger.getIrcServers()[srvkey]
         });
     });
 
     logger.on("irc_connected", function(srvkey){
         socket.emit('send:irc_connected:'+srvkey, {
-            connected: logger.getIrcServers()[srvkey].connected
+            server: logger.getIrcServers()[srvkey]
         });
     })
 

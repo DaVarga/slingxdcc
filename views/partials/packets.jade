@@ -22,7 +22,7 @@ div(ng-controller="PacketListCtrl" select="init(search)")
                         th
                 tfoot
                     td(colspan="8")
-                        pagination(num-pages="numPages", current-page="getCurrentPage()", max-size="9", boundary-links="true", on-select-page="setPage(page)", previous-text="‹", next-text="›", first-text="«", last-text="»")
+                        pagination(total-items="numPackets", items-per-page="pageItemLimit", page="getCurrentPage()", max-size="9", boundary-links="true", on-select-page="setPage(page)", previous-text="‹", next-text="›", first-text="«", last-text="»")
 
                 tbody
                     tr(ng-repeat="packet in packets")

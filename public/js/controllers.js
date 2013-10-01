@@ -104,15 +104,22 @@ ServerAddCtrl.$inject = ['$scope', '$http'];
 
 function ServerSettingsCtrl($scope, $http, socket){
     $scope.joinChanStr = "";
-    $scope.init = function (server){
-        $scope.server = server;
-        socket.on('send:irc_error:'+$scope.server.key, function(data){
-            $scope.server.error = data.error;
+    $scope.init = function (key){
+        $scope.server = $scope.servers[key];
+
+        socket.on('send:irc_error:'+key, function(data){
+            $scope.server.error = data.server.error;
         })
-        socket.on('send:irc_connected:'+$scope.server.key, function(data){
-            $scope.server.connected = data.connected;
+        socket.on('send:irc_connected:'+key, function(data){
+            $scope.server.connected = true;
         });
+
     }
+
+    $scope.$on('$destroy', function () {
+        socket.off('send:irc_connected:'+$scope.server.key);
+        socket.off('send:irc_error:'+$scope.server.key);
+    });
 
     $scope.editServer = function (){
         if ($scope.server.host.length == 0 || parseInt($scope.server.port) > 65535 || parseInt($scope.server.port) < 0 || $scope.server.nick.length == 0) return;
@@ -185,7 +192,8 @@ function ServerSettingsCtrl($scope, $http, socket){
 
 ServerSettingsCtrl.$inject = ['$scope', '$http', 'socket'];
 
-function SettingsCtrl($scope, $http){
+
+function SettingsCtrl($scope, $http, socket){
     $scope.getServers = function (){
         $http.get('/api/server/').success(function (data, status, headers, config){
             for (var i in data){
@@ -199,7 +207,7 @@ function SettingsCtrl($scope, $http){
 
 }
 
-SettingsCtrl.$inject = ['$scope', '$http'];
+SettingsCtrl.$inject = ['$scope', '$http', 'socket'];
 
 function SearchBarCtrl($scope, $rootScope, socket){
     $scope.history = [];
@@ -303,7 +311,9 @@ function PacketListCtrl($scope, $rootScope, $http){
         }
         $http({method: 'GET', url: url}).success(function (data, status, headers, config){
             $scope.numPages = data.numPages;
+            $scope.numPackets = data.numPackets;
             $scope.packets = data.packets;
+            $scope.pageItemLimit = data.pageItemLimit;
             loadDone = true;
         });
     }

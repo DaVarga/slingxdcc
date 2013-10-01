@@ -35,6 +35,8 @@ exports.packetSearchPaged = function (req, res){
     logger.searchPacketsPaged(string, pageItemLimit, page, sortBy, sortOrder, filterDiscon, function (pages, result){
         res.json({
             numPages: pages,
+            numPackets: pages*pageItemLimit,
+            pageItemLimit: pageItemLimit,
             packets : result
         });
     });
@@ -50,16 +52,13 @@ exports.packetListPaged = function (req, res){
     logger.searchPacketsPaged(null, pageItemLimit, page, sortBy, sortOrder, filterDiscon, function (pages, result){
         res.json({
             numPages: pages,
-            packets : result
+            numPackets: pages*pageItemLimit,
+            pageItemLimit: pageItemLimit,
+            packets: result
         });
     });
 };
 
-exports.packetSearch = function (req, res){
-    var string = req.params.string;
-    var packets = logger.searchPackets(string, sortBy, sortOrder, filterDiscon);
-    res.json(packets);
-};
 
 exports.getSorting = function (req, res){
     res.json({
