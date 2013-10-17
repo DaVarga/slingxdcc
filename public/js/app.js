@@ -10,13 +10,16 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'ui.bootstrap']).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider){
-        $routeProvider.when('/', {
-            controller: AppCtrl
-        }).when('/packets', {
+        $routeProvider
+            .when('/packets', {
                 templateUrl: 'partials/packets'
-            }).when('/settings', {
+            })
+            .when('/settings', {
                 templateUrl: 'partials/settings'
-            }).otherwise({redirectTo: '/packets'});
+            })
+            .otherwise({
+                redirectTo: '/packets'
+            });
         $locationProvider.html5Mode(true);
     }]);
 
