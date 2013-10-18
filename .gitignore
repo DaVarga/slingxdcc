@@ -7,6 +7,7 @@ lib-cov
 *.pid
 *.gz
 *.db
+settings.json
 *.key
 *.crt
 

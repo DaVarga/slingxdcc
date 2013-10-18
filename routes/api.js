@@ -12,6 +12,8 @@
  */
 
 var logger = require("../lib/xdcclogger");
+var packdb = require("../lib/packdb");
+
 var sortBy = "lastseen";
 var sortOrder = "desc";
 var filterDiscon = true;
@@ -20,19 +22,19 @@ var pageItemLimit = 20;
 
 exports.packet = function (req, res){
     var id = req.params.id;
-    res.json(logger.getPacket(id));
+    res.json(packdb.getPacket(id));
 };
 
 exports.packetSearch = function (req, res){
     var string = req.params.string;
-    var packets = logger.searchPackets(string, sortBy, sortOrder, filterDiscon);
+    var packets = packdb.searchPackets(string, sortBy, sortOrder, filterDiscon);
     res.json(packets);
 };
 
 exports.packetSearchPaged = function (req, res){
     var string = req.params.string;
     var page = parseInt(req.params.page);
-    logger.searchPacketsPaged(string, pageItemLimit, page, sortBy, sortOrder, filterDiscon, function (pages, result){
+    packdb.searchPacketsPaged(string, pageItemLimit, page, sortBy, sortOrder, filterDiscon, function (pages, result){
         res.json({
             numPages: pages,
             numPackets: pages*pageItemLimit,
@@ -43,13 +45,13 @@ exports.packetSearchPaged = function (req, res){
 };
 
 exports.packetList = function (req, res){
-    var packets = logger.searchPackets(null, sortBy, sortOrder, filterDiscon);
+    var packets = packdb.searchPackets(null, sortBy, sortOrder, filterDiscon);
     res.json(packets);
 };
 
 exports.packetListPaged = function (req, res){
     var page = parseInt(req.params.page);
-    logger.searchPacketsPaged(null, pageItemLimit, page, sortBy, sortOrder, filterDiscon, function (pages, result){
+    packdb.searchPacketsPaged(null, pageItemLimit, page, sortBy, sortOrder, filterDiscon, function (pages, result){
         res.json({
             numPages: pages,
             numPackets: pages*pageItemLimit,
@@ -89,18 +91,18 @@ exports.getNumPackets = function (req, res){
         case 'on':
             returnval = {
                 type  : type,
-                number: logger.numberOfConnPackets()
+                number: packdb.numberOfConnPackets()
             }
             break;
         case 'off':
             returnval = {
                 type  : type,
-                number: logger.numberOfPackets() - logger.numberOfConnPackets()
+                number: packdb.numberOfPackets() - packdb.numberOfConnPackets()
             }
             break;
         default:
             returnval = {
-                number: logger.numberOfPackets()
+                number: packdb.numberOfPackets()
             }
             break;
     }

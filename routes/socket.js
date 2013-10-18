@@ -3,13 +3,14 @@
  */
 
 var logger = require("../lib/xdcclogger");
+var packdb = require("../lib/packdb");
 
 module.exports = function (socket) {
     var lastPacketCount = 0;
 
     setInterval(function () {
-        if(lastPacketCount < logger.numberOfPackets()){
-            lastPacketCount = logger.numberOfPackets()
+        if(lastPacketCount < packdb.numberOfPackets()){
+            lastPacketCount = packdb.numberOfPackets()
             socket.emit('send:packetCount', {
                 count: lastPacketCount
             });
