@@ -99,6 +99,11 @@ exports.getNumPackets = function (req, res){
                 type  : type,
                 number: packdb.numberOfPackets() - packdb.numberOfConnPackets()
             }
+        case 'red':
+            returnval = {
+                type  : type,
+                number: packdb.numberOfRedundantPackets()
+            }
             break;
         default:
             returnval = {

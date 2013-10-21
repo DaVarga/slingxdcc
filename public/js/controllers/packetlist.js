@@ -25,6 +25,7 @@ function PacketListCtrl($scope, $rootScope, $http){
     };
 
     $scope.setPage(1);
+    refreshSortScope();
 
     $scope.getOpacity = function(){
         if(loadDone){
@@ -36,23 +37,6 @@ function PacketListCtrl($scope, $rootScope, $http){
     $scope.getCurrentPage = function(){
         return $scope.currentPage;
     }
-
-    $scope.refreshSortScope = function(){
-        $http({method: 'GET', url: '/api/packet/sorting/'}).success(function (data, status, headers, config){
-            $scope.sorting = data;
-
-            if(typeof $scope.sorted === "undefined"){
-                $scope.sorted = function (col){
-                    if ($scope.sorting.sortBy == col){
-                        return $scope.sorting.sortOrder;
-                    }else{
-                        return 'none';
-                    }
-                };
-            }
-        });
-    }
-
 
     $scope.setSorting = function (by){
         var value = {
@@ -87,6 +71,19 @@ function PacketListCtrl($scope, $rootScope, $http){
             $scope.packets = data.packets;
             $scope.pageItemLimit = data.pageItemLimit;
             loadDone = true;
+        });
+    }
+
+    function refreshSortScope(){
+        $http({method: 'GET', url: '/api/packet/sorting/'}).success(function (data, status, headers, config){
+            $scope.sorting = data;
+            $scope.sorted = function (col){
+                if ($scope.sorting.sortBy == col){
+                    return $scope.sorting.sortOrder;
+                }else{
+                    return 'none';
+                }
+            };
         });
     }
 }

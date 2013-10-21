@@ -28,6 +28,7 @@ nconf.defaults({
         "servers": {},
         "packRegex": "#(\\d+)\\s+(\\d+)x\\s+\\[\\s*([><]?[0-9\\.]+[TGMKtgmk]?)\\]\\s+(.*)",
         "packdb": "packets.db",
+        "autocleandb": true,
         "cleandb_Xminutes": 60,
         "redundantPercentage": 25
     },
