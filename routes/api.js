@@ -82,7 +82,7 @@ exports.getServer = function (req, res){
 };
 
 exports.getNumPackets = function (req, res){
-    var type = req.body.type;
+    var type = req.headers.type;
     var returnval = {
         type  : "all",
         number: 0
