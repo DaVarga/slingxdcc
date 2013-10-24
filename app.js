@@ -24,14 +24,6 @@ var express = require('express'),
 nconf.add('settings', {type: 'file', file: 'config/settings.json'});
 
 nconf.defaults({
-    "logger": {
-        "servers": {},
-        "packRegex": "#(\\d+)\\s+(\\d+)x\\s+\\[\\s*([><]?[0-9\\.]+[TGMKtgmk]?)\\]\\s+(.*)",
-        "packdb": "packets.db",
-        "autocleandb": true,
-        "cleandb_Xminutes": 60,
-        "redundantPercentage": 25
-    },
     "webserver": {
         "port": 3000,
         "ssl": true,
@@ -96,10 +88,11 @@ nconf.load(function(){
 
     app.get('/api/server/', api.getServer);
 
+    app.get('/api/db/compacting/', api.getNextCompacting);
+
     app.put('/api/packet/sorting/', api.setSorting);
     app.put('/api/packet/filter/', api.setFilter);
     app.put('/api/packet/pagelimit/', api.setPageLimit);
-
     app.put('/api/channel/', api.channels);
 
     app.post('/api/server/', api.addServer);

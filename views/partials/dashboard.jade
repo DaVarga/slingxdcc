@@ -1,2 +1,41 @@
-div(ng-controller="DashboardCtrl")
-    span {{packetCount}}
+div(ng-controller="DashboardCtrl").dashboard
+    .row
+        .col-lg-12
+            button(type="button",ng-click="getData()").btn.btn-default.pull-right
+                span.glyphicon.glyphicon-refresh
+            h1 Dashboard
+
+            .row
+                .col-lg-6
+                    hr
+                    h3 Packets/Database
+                    .col-sm-8
+                        canvas(donutchart,options="chartPacketOptions",data="chartPacketData",height="300px")
+                    .col-sm-4
+                        ul.list-group
+                            li.list-group-item
+                                span Online:
+                                span.label.label-success.pull-right {{onPacketPercentage() | number:1}}%
+                            li.list-group-item
+                                span Offline:
+                                span.label.label-danger.pull-right {{offPacketPercentage() | number:1}}%
+                            li.list-group-item
+                                span Redundant:
+                                span.label.label-default.pull-right {{redPacketPercentage() | number:1}}%
+                            li.list-group-item
+                                span Next database Cleanup: {{nextDbCleanup | date:'dd.MM HH:mm'}}
+                .col-lg-6
+                    hr
+                    h3 Server
+                    .col-sm-8
+                        canvas(donutchart,options="chartPacketOptions",data="chartServerData",height="300px")
+                    .col-sm-4
+                        ul.list-group
+                            li.list-group-item
+                                span Online:
+                                span.label.label-success.pull-right {{onServerPercentage() | number:1}}%
+                            li.list-group-item
+                                span Offline:
+                                span.label.label-danger.pull-right {{offServerPercentage() | number:1}}%
+
+

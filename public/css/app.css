@@ -13,5 +13,9 @@ table thead tr th span.glyphicon {
     padding-left: 5px;
 }
 
-
-  
+.dashboard .col-lg-6 {
+    overflow: hidden;
+}
+.boxcenter{
+    margin: 0 auto;
+}

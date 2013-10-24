@@ -114,6 +114,10 @@ exports.getNumPackets = function (req, res){
     res.json(returnval);
 }
 
+exports.getNextCompacting = function (req, res){
+    res.json({nextCompacting:packdb.getNextCompacting()});
+};
+
 // PUT
 
 exports.setSorting = function (req, res){

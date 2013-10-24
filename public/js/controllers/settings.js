@@ -12,6 +12,7 @@
 
 
 function SettingsCtrl($scope, $http, socket){
+    $scope.servers = {};
     $scope.getServers = function (){
         $http.get('/api/server/').success(function (data, status, headers, config){
             for (var i in data){

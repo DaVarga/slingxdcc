@@ -83,7 +83,6 @@ function ServerAddCtrl($scope, $http){
         }
     }
 
-    //TODO
     $scope.isKeyUniqe = function (){
         if(typeof $scope.nServConf.key !== "undefined" && $scope.nServConf.key.length > 0)
             return (typeof $scope.servers[$scope.nServConf.key] === "undefined");
