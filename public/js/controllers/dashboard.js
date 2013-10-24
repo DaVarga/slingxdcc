@@ -92,7 +92,7 @@ function DashboardCtrl($scope, $http, socket){
         });
 
         $http.get('/api/db/compacting/').success(function (data, status, headers, config){
-            $scope.nextDbCleanup = data;
+            $scope.nextDbCleanup = data.nextCompacting;
         })
 
     }
