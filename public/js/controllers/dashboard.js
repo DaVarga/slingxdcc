@@ -105,7 +105,7 @@ function DashboardCtrl($scope, $http, socket){
         segmentShowStroke : true,
 
         //String - The colour of each segment stroke
-        segmentStrokeColor : "#fff",
+        segmentStrokeColor : "#ffffff",
 
         //Number - The width of each segment stroke
         segmentStrokeWidth : 2,
