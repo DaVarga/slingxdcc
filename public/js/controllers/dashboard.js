@@ -18,6 +18,26 @@ function DashboardCtrl($scope, $http, socket){
     $scope.numServers = 0;
     $scope.nextDbCleanup = 0;
 
+
+    $scope.chartServerData = [{
+        value: 0,
+        color:"#5cb85c"
+    },{
+        value: 0,
+        color:"#d9534f"
+    }];
+
+    $scope.chartPacketData = [{
+        value: 0,
+        color:"#5cb85c"
+    },{
+        value: 0,
+        color:"#d9534f"
+    },{
+        value: 0,
+        color:"#999"
+    }];
+
     $scope.redPacketPercentage = function(){
         return $scope.packetCount.red / ($scope.packetCount.all + $scope.packetCount.red) * 100;
     }
@@ -39,8 +59,6 @@ function DashboardCtrl($scope, $http, socket){
     }
 
     $scope.getData = function (){
-        $scope.chartPacketData = [];
-        $scope.chartServerData = [];
 
         $http.get('/api/server/').success(function (data, status, headers, config){
             for (var i in data){
@@ -52,14 +70,8 @@ function DashboardCtrl($scope, $http, socket){
             }
             $scope.servers = data;
 
-            $scope.chartServerData.push({
-                value: $scope.onServers,
-                color:"#5cb85c"
-            });
-            $scope.chartServerData.push({
-                value: $scope.numServers - $scope.onServers,
-                color:"#d9534f"
-            });
+            $scope.chartServerData[0].value = $scope.onServers;
+            $scope.chartServerData[1].value = $scope.numServers - $scope.onServers;
 
 
         })
@@ -67,28 +79,19 @@ function DashboardCtrl($scope, $http, socket){
         $http.get('/api/packet/',{headers:{type:'on'}}).success(function (data, status, headers, config){
             $scope.packetCount.on = data.number;
             $scope.packetCount.off -= $scope.packetCount.on;
-            $scope.chartPacketData.push({
-                value: $scope.packetCount.on,
-                color:"#5cb85c"
-            });
+            $scope.chartPacketData[0].value = $scope.packetCount.on
 
         });
 
         $http.get('/api/packet/', {headers:{type:'all'}}).success(function (data, status, headers, config){
             $scope.packetCount.all = data.number;
             $scope.packetCount.off += $scope.packetCount.all;
-            $scope.chartPacketData.push({
-                value: $scope.packetCount.off,
-                color:"#d9534f"
-            });
+            $scope.chartPacketData[1].value = $scope.packetCount.off;
         });
 
         $http.get('/api/packet/', {headers:{type:'red'}}).success(function (data, status, headers, config){
             $scope.packetCount.red = data.number;
-            $scope.chartPacketData.push({
-                value: $scope.packetCount.red,
-                color:"#999"
-            });
+            $scope.chartPacketData[2].value = $scope.packetCount.red;
         });
 
         $http.get('/api/db/compacting/').success(function (data, status, headers, config){
@@ -97,8 +100,6 @@ function DashboardCtrl($scope, $http, socket){
 
     }
 
-    $scope.chartPacketData = [];
-    $scope.chartServerData = [];
 
     $scope.chartPacketOptions =  {
         //Boolean - Whether we should show a stroke on each segment
@@ -128,7 +129,6 @@ function DashboardCtrl($scope, $http, socket){
         //Function - Will fire on animation completion.
         onAnimationComplete : null
     };
-    $scope.chartPacketData = [];
 
     $scope.getData();
 }
