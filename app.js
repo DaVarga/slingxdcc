@@ -96,6 +96,9 @@ nconf.load(function(){
     app.put('/api/channel/', api.channels);
 
     app.post('/api/server/', api.addServer);
+    app.post('/api/downloads/', api.startDownload);
+    app.post('/api/downloads/cancel', api.cancelDownload);
+
     app.delete('/api/server/:key', api.removeServer);
 
     app.get('*', routes.index);

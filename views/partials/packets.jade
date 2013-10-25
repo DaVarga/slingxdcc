@@ -42,7 +42,9 @@ div(ng-controller="PacketListCtrl" select="init(search)")
                             td
                                 span(tooltip-placement="bottom", tooltip="{{packet.filename}}") {{packet.filename|truncate:50}}
                             td
-                                span(tooltip-placement="bottom", tooltip="{{packet.lastseen| date:'medium'}}") {{packet.lastseen| timeago}}
+                                span(tooltip-placement="bottom", tooltip="{{packet.lastseen | date:'medium'}}") {{packet.lastseen| timeago}}
                             td
-                                button(type="button").btn.btn-default.btn-xs
+                                button(type="button",ng-click="startDownload(packet)").btn.btn-default.btn-xs
                                     span.glyphicon.glyphicon-download
+                                button(type="button",ng-click="cancelDownload(packet)").btn.btn-default.btn-xs
+                                    span.glyphicon.glyphicon-stop

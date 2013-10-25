@@ -10,7 +10,7 @@
 
 /* Dashboard */
 
-function DashboardCtrl($scope, $http, socket){
+function DashboardCtrl($scope, $http){
 
     $scope.packetCount = {off:0,on:0,red:0};
     $scope.servers = {};
@@ -133,4 +133,4 @@ function DashboardCtrl($scope, $http, socket){
     $scope.getData();
 }
 
-DashboardCtrl.$inject = ['$scope', '$http', 'socket'];
+DashboardCtrl.$inject = ['$scope', '$http'];

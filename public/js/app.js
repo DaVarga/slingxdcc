@@ -20,6 +20,9 @@ angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 
             .when('/settings', {
                 templateUrl: 'partials/settings'
             })
+            .when('/downloads', {
+                templateUrl: 'partials/downloads'
+            })
             .otherwise({
                 redirectTo: '/'
             });

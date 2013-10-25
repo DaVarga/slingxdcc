@@ -13,6 +13,7 @@
 
 var logger = require("../lib/xdcclogger");
 var packdb = require("../lib/packdb");
+var downloadHandler = require("../lib/downloadHanlder");
 
 var sortBy = "lastseen";
 var sortOrder = "desc";
@@ -175,6 +176,18 @@ exports.addServer = function (req, res){
     res.json(req.body);
 };
 
+exports.startDownload = function (req,res){
+    downloadHandler.startDownload(req.body);
+    res.json(req.body);
+}
+
+
+exports.cancelDownload = function (req,res){
+    console.log(req.body);
+    downloadHandler.cancelDownload(req.body);
+    res.json(req.body);
+}
+
 // DELETE
 exports.removeServer = function (req, res){
     var srvkey = req.params.key;
@@ -186,3 +199,4 @@ exports.removeServer = function (req, res){
         res.json(false);
     }
 };
+

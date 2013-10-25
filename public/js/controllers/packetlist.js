@@ -57,6 +57,19 @@ function PacketListCtrl($scope, $rootScope, $http){
         });
     };
 
+    $scope.startDownload = function(packet){
+        $http.post('/api/downloads/', packet).success(function (data, status, headers, config){
+            //TODO
+        });
+    }
+
+    $scope.cancelDownload = function(packet){
+
+        $http.post('/api/downloads/cancel/', packet).success(function (data, status, headers, config){
+            //TODO
+        });
+    }
+
     function refreshPageScope(){
         loadDone = false;
         var url;

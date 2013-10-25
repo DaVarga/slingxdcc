@@ -34,11 +34,6 @@ function ServerAddCtrl($scope, $http){
         }
 
         $http.post('/api/server/', server).success(function (data){
-            $scope.server.connected = false;
-            angular.copy($scope.server,$scope.servers[server.key]);
-            $scope.joinChanStr = "";
-            $scope.getServers();
-        }).success(function (data){
                 $scope.servers[$scope.nServConf.key] = {}
                 $scope.nServConf.connected = false;
                 angular.copy($scope.nServConf, $scope.servers[$scope.nServConf.key]);
