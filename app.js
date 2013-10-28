@@ -89,6 +89,7 @@ nconf.load(function(){
     app.get('/api/server/', api.getServer);
 
     app.get('/api/db/compacting/', api.getNextCompacting);
+    app.get('/api/downloads/', api.getDownloads);
 
     app.put('/api/packet/sorting/', api.setSorting);
     app.put('/api/packet/filter/', api.setFilter);

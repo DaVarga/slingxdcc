@@ -119,6 +119,10 @@ exports.getNextCompacting = function (req, res){
     res.json({nextCompacting:packdb.getNextCompacting()});
 };
 
+exports.getDownloads = function (req, res){
+    res.json({dlQueue:downloadHandler.getDownloads()});
+};
+
 // PUT
 
 exports.setSorting = function (req, res){

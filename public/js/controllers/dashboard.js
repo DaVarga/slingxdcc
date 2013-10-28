@@ -60,6 +60,7 @@ function DashboardCtrl($scope, $http){
 
     $scope.getData = function (){
 
+        $scope.packetCount.off = 0;
         $http.get('/api/server/').success(function (data, status, headers, config){
             for (var i in data){
                 data[i].key = i;

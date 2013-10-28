@@ -1,0 +1,15 @@
+div(ng-controller="DownloadsCtrl")
+    .row
+        .col-lg-12
+            button(type="button",ng-click="getData()").btn.btn-default.pull-right
+                span.glyphicon.glyphicon-refresh
+            h1 Downloads
+            tabset
+                tab(ng-repeat="(srvkey, val) in dlQueue")
+                    tab-heading
+                        {{srvkey}}
+                    .row(ng-repeat="(key, valval) in val")
+                        .row(ng-repeat="(key, valvalval) in valval")
+                            {{valvalval.filename}}
+
+
