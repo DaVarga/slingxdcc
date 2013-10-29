@@ -11,8 +11,13 @@ module.exports = function (socket) {
     setInterval(function () {
         if(lastPacketCount < packdb.numberOfPackets()){
             lastPacketCount = packdb.numberOfPackets()
+
+            var abspackets = packdb.numberOfPackets();
+            var redpackets = packdb.numberOfRedundantPackets();
+
             socket.emit('send:packetCount', {
-                count: lastPacketCount
+                absPackets : abspackets,
+                redPackets : redpackets
             });
         }
 

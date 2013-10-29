@@ -22,7 +22,7 @@ block body
 
             form.navbar-form.navbar-right(role="search", ng-submit="setSearch()", style="width:350px")
                 input.form-control(type="text", placeholder="Search", ng-model="searchString", typeahead="item for item in history | limitTo:8 | filter:$viewValue")
-            p.navbar-text.pull-right Packets # {{packetCount}}
+            p.navbar-text.pull-right Packets # {{packetCount.absPackets}}
 
     .container
         div(ng-view)

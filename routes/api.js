@@ -83,36 +83,17 @@ exports.getServer = function (req, res){
 };
 
 exports.getNumPackets = function (req, res){
-    var type = req.headers.type;
-    var returnval = {
-        type  : "all",
-        number: 0
-    };
-    switch (type){
-        case 'on':
-            returnval = {
-                type  : type,
-                number: packdb.numberOfConnPackets()
-            }
-            break;
-        case 'off':
-            returnval = {
-                type  : type,
-                number: packdb.numberOfPackets() - packdb.numberOfConnPackets()
-            }
-        case 'red':
-            returnval = {
-                type  : type,
-                number: packdb.numberOfRedundantPackets()
-            }
-            break;
-        default:
-            returnval = {
-                number: packdb.numberOfPackets()
-            }
-            break;
-    }
-    res.json(returnval);
+    var conpackets = packdb.numberOfConnPackets();
+    var abspackets = packdb.numberOfPackets();
+    var redpackets = packdb.numberOfRedundantPackets();
+    var offpackets = abspackets - conpackets;
+
+    res.json({
+        conPackets : conpackets,
+        absPackets : abspackets,
+        redPackets : redpackets,
+        offPackets : offpackets
+    });
 }
 
 exports.getNextCompacting = function (req, res){
@@ -187,7 +168,6 @@ exports.startDownload = function (req,res){
 
 
 exports.cancelDownload = function (req,res){
-    console.log(req.body);
     downloadHandler.cancelDownload(req.body);
     res.json(req.body);
 }

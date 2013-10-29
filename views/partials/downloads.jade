@@ -4,12 +4,32 @@ div(ng-controller="DownloadsCtrl")
             button(type="button",ng-click="getData()").btn.btn-default.pull-right
                 span.glyphicon.glyphicon-refresh
             h1 Downloads
-            tabset
-                tab(ng-repeat="(srvkey, val) in dlQueue")
-                    tab-heading
-                        {{srvkey}}
-                    .row(ng-repeat="(key, valval) in val")
-                        .row(ng-repeat="(key, valvalval) in valval")
-                            {{valvalval.filename}}
+            .table-responsive
+                table.table.table-hover.table-striped.table-condensed
+                    thead
+                        tr
+                            th Server
+                            th Bot
+                            th #
+                            th Queue
+                            th Filename
+                            th Size
+                            th Speed
+                    tbody
+                        tr(ng-repeat="(srvkey, servercol) in dlQueue", ng-repeat="(bot, botqueue) in dlQueue[srvkey]", ng-repeat="(quepos, package) in dlQueue[srvkey][bot]")
+                            td
+                                span {{package.server}}
+                            td
+                                span {{package.nick}}
+                            td
+                                span {{package.nr}}
+                            td
+                                span {{quepos}}
+                            td
+                                span {{package.filename}}
+                            td
+                                span {{package.filesize}}
+                            td
+                                span {{package.speed}}
 
 

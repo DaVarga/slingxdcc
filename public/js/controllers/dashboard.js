@@ -10,61 +10,73 @@
 
 /* Dashboard */
 
-function DashboardCtrl($scope, $http){
+function DashboardCtrl($scope, $http, socket, $timeout) {
 
-    $scope.packetCount = {off:0,on:0,red:0};
     $scope.servers = {};
     $scope.onServers = 0;
     $scope.numServers = 0;
     $scope.nextDbCleanup = 0;
-
-
-    $scope.chartServerData = [{
-        value: 0,
-        color:"#5cb85c"
-    },{
-        value: 0,
-        color:"#d9534f"
-    }];
-
-    $scope.chartPacketData = [{
-        value: 0,
-        color:"#5cb85c"
-    },{
-        value: 0,
-        color:"#d9534f"
-    },{
-        value: 0,
-        color:"#999"
-    }];
-
-    $scope.redPacketPercentage = function(){
-        return $scope.packetCount.red / ($scope.packetCount.all + $scope.packetCount.red) * 100;
+    $scope.packetCount = {
+        redPackets: 0,
+        conPackets: 0,
+        offPackets: 0
     }
 
-    $scope.onPacketPercentage = function(){
-        return $scope.packetCount.on / ($scope.packetCount.all + $scope.packetCount.red) * 100;
+
+    $scope.chartServerData = [
+        {
+            value: 0,
+            color: "#5cb85c"
+        },
+        {
+            value: 0,
+            color: "#d9534f"
+        }
+    ];
+
+    $scope.chartPacketData = [
+        {
+            value: 0,
+            color: "#5cb85c"
+        },
+        {
+            value: 0,
+            color: "#d9534f"
+        },
+        {
+            value: 0,
+            color: "#999"
+        }
+    ];
+
+    $scope.redPacketPercentage = function () {
+        return $scope.packetCount.redPackets / ($scope.packetCount.absPackets + $scope.packetCount.redPackets) * 100;
     }
 
-    $scope.offPacketPercentage = function(){
-        return $scope.packetCount.off / ($scope.packetCount.all + $scope.packetCount.red) * 100;
+    $scope.onPacketPercentage = function () {
+        return $scope.packetCount.conPackets / ($scope.packetCount.absPackets + $scope.packetCount.redPackets) * 100;
     }
 
-    $scope.onServerPercentage = function(){
+    $scope.offPacketPercentage = function () {
+        return $scope.packetCount.offPackets / ($scope.packetCount.absPackets + $scope.packetCount.redPackets) * 100;
+    }
+
+    $scope.onServerPercentage = function () {
         return $scope.onServers / $scope.numServers * 100;
     }
 
-    $scope.offServerPercentage = function(){
+    $scope.offServerPercentage = function () {
         return 100 - $scope.onServerPercentage();
     }
 
-    $scope.getData = function (){
+    $scope.getData = function () {
 
-        $scope.packetCount.off = 0;
-        $http.get('/api/server/').success(function (data, status, headers, config){
-            for (var i in data){
+        $http.get('/api/server/').success(function (data, status, headers, config) {
+            $scope.onServers = 0;
+            $scope.numServers = 0;
+            for (var i in data) {
                 data[i].key = i;
-                if(data[i].connected){
+                if (data[i].connected) {
                     $scope.onServers++;
                 }
                 $scope.numServers++;
@@ -77,61 +89,64 @@ function DashboardCtrl($scope, $http){
 
         })
 
-        $http.get('/api/packet/',{headers:{type:'on'}}).success(function (data, status, headers, config){
-            $scope.packetCount.on = data.number;
-            $scope.packetCount.off -= $scope.packetCount.on;
-            $scope.chartPacketData[0].value = $scope.packetCount.on
+        $http.get('/api/packet/').success(function (data, status, headers, config) {
+            $scope.packetCount = data;
+            $scope.chartPacketData[0].value = $scope.packetCount.absPackets;
+            $scope.chartPacketData[1].value = $scope.packetCount.offPackets;
+            $scope.chartPacketData[2].value = $scope.packetCount.redPackets;
 
         });
 
-        $http.get('/api/packet/', {headers:{type:'all'}}).success(function (data, status, headers, config){
-            $scope.packetCount.all = data.number;
-            $scope.packetCount.off += $scope.packetCount.all;
-            $scope.chartPacketData[1].value = $scope.packetCount.off;
-        });
-
-        $http.get('/api/packet/', {headers:{type:'red'}}).success(function (data, status, headers, config){
-            $scope.packetCount.red = data.number;
-            $scope.chartPacketData[2].value = $scope.packetCount.red;
-        });
-
-        $http.get('/api/db/compacting/').success(function (data, status, headers, config){
+        $http.get('/api/db/compacting/').success(function (data, status, headers, config) {
             $scope.nextDbCleanup = data.nextCompacting;
         })
 
     }
 
 
-    $scope.chartPacketOptions =  {
+    $scope.chartPacketOptions = {
         //Boolean - Whether we should show a stroke on each segment
-        segmentShowStroke : true,
+        segmentShowStroke: true,
 
         //String - The colour of each segment stroke
-        segmentStrokeColor : "#ffffff",
+        segmentStrokeColor: "#ffffff",
 
         //Number - The width of each segment stroke
-        segmentStrokeWidth : 2,
+        segmentStrokeWidth: 2,
 
         //Boolean - Whether we should animate the chart
-        animation : true,
+        animation: true,
 
         //Number - Amount of animation steps
-        animationSteps : 100,
+        animationSteps: 100,
 
         //String - Animation easing effect
-        animationEasing : "easeOutBounce",
+        animationEasing: "easeOutQuart",
 
         //Boolean - Whether we animate the rotation of the Pie
-        animateRotate : true,
+        animateRotate: true,
 
         //Boolean - Whether we animate scaling the Pie from the centre
-        animateScale : false,
+        animateScale: false,
 
         //Function - Will fire on animation completion.
-        onAnimationComplete : null
+        onAnimationComplete: deaktivateAnimation
     };
 
+    function deaktivateAnimation() {
+        $scope.chartPacketOptions.animateRotate = false;
+        socket.on('send:packetCount', function (data) {
+            angular.extend($scope.packetCount, data);
+            $scope.chartPacketData[0].value = $scope.packetCount.absPackets;
+            $scope.chartPacketData[1].value = $scope.packetCount.offPackets;
+            $scope.chartPacketData[2].value = $scope.packetCount.redPackets;
+        });
+    }
+
     $scope.getData();
+    $timeout(function(){
+        $scope.getData();
+    },30000);
 }
 
-DashboardCtrl.$inject = ['$scope', '$http'];
+DashboardCtrl.$inject = ['$scope', '$http', 'socket', '$timeout'];

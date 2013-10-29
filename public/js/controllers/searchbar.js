@@ -16,7 +16,7 @@ function SearchBarCtrl($scope, $rootScope, socket, $http){
 
 
     $http({method: 'GET', url: '/api/packet/'}).success(function (data, status, headers, config){
-        $scope.packetCount = data.number;
+        $scope.packetCount = data;
     });
 
     $scope.setSearch = function (){
@@ -36,7 +36,7 @@ function SearchBarCtrl($scope, $rootScope, socket, $http){
     }
 
     socket.on('send:packetCount', function(data){
-        $scope.packetCount = data.count;
+        $scope.packetCount = data;
     });
 
 
