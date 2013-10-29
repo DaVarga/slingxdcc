@@ -1,4 +1,4 @@
-div(ng-controller="DownloadsCtrl")
+div(ng-controller="DownloadsCtrl").downloads
     .row
         .col-lg-12
             button(type="button",ng-click="getData()").btn.btn-default.pull-right
@@ -8,28 +8,35 @@ div(ng-controller="DownloadsCtrl")
                 table.table.table-hover.table-striped.table-condensed
                     thead
                         tr
-                            th Server
-                            th Bot
-                            th #
-                            th Queue
+                            th Packet
+                            th Q
                             th Filename
                             th Size
                             th Speed
                     tbody
-                        tr(ng-repeat="(srvkey, servercol) in dlQueue", ng-repeat="(bot, botqueue) in dlQueue[srvkey]", ng-repeat="(quepos, package) in dlQueue[srvkey][bot]")
+                        tr(ng-repeat="pack in dlList")
                             td
-                                span {{package.server}}
+                                .row
+                                    .col-xs-12
+                                        span {{pack.server}}
+                                .row
+                                    .col-xs-12
+                                        span {{pack.nick}}
+                                .row
+                                    .col-xs-12
+                                        span {{pack.nr}}
                             td
-                                span {{package.nick}}
+                                span {{pack.queuePos}}
                             td
-                                span {{package.nr}}
+                                .row
+                                    .col-xs-12
+                                        span {{pack.filename}}
+                                .row
+                                    .col-xs-12
+                                        progress(percent="pack.progress").progress-striped.active
                             td
-                                span {{quepos}}
+                                span {{pack.filesize}}
                             td
-                                span {{package.filename}}
-                            td
-                                span {{package.filesize}}
-                            td
-                                span {{package.speed}}
+                                span {{pack.speed}}
 
 

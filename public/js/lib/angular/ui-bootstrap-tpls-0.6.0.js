@@ -3458,7 +3458,7 @@ angular.module("template/popover/popover.html", []).run(["$templateCache", funct
 
 angular.module("template/progressbar/bar.html", []).run(["$templateCache", function($templateCache) {
     $templateCache.put("template/progressbar/bar.html",
-        "<div class=\"bar\" ng-class='type && \"bar-\" + type'></div>");
+        "<div class=\"progress-bar\" ng-class='type && \"bar-\" + type'></div>");
 }]);
 
 angular.module("template/progressbar/progress.html", []).run(["$templateCache", function($templateCache) {

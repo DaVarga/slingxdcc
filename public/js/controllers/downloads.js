@@ -12,11 +12,23 @@
 
 function DownloadsCtrl($scope, $http){
 
+    $scope.dlList = {}
+
     $scope.getData = function(){
         $http.get('/api/downloads/').success(function (data, status, headers, config){
             $scope.dlQueue = data.dlQueue;
+            jQuery.each($scope.dlQueue,function(srvkey,srvcol){
+                jQuery.each(srvcol,function(botname,botqueue){
+                    jQuery.each(botqueue,function(queuePos,pack){
+                        $scope.dlList[pack.server+"#"+pack.nick+"#"+pack.nr] = pack;
+                        $scope.dlList[pack.server+"#"+pack.nick+"#"+pack.nr].queuePos = queuePos;
+                        $scope.dlList[pack.server+"#"+pack.nick+"#"+pack.nr].progress = Math.round(Math.random()*100);
+                    })
+                })
+            })
         });
     }
+
 
 
     $scope.getData();
