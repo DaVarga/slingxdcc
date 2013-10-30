@@ -19,3 +19,15 @@ table thead tr th span.glyphicon {
 .boxcenter{
     margin: 0 auto;
 }
+
+.downloads .table tbody>tr>td{
+    padding: 8px;
+    vertical-align: middle;
+    border-top: 1px solid #ddd;
+}
+
+.downloads .progress {
+    height: 10px;
+    margin-bottom: 3px;
+    margin-top: 10px;
+}
