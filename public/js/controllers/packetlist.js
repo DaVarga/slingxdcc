@@ -14,6 +14,22 @@ function PacketListCtrl($scope, $rootScope, $http){
     var loadDone = false;
     $scope.searchString = $rootScope.searchString ? $rootScope.searchString : "";
 
+    var dlList = [];
+
+    function getDownloads(){
+        $http.get('/api/downloads/').success(function (data, status, headers, config){
+            dlList = []
+            $scope.dlQueue = data.dlQueue;
+            jQuery.each($scope.dlQueue,function(srvkey,srvcol){
+                jQuery.each(srvcol,function(botname,botqueue){
+                    jQuery.each(botqueue,function(queuePos,pack){
+                        dlList.push(pack);
+                    })
+                })
+            })
+        });
+    }
+
     $rootScope.$on("setSearch",function(){
         $scope.searchString = $rootScope.searchString;
         $scope.setPage(1);
@@ -26,6 +42,7 @@ function PacketListCtrl($scope, $rootScope, $http){
 
     $scope.setPage(1);
     refreshSortScope();
+    getDownloads();
 
     $scope.getOpacity = function(){
         if(loadDone){
@@ -58,15 +75,19 @@ function PacketListCtrl($scope, $rootScope, $http){
     };
 
     $scope.startDownload = function(packet){
-        $http.post('/api/downloads/', packet).success(function (data, status, headers, config){
-            //TODO
+        $http.post('/api/downloads/', {packObj:packet}).success(function (data, status, headers, config){
+            if(data.success){
+                dlList.push(packet);
+            }
         });
     }
 
     $scope.cancelDownload = function(packet){
+        $http.post('/api/downloads/cancel/', {packObj:packet}).success(function (data, status, headers, config){
+            if(data.success){
+                dlList = removeArrayItem(dlList,packet);
+            }
 
-        $http.post('/api/downloads/cancel/', packet).success(function (data, status, headers, config){
-            //TODO
         });
     }
 
@@ -98,6 +119,31 @@ function PacketListCtrl($scope, $rootScope, $http){
                 }
             };
         });
+    }
+
+    function getDownloadIndex(packet){
+        var index = -1;
+        for (var i=0; i<dlList.length; i++) {
+            if(dlList[i].server == packet.server && dlList[i].nick == packet.nick && dlList[i].nr == packet.nr){
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
+    function removeArrayItem(array, item) {
+        var id = getDownloadIndex(item);
+        if (id != -1) array.splice(id, 1);
+        return array;
+    }
+
+    $scope.dlActive = function (packet){
+        if (getDownloadIndex(packet) == -1){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
 

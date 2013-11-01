@@ -5,7 +5,7 @@ div(ng-controller="DownloadsCtrl").downloads
                 span.glyphicon.glyphicon-refresh
             h1 Downloads
             .table-responsive
-                table.table.table-hover.table-striped.table-condensed
+                table.table.table-hover.table-condensed.table-striped
                     thead
                         tr
                             th Bot
@@ -13,22 +13,31 @@ div(ng-controller="DownloadsCtrl").downloads
                             th Filename
                             th Size
                             th Speed
+                            th
                     tbody
-                        tr(ng-repeat="(key, pack) in dlList")
+                        tr(ng-repeat="(key, pack) in dlList", ng-class="rowClass(pack)")
                             td
                                 span {{pack.nick}}
                             td
-                                span {{pack.queuePos}}
+                                span.queuepos {{pack.queuePos}}
                             td
                                 .row
                                     .col-xs-12
-                                        span {{pack.filename}}
+                                        span(tooltip-placement="bottom", tooltip="{{pack.filename}}") {{pack.filename|truncate:100}}
                                 .row
                                     .col-xs-12
-                                        progress(percent="pack.progress", ng-class="{collapse: pack.queuePos==0}").progress-striped.active
+                                        progress(percent="pack.progress").progress-striped.active
                             td
                                 span {{pack.filesize}}
                             td
-                                span {{pack.speed}}
+                                span.dlspeed {{pack.speed}}
+                                .btn-group.queueupdown
+                                    button(type="button",ng-click="downqueue(pack)", ng-class="{disabled:fistqueue(pack,key)}").btn.btn-default.btn-xs
+                                        span.glyphicon.glyphicon-arrow-up
+                                    button(type="button",ng-click="upqueue(pack)", ng-class="{disabled:lastqueue(pack,key)}").btn.btn-default.btn-xs
+                                        span.glyphicon.glyphicon-arrow-down
+                            td
+                                button(type="button",ng-click="cancelDownload(pack)").btn.btn-default.btn-xs
+                                    span.glyphicon.glyphicon-stop
 
 

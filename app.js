@@ -95,6 +95,8 @@ nconf.load(function(){
     app.put('/api/packet/filter/', api.setFilter);
     app.put('/api/packet/pagelimit/', api.setPageLimit);
     app.put('/api/channel/', api.channels);
+    app.put('/api/downloads/upqueue/', api.upQueueDownload);
+    app.put('/api/downloads/downqueue/', api.downQueueDownload);
 
     app.post('/api/server/', api.addServer);
     app.post('/api/downloads/', api.startDownload);

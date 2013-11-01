@@ -31,3 +31,15 @@ table thead tr th span.glyphicon {
     margin-bottom: 3px;
     margin-top: 10px;
 }
+
+tr.dlinactive {
+    color: #838383;
+}
+
+tr.dlinactive td:first-child{
+    padding-left: 25px !important;
+}
+
+tr.dlinactive .progress, tr.dlinactive .dlspeed , tr.dlactive .queueupdown, tr.dlactive .queuepos {
+    display: none;
+}

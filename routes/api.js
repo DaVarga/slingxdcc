@@ -107,8 +107,8 @@ exports.getDownloads = function (req, res){
 // PUT
 
 exports.setSorting = function (req, res){
-    sortBy = req.body.sortBy;
-    sortOrder = req.body.sortOrder;
+    var sortBy = req.body.sortBy;
+    var sortOrder = req.body.sortOrder;
     res.json({
         sortBy   : sortBy,
         sortOrder: sortOrder
@@ -117,19 +117,19 @@ exports.setSorting = function (req, res){
 };
 
 exports.setFilter = function (req, res){
-    filterDiscon = req.body.filterDiscon;
+    var filterDiscon = req.body.filterDiscon;
     res.json(filterDiscon);
 };
 
 exports.setPageLimit = function (req, res){
-    pageItemLimit = parseInt(req.body.limit);
+    var pageItemLimit = parseInt(req.body.limit);
     res.json(pageItemLimit);
 };
 
 exports.channels = function (req, res){
-    type = req.body.type
-    srvkey = req.body.srvkey;
-    channels = req.body.channels.length > 0 ? req.body.channels.toString().split(" ") : [];
+    var type = req.body.type
+    var srvkey = req.body.srvkey;
+    var channels = req.body.channels.length > 0 ? req.body.channels.toString().split(" ") : [];
     if(channels.length > 0){
         switch (type){
             case 'join':
@@ -149,6 +149,20 @@ exports.channels = function (req, res){
     res.json({type: type, srvkey: srvkey, channels: channels});
 };
 
+
+exports.upQueueDownload = function (req, res){
+    var packObj = req.body.packObj;
+    var success = downloadHandler.upqueue(packObj);
+    res.json({success:success});
+};
+
+exports.downQueueDownload = function (req, res){
+    var packObj = req.body.packObj;
+    var success = downloadHandler.downqueue(packObj);
+    res.json({success:success});
+};
+
+
 // POST
 exports.addServer = function (req, res){
     logger.addServer(req.body.srvkey, {
@@ -162,14 +176,14 @@ exports.addServer = function (req, res){
 };
 
 exports.startDownload = function (req,res){
-    downloadHandler.startDownload(req.body);
-    res.json(req.body);
+    var success = downloadHandler.startDownload(req.body.packObj);
+    res.json({success: success});
 }
 
 
 exports.cancelDownload = function (req,res){
-    downloadHandler.cancelDownload(req.body);
-    res.json(req.body);
+    var success = downloadHandler.cancelDownload(req.body.packObj);
+    res.json({success: success});
 }
 
 // DELETE
