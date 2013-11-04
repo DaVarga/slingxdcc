@@ -26,11 +26,16 @@ div(ng-controller="DownloadsCtrl").downloads
                                         span(tooltip-placement="bottom", tooltip="{{pack.filename}}") {{pack.filename|truncate:100}}
                                 .row
                                     .col-xs-12
-                                        progress(percent="pack.progress").progress-striped.active
+                                        .progress(tooltip="{{pack.progress}}% ~ {{pack.recieved|bytes}} of {{pack.realsize|bytes}}")
+                                            .progress-bar.progress-bar-success(role='progressbar', aria-valuenow='{{pack.progress}}', aria-valuemin='0', aria-valuemax='100', style='width: {{pack.progress}}%;')
+
+
                             td
-                                span {{pack.filesize}}
+                                span(ng-class="{collapse:!(pack.recieved > 0)}").dlrecieved {{pack.recieved|bytes}}/<br>
+                                span(ng-class="{collapse:hasRealSize(pack)}") {{pack.filesize}}
+                                span(ng-class="{collapse:!hasRealSize(pack)}") {{pack.realsize|bytes}}
                             td
-                                span.dlspeed {{pack.speed}}
+                                span.dlspeed {{pack.speed|bytes}}/s
                                 .btn-group.queueupdown
                                     button(type="button",ng-click="downqueue(pack)", ng-class="{disabled:fistqueue(pack,key)}").btn.btn-default.btn-xs
                                         span.glyphicon.glyphicon-arrow-up

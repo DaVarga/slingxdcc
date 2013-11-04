@@ -135,11 +135,6 @@ function DashboardCtrl($scope, $http, socket, $timeout) {
 
     function deaktivateAnimation() {
         $scope.chartPacketOptions.animateRotate = false;
-        socket.on('send:packetCount', function (data) {
-            angular.extend($scope.packetCount, data);
-            $scope.chartPacketData[0].value = $scope.packetCount.absPackets;
-            $scope.chartPacketData[2].value = $scope.packetCount.redPackets;
-        });
     }
 
     $scope.getData();

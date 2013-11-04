@@ -13,7 +13,7 @@
 
 var logger = require("../lib/xdcclogger");
 var packdb = require("../lib/packdb");
-var downloadHandler = require("../lib/downloadHanlder");
+var downloadHandler = require("../lib/downloadHandler");
 
 var sortBy = "lastseen";
 var sortOrder = "desc";

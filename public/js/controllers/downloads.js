@@ -10,10 +10,32 @@
 
 /* Downloads */
 
-function DownloadsCtrl($scope, $http){
+function DownloadsCtrl($scope, $http, socket){
 
     $scope.dlList = [];
     $scope.dlQueue = {};
+
+    socket.on('dlstart',function(data){
+        for (var i=0; i<$scope.dlList.length; i++) {
+            if($scope.dlList[i].server == data.packObj.server && $scope.dlList[i].nick == data.packObj.nick && $scope.dlList[i].nr == data.packObj.nr){
+                angular.extend($scope.dlList[i], data.packObj);
+                break;
+            }
+        }
+    });
+
+    socket.on('dlprogress',function(data){
+        for (var i=0; i<$scope.dlList.length; i++) {
+            if($scope.dlList[i].server == data.packObj.server && $scope.dlList[i].nick == data.packObj.nick && $scope.dlList[i].nr == data.packObj.nr){
+                angular.extend($scope.dlList[i], data.packObj);
+                break;
+            }
+        }
+    })
+
+    socket.on('dlerror',function(data){
+        $scope.getData();
+    });
 
     $scope.getData = function(){
         $http.get('/api/downloads/').success(function (data, status, headers, config){
@@ -64,10 +86,18 @@ function DownloadsCtrl($scope, $http){
     }
 
     $scope.lastqueue = function(packet, index){
-        if(typeof $scope.dlList[index+1] == "undefined" || !($scope.dlList[index+1].queuePos > packet.queuePos)){
+        if(typeof $scope.dlList[index+1] === "undefined" || !($scope.dlList[index+1].queuePos > packet.queuePos)){
             return true;
         }
         return false;
+    }
+
+    $scope.hasRealSize = function(packet){
+        if(packet.realsize > 0){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     function queuesToArray(queues){
@@ -76,7 +106,6 @@ function DownloadsCtrl($scope, $http){
             jQuery.each(srvcol,function(botname,botqueue){
                 jQuery.each(botqueue,function(queuePos,pack){
                     pack.queuePos = queuePos;
-                    pack.progress = Math.round(Math.random()*100);
                     array.push(pack);
                 })
             })
@@ -104,4 +133,4 @@ function DownloadsCtrl($scope, $http){
     $scope.getData();
 }
 
-DownloadsCtrl.$inject = ['$scope', '$http'];
+DownloadsCtrl.$inject = ['$scope', '$http', 'socket'];

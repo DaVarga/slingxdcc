@@ -4,6 +4,7 @@
 
 var logger = require("../lib/xdcclogger");
 var packdb = require("../lib/packdb");
+var downloadHandler = require("../lib/downloadHandler")
 
 module.exports = function (socket) {
     var lastPacketCount = 0;
@@ -33,6 +34,22 @@ module.exports = function (socket) {
         socket.emit('send:irc_connected:'+srvkey, {
             server: logger.getIrcServers()[srvkey]
         });
+    })
+
+    downloadHandler.on("dlerror",function(data){
+        socket.emit('dlerror', data);
+    })
+
+    downloadHandler.on("dlsuccess",function(data){
+        socket.emit('dlsuccess', data);
+    })
+
+    downloadHandler.on("dlprogress",function(data){
+        socket.emit('dlprogress', data);
+    })
+
+    downloadHandler.on("dlstart",function(data){
+        socket.emit('dlstart', data);
     })
 
 };
