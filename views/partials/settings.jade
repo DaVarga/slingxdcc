@@ -48,7 +48,7 @@ div(ng-controller="SettingsCtrl")
                                     form(role="joinChannel", ng-submit="joinChannels()").input-group
                                         input.form-control(placeholder="Add channel", type="text", ng-model="joinChanStr")
                                         span.input-group-btn
-                                            button.btn.btn-default(type="submit", tooltip-html-unsafe="Add multiple channels<br>separated by space", tooltip-trigger="mouseenter", tooltip-placement="left")
+                                            button.btn.btn-default(type="submit", tooltip="Add multiple channels separated by space", tooltip-trigger="mouseenter", tooltip-placement="left")
                                                 span.glyphicon.glyphicon-plus
 
 
@@ -109,5 +109,5 @@ div(ng-controller="SettingsCtrl")
                                     form(role="joinChannel", ng-submit="joinChannels()").input-group
                                         input.form-control(placeholder="Add channel", type="text", ng-model="joinChanStr")
                                         span.input-group-btn
-                                            button.btn.btn-default(type="submit", tooltip-html-unsafe="Add multiple channels<br>separated by space", tooltip-trigger="mouseenter", tooltip-placement="left")
+                                            button.btn.btn-default(type="submit", tooltip="Add multiple channels separated by space", tooltip-trigger="mouseenter", tooltip-placement="left")
                                                 span.glyphicon.glyphicon-plus
