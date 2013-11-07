@@ -47,7 +47,7 @@ function ServerAddCtrl($scope, $http){
                     observchannels: []
                 };
 
-                $scope.getServers();
+                $scope.getData();
             })
     };
 

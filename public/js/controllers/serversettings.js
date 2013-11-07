@@ -43,7 +43,7 @@ function ServerSettingsCtrl($scope, $http, socket){
             $scope.server.connected = false;
             angular.copy($scope.server,$scope.servers[server.key]);
             $scope.joinChanStr = "";
-            $scope.getServers();
+            $scope.getData();
         })
     };
 

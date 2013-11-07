@@ -13,16 +13,21 @@
 
 function SettingsCtrl($scope, $http, socket){
     $scope.servers = {};
-    $scope.getServers = function (){
+
+    $scope.getData = function (){
         $http.get('/api/server/').success(function (data, status, headers, config){
             for (var i in data){
                 data[i].key = i;
             }
             $scope.servers = data;
         })
+
+        $http.get('/api/pages')
+
+
     }
 
-    $scope.getServers();
+    $scope.getData();
 
 }
 
