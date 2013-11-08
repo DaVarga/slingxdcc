@@ -37,19 +37,19 @@ module.exports = function (socket) {
     })
 
     downloadHandler.on("dlerror",function(data){
-        socket.emit('dlerror', data);
+        socket.emit('send:dlerror', data);
     })
 
     downloadHandler.on("dlsuccess",function(data){
-        socket.emit('dlsuccess', data);
+        socket.emit('send:dlsuccess', data);
     })
 
     downloadHandler.on("dlprogress",function(data){
-        socket.emit('dlprogress', data);
+        socket.emit('send:dlprogress', data);
     })
 
     downloadHandler.on("dlstart",function(data){
-        socket.emit('dlstart', data);
+        socket.emit('send:dlstart', data);
     })
 
 };

@@ -13,9 +13,8 @@
 function DownloadsCtrl($scope, $http, socket){
 
     $scope.dlList = [];
-    $scope.dlQueue = {};
 
-    socket.on('dlstart',function(data){
+    socket.on('send:dlstart',function(data){
         for (var i=0; i<$scope.dlList.length; i++) {
             if($scope.dlList[i].server == data.packObj.server && $scope.dlList[i].nick == data.packObj.nick && $scope.dlList[i].nr == data.packObj.nr){
                 angular.extend($scope.dlList[i], data.packObj);
@@ -24,7 +23,7 @@ function DownloadsCtrl($scope, $http, socket){
         }
     });
 
-    socket.on('dlprogress',function(data){
+    socket.on('send:dlprogress',function(data){
         for (var i=0; i<$scope.dlList.length; i++) {
             if($scope.dlList[i].server == data.packObj.server && $scope.dlList[i].nick == data.packObj.nick && $scope.dlList[i].nr == data.packObj.nr){
                 angular.extend($scope.dlList[i], data.packObj);
@@ -33,21 +32,27 @@ function DownloadsCtrl($scope, $http, socket){
         }
     })
 
-    socket.on('dlerror',function(data){
+    socket.on('send:dlerror',function(data){
         $scope.getData();
+    });
+
+    $scope.$on('$destroy', function () {
+        socket.off('send:dlerror');
+        socket.off('send:dlstart');
+        socket.off('send:dlprogress');
     });
 
     $scope.getData = function(){
         $http.get('/api/downloads/').success(function (data, status, headers, config){
-            $scope.dlQueue = data.dlQueue
-            $scope.dlList = queuesToArray($scope.dlQueue);
+            $scope.dlList = queuesToArray(data.dlQueue);
         });
     }
 
     $scope.cancelDownload = function(packet){
         $http.post('/api/downloads/cancel/', {packObj:packet}).success(function (data, status, headers, config){
             if(data.success){
-                $scope.getData();
+                removeArrayItem($scope.dlList, packet);
+
             }
         });
     }
