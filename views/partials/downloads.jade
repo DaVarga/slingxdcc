@@ -32,7 +32,7 @@ div(ng-controller="DownloadsCtrl").downloads
 
                             td
                                 span(ng-class="{collapse:!(pack.recieved > 0)}").dlrecieved {{pack.recieved|bytes}}/<br>
-                                span(ng-class="{collapse:hasRealSize(pack)}") {{pack.filesize}}
+                                span(ng-class="{collapse:hasRealSize(pack)}") {{pack.filesize|bytes}}
                                 span(ng-class="{collapse:!hasRealSize(pack)}") {{pack.realsize|bytes}}
                             td
                                 span.dlspeed {{pack.speed|bytes}}/s

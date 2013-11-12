@@ -38,7 +38,7 @@ div(ng-controller="PacketListCtrl" select="init(search)")
                             td
                                 span {{packet.downloads}}
                             td
-                                span {{packet.filesize}}
+                                span {{packet.filesize|bytes}}
                             td
                                 span(tooltip-placement="bottom", tooltip="{{packet.filename}}") {{packet.filename|truncate:50}}
                             td
