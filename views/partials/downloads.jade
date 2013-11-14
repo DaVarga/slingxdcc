@@ -8,16 +8,16 @@ div(ng-controller="DownloadsCtrl").downloads
                 table.table.table-hover.table-condensed.table-striped
                     thead
                         tr
-                            th Bot
-                            th Q
+                            th(style="width:200px") Bot
+                            th(style="width:40px") Q
                             th Filename
-                            th Size
-                            th Speed
-                            th
+                            th(style="width:100px") Size
+                            th(style="width:85px") Speed
+                            th(style="width:50px")
                     tbody
                         tr(ng-repeat="(key, pack) in dlList", ng-class="rowClass(pack)")
                             td
-                                span {{pack.nick}}
+                                span(tooltip="Server: {{pack.server}}, Pack#: {{pack.nr}}") {{pack.nick}}
                             td
                                 span.queuepos {{pack.queuePos}}
                             td
@@ -35,7 +35,7 @@ div(ng-controller="DownloadsCtrl").downloads
                                 span(ng-class="{collapse:hasRealSize(pack)}") {{pack.filesize|bytes}}
                                 span(ng-class="{collapse:!hasRealSize(pack)}") {{pack.realsize|bytes}}
                             td
-                                span.dlspeed {{pack.speed|bytes}}/s
+                                span(tooltip="ETA: {{pack.eta|timeago}}", ng-class="{collapse:(pack.speed == -1)}").dlspeed {{pack.speed|bytes}}/s
                                 .btn-group.queueupdown
                                     button(type="button",ng-click="downqueue(pack)", ng-class="{disabled:fistqueue(pack,key)}").btn.btn-default.btn-xs
                                         span.glyphicon.glyphicon-arrow-up

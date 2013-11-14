@@ -52,7 +52,7 @@ angular.module('myApp.filters', []).filter('interpolate', ['version', function (
                     prefixAgo    : null,
                     prefixFromNow: null,
                     suffixAgo    : "",
-                    suffixFromNow: "from now",
+                    suffixFromNow: "in",
                     seconds      : "less than a minute",
                     minute       : "about a minute",
                     minutes      : "%d minutes",

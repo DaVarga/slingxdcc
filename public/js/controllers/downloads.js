@@ -27,6 +27,8 @@ function DownloadsCtrl($scope, $http, socket){
         for (var i=0; i<$scope.dlList.length; i++) {
             if($scope.dlList[i].server == data.packObj.server && $scope.dlList[i].nick == data.packObj.nick && $scope.dlList[i].nr == data.packObj.nr){
                 angular.extend($scope.dlList[i], data.packObj);
+                var secondsleft = parseInt(($scope.dlList[i].realsize - $scope.dlList[i].recieved) / $scope.dlList[i].speed);
+                $scope.dlList[i].eta = parseInt(Date.now() + secondsleft*1000)
                 break;
             }
         }
