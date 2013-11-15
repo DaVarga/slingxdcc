@@ -138,9 +138,20 @@ function DashboardCtrl($scope, $http, socket, $timeout) {
     }
 
     $scope.getData();
-    $timeout(function(){
-        $scope.getData();
-    },30000);
+
+    var timeout;
+    repeat();
+
+    function repeat() {
+        timeout = $timeout(function () {
+            $scope.getData();
+            repeat();
+        }, 30000)
+    };
+
+    $scope.$on('$destroy', function () {
+        $timeout.cancel(timeout);
+    });
 }
 
 DashboardCtrl.$inject = ['$scope', '$http', 'socket', '$timeout'];

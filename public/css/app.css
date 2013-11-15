@@ -40,6 +40,6 @@ tr.dlinactive td:first-child{
     padding-left: 25px !important;
 }
 
-tr.dlinactive .progress, tr.dlinactive .dlspeed , tr.dlactive .queueupdown, tr.dlactive .queuepos, tr.dlinactive .dlrecieved{
+tr.dlinactive .progress, tr.dlinactive .dlspeed , tr.dlactive .queueupdown, tr.dlactive .queuepos, tr.dlinactive .dlreceived{
     display: none;
 }

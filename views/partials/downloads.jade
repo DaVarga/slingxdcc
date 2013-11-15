@@ -14,6 +14,15 @@ div(ng-controller="DownloadsCtrl").downloads
                             th(style="width:100px") Size
                             th(style="width:85px") Speed
                             th(style="width:50px")
+                    tfoot
+                        tr
+                            td
+                            td
+                            td
+                            td
+                            td(ng-class="{collapse:!(speedsum >= 0)}") {{speedsum|bytes}}/s
+                            td
+
                     tbody
                         tr(ng-repeat="(key, pack) in dlList", ng-class="rowClass(pack)")
                             td
@@ -26,12 +35,12 @@ div(ng-controller="DownloadsCtrl").downloads
                                         span(tooltip-placement="bottom", tooltip="{{pack.filename}}") {{pack.filename|truncate:100}}
                                 .row
                                     .col-xs-12
-                                        .progress(ng-class="{collapse:!hasRealSize(pack)}", tooltip="{{pack.progress}}% ~ {{pack.recieved|bytes}} of {{pack.realsize|bytes}}")
-                                            .progress-bar.progress-bar-success(role='progressbar', aria-valuenow='{{pack.progress}}', aria-valuemin='0', aria-valuemax='100', style='width: {{pack.progress}}%;')
+                                        .progress(ng-class="{collapse:!hasRealSize(pack)}", tooltip="{{pack.progress}}% ~ {{pack.received|bytes}} of {{pack.realsize|bytes}}")
+                                            .progress-bar(ng-class="{'progress-bar-success':(pack.speed > 0)}", role='progressbar', aria-valuenow='{{pack.progress}}', aria-valuemin='0', aria-valuemax='100', style='width: {{pack.progress}}%;')
 
 
                             td
-                                span(ng-class="{collapse:!(pack.recieved > 0)}").dlrecieved {{pack.recieved|bytes}}/<br>
+                                span(ng-class="{collapse:!(pack.received > 0)}").dlreceived {{pack.received|bytes}}/<br>
                                 span(ng-class="{collapse:hasRealSize(pack)}") {{pack.filesize|bytes}}
                                 span(ng-class="{collapse:!hasRealSize(pack)}") {{pack.realsize|bytes}}
                             td

@@ -13,6 +13,7 @@
 function DownloadsCtrl($scope, $http, socket){
 
     $scope.dlList = [];
+    $scope.speedsum = 0;
 
     socket.on('send:dlstart',function(data){
         for (var i=0; i<$scope.dlList.length; i++) {
@@ -26,8 +27,14 @@ function DownloadsCtrl($scope, $http, socket){
     socket.on('send:dlprogress',function(data){
         for (var i=0; i<$scope.dlList.length; i++) {
             if($scope.dlList[i].server == data.packObj.server && $scope.dlList[i].nick == data.packObj.nick && $scope.dlList[i].nr == data.packObj.nr){
+
+                data.packObj.progress = parseInt(data.packObj.received / $scope.dlList[i].realsize * 1000)/10
+
+                $scope.speedsum -= $scope.dlList[i].speed;
+                $scope.speedsum += data.packObj.speed;
+
                 angular.extend($scope.dlList[i], data.packObj);
-                var secondsleft = parseInt(($scope.dlList[i].realsize - $scope.dlList[i].recieved) / $scope.dlList[i].speed);
+                var secondsleft = parseInt(($scope.dlList[i].realsize - $scope.dlList[i].received) / $scope.dlList[i].speed);
                 $scope.dlList[i].eta = parseInt(Date.now() + secondsleft*1000)
                 break;
             }
@@ -38,15 +45,22 @@ function DownloadsCtrl($scope, $http, socket){
         $scope.getData();
     });
 
+    socket.on('send:dlsuccess',function(data){
+        removeArrayItem($scope.dlList, data.packObj);
+        $scope.speedsum = speedsum();
+    });
+
     $scope.$on('$destroy', function () {
         socket.off('send:dlerror');
         socket.off('send:dlstart');
         socket.off('send:dlprogress');
+        socket.off('send:dlsuccess');
     });
 
     $scope.getData = function(){
         $http.get('/api/downloads/').success(function (data, status, headers, config){
             $scope.dlList = queuesToArray(data.dlQueue);
+            $scope.speedsum = speedsum();
         });
     }
 
@@ -54,7 +68,7 @@ function DownloadsCtrl($scope, $http, socket){
         $http.post('/api/downloads/cancel/', {packObj:packet}).success(function (data, status, headers, config){
             if(data.success){
                 removeArrayItem($scope.dlList, packet);
-
+                $scope.speedsum = speedsum();
             }
         });
     }
@@ -113,6 +127,9 @@ function DownloadsCtrl($scope, $http, socket){
             jQuery.each(srvcol,function(botname,botqueue){
                 jQuery.each(botqueue,function(queuePos,pack){
                     pack.queuePos = queuePos;
+                    if(pack.received > 0){
+                        pack.progress = parseInt(pack.received / pack.realsize * 1000)/10
+                    }
                     array.push(pack);
                 })
             })
@@ -135,6 +152,16 @@ function DownloadsCtrl($scope, $http, socket){
         var id = getDownloadIndex(item);
         if (id != -1) array.splice(id, 1);
         return array;
+    }
+
+    function speedsum() {
+        var speedsum = 0;
+        for (var i = 0; i < $scope.dlList.length; i++) {
+            if ($scope.dlList[i].speed > 0) {
+                speedsum += $scope.dlList[i].speed;
+            }
+        }
+        return speedsum;
     }
 
     $scope.getData();

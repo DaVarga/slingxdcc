@@ -44,10 +44,11 @@ settings.json
 	  },
 	  "downloadHandler": {
 	    "destination": "downloads/",	// Downloads folder
-	    "resumeDownloads": true			// Resume or overwrite downloads
+	    "resumeDownloads": true,		// Resume or overwrite downloads
+        "refreshInterval": 1            // Interval in seconds progress update is displayed
 	  },
 	  "downloads": {},
-	  "PacketList": {
+	  "packetList": {
 	    "sortBy": "lastseen"			// Sort search by, can be edited via GUI
 	    "sortOrder": "desc",			// Sort order, can be edited via GUI
 	    "filterDiscon": true			// Filter offline downloads

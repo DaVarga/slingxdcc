@@ -19,13 +19,15 @@ var nconf = require("nconf")
 nconf.add('settings', {type: 'file', file: 'config/settings.json'});
 
 nconf.defaults({
-    "PacketList": {
+    "packetList": {
         "sortBy": "lastseen",
         "sortOrder": "desc",
         "filterDiscon": true,
         "pageItemLimit": 20
     }
 });
+nconf.set('packetList',nconf.get('packetList'));
+nconf.save();
 
 // GET
 
@@ -36,35 +38,35 @@ exports.packet = function (req, res){
 
 exports.packetSearch = function (req, res){
     var string = req.params.string;
-    var packets = packdb.searchPackets(string, nconf.get("PacketList:sortBy"), nconf.get("PacketList:sortOrder"), nconf.get("PacketList:filterDiscon"));
+    var packets = packdb.searchPackets(string, nconf.get("packetList:sortBy"), nconf.get("packetList:sortOrder"), nconf.get("packetList:filterDiscon"));
     res.json(packets);
 };
 
 exports.packetSearchPaged = function (req, res){
     var string = req.params.string;
     var page = parseInt(req.params.page);
-    packdb.searchPacketsPaged(string, nconf.get("PacketList:pageItemLimit"), page, nconf.get("PacketList:sortBy"), nconf.get("PacketList:sortOrder"), nconf.get("PacketList:filterDiscon"), function (pages, result){
+    packdb.searchPacketsPaged(string, nconf.get("packetList:pageItemLimit"), page, nconf.get("packetList:sortBy"), nconf.get("packetList:sortOrder"), nconf.get("packetList:filterDiscon"), function (pages, result){
         res.json({
             numPages: pages,
-            numPackets: pages*nconf.get("PacketList:pageItemLimit"),
-            pageItemLimit: nconf.get("PacketList:pageItemLimit"),
+            numPackets: pages*nconf.get("packetList:pageItemLimit"),
+            pageItemLimit: nconf.get("packetList:pageItemLimit"),
             packets : result
         });
     });
 };
 
 exports.packetList = function (req, res){
-    var packets = packdb.searchPackets(null, nconf.get("PacketList:sortBy"), nconf.get("PacketList:sortOrder"), nconf.get("PacketList:filterDiscon"));
+    var packets = packdb.searchPackets(null, nconf.get("packetList:sortBy"), nconf.get("packetList:sortOrder"), nconf.get("packetList:filterDiscon"));
     res.json(packets);
 };
 
 exports.packetListPaged = function (req, res){
     var page = parseInt(req.params.page);
-    packdb.searchPacketsPaged(null, nconf.get("PacketList:pageItemLimit"), page, nconf.get("PacketList:sortBy"), nconf.get("PacketList:sortOrder"), nconf.get("PacketList:filterDiscon"), function (pages, result){
+    packdb.searchPacketsPaged(null, nconf.get("packetList:pageItemLimit"), page, nconf.get("packetList:sortBy"), nconf.get("packetList:sortOrder"), nconf.get("packetList:filterDiscon"), function (pages, result){
         res.json({
             numPages: pages,
-            numPackets: pages*nconf.get("PacketList:pageItemLimit"),
-            pageItemLimit: nconf.get("PacketList:pageItemLimit"),
+            numPackets: pages*nconf.get("packetList:pageItemLimit"),
+            pageItemLimit: nconf.get("packetList:pageItemLimit"),
             packets: result
         });
     });
@@ -73,17 +75,17 @@ exports.packetListPaged = function (req, res){
 
 exports.getSorting = function (req, res){
     res.json({
-        sortBy   : nconf.get("PacketList:sortBy"),
-        sortOrder: nconf.get("PacketList:sortOrder")
+        sortBy   : nconf.get("packetList:sortBy"),
+        sortOrder: nconf.get("packetList:sortOrder")
     });
 };
 
 exports.getFilter = function (req, res){
-    res.json(nconf.get("PacketList:filterDiscon"));
+    res.json(nconf.get("packetList:filterDiscon"));
 };
 
 exports.getPageLimit = function (req, res){
-    res.json(nconf.get("PacketList:pageItemLimit"));
+    res.json(nconf.get("packetList:pageItemLimit"));
 };
 
 exports.getServer = function (req, res){
@@ -115,24 +117,24 @@ exports.getDownloads = function (req, res){
 // PUT
 
 exports.setSorting = function (req, res){
-    nconf.set("PacketList:sortBy",req.body.sortBy);
-    nconf.set("PacketList:sortOrder",req.body.sortOrder);
+    nconf.set("packetList:sortBy",req.body.sortBy);
+    nconf.set("packetList:sortOrder",req.body.sortOrder);
     res.json({
-        sortBy   : nconf.get("PacketList:sortBy"),
-        sortOrder: nconf.get("PacketList:sortOrder")
+        sortBy   : nconf.get("packetList:sortBy"),
+        sortOrder: nconf.get("packetList:sortOrder")
     });
     nconf.save();
 };
 
 exports.setFilter = function (req, res){
-    nconf.set("PacketList:filterDiscon",req.body.filterDiscon);
-    res.json(nconf.get("PacketList:filterDiscon"));
+    nconf.set("packetList:filterDiscon",req.body.filterDiscon);
+    res.json(nconf.get("packetList:filterDiscon"));
     nconf.save();
 };
 
 exports.setPageLimit = function (req, res){
-    nconf.set("PacketList:pageItemLimit",parseInt(req.body.limit));
-    res.json(nconf.get("PacketList:pageItemLimit"));
+    nconf.set("packetList:pageItemLimit",parseInt(req.body.limit));
+    res.json(nconf.get("packetList:pageItemLimit"));
     nconf.save();
 };
 

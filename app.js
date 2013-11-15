@@ -12,8 +12,6 @@
  */
 
 var express = require('express'),
-    routes = require('./routes'),
-    api = require('./routes/api'),
     https = require('https'),
     http = require('http'),
     path = require('path'),
@@ -33,6 +31,13 @@ nconf.defaults({
 });
 
 nconf.load(function(){
+
+    var routes = require('./routes'),
+        api = require('./routes/api');
+
+    nconf.set('webserver',nconf.get('webserver'));
+    nconf.save();
+
     var logger = require("./lib/xdcclogger");
 
 
@@ -49,7 +54,8 @@ nconf.load(function(){
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
     app.use(express.logger('dev'));
-    app.use(express.bodyParser());
+    app.use(express.json());
+    app.use(express.urlencoded());
     app.use(express.methodOverride());
     app.use(express.static(path.join(__dirname, 'public')));
     app.use(app.router);
