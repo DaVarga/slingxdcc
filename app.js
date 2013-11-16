@@ -29,18 +29,15 @@ nconf.defaults({
         "ssl.key": "ssl/server.key"
     }
 });
+nconf.set('webserver',nconf.get('webserver'));
+nconf.save();
 
 nconf.load(function(){
 
     var routes = require('./routes'),
         api = require('./routes/api');
 
-    nconf.set('webserver',nconf.get('webserver'));
-    nconf.save();
-
-    var logger = require("./lib/xdcclogger");
-
-
+    require("./lib/xdcclogger");
 
     var app = module.exports = express();
 
@@ -69,7 +66,6 @@ nconf.load(function(){
     if (app.get('env') === 'production'){
         // TODO
     }
-    ;
 
     /**
      * Routes
@@ -120,13 +116,9 @@ nconf.load(function(){
      */
 
 
-    fs.readFile(nconf.get('webserver:ssl.key'), function (err, data){
-        var errorkey = err;
-        var key = data;
-        var server;
-        fs.readFile(nconf.get('webserver:ssl.crt'), function (err, data){
-            var errorcrt = err;
-            var crt = data;
+    fs.readFile(nconf.get('webserver:ssl.key'), function (errorkey, key){
+        fs.readFile(nconf.get('webserver:ssl.crt'), function (errorcrt, crt){
+            var server;
             if ((errorcrt || errorkey) && nconf.get('webserver:ssl')){
                 server = http.createServer(app);
                 console.log('No key or cert found, \n!!!Fallback!!! Http');
