@@ -10,7 +10,7 @@
 
 /* Searchbarcontroller handels the searches */
 
-function SearchBarCtrl($scope, $rootScope, socket, $http){
+function SearchBarCtrl($scope, $rootScope, $http, $location){
     $scope.history = [];
     $scope.packetCount = 0;
 
@@ -27,21 +27,15 @@ function SearchBarCtrl($scope, $rootScope, socket, $http){
         $scope.history.push($scope.searchString.toLowerCase());
         $rootScope.searchString = $scope.searchString;
         $scope.$emit("setSearch");
-    }
+        $location.path("packets");
+    };
 
     $scope.selectHistory = function (item){
-        $scope.searchString = item
+        $scope.searchString = item;
         $rootScope.searchString = $scope.searchString;
         $rootScope.$emit("setSearch");
-    }
-
-    socket.on('send:packetCount', function(data){
-        $scope.packetCount = data;
-    });
-
-
-
+    };
 
 }
 
-SearchBarCtrl.$inject = ['$scope', '$rootScope', 'socket', '$http'];
+SearchBarCtrl.$inject = ['$scope', '$rootScope', '$http', '$location'];

@@ -43,3 +43,97 @@ tr.dlinactive td:first-child{
 tr.dlinactive .progress, tr.dlinactive .dlspeed , tr.dlactive .queueupdown, tr.dlactive .queuepos, tr.dlinactive .dlreceived{
     display: none;
 }
+
+.badge[href]:hover,
+.badge[href]:focus {
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.badge-default {
+    background-color: #999999;
+}
+
+.badge-default[href]:hover,
+.badge-default[href]:focus {
+    background-color: #808080;
+}
+
+.badge-primary {
+    background-color: #428bca;
+}
+
+.badge-primary[href]:hover,
+.badge-primary[href]:focus {
+    background-color: #3071a9;
+}
+
+.badge-success {
+    background-color: #5cb85c;
+}
+
+.badge-success[href]:hover,
+.badge-success[href]:focus {
+    background-color: #449d44;
+}
+
+.badge-info {
+    background-color: #5bc0de;
+}
+
+.badge-info[href]:hover,
+.badge-info[href]:focus {
+    background-color: #31b0d5;
+}
+
+.badge-warning {
+    background-color: #f0ad4e;
+}
+
+.badge-warning[href]:hover,
+.badge-warning[href]:focus {
+    background-color: #ec971f;
+}
+
+.badge-danger {
+    background-color: #d9534f;
+}
+
+.badge-danger[href]:hover,
+.badge-danger[href]:focus {
+    background-color: #c9302c;
+}
+
+.navcount{
+    position:absolute;
+    vertical-align: middle;
+    opacity: .8;
+}
+
+.navbar-brand:hover .navcount{
+    opacity: 1;
+}
+
+.dashnoti ul {
+    height: 285px;
+    overflow-y: auto;
+    overflow-x:visible;
+}
+
+.dashnoti .list-group-item {
+    height: 66px;
+    border-color: #afafaf;
+}
+
+.dashnoti ul li.dlsuccess{
+    background-color: #daf2da;
+}
+
+.dashnoti ul li.dlerror{
+    background-color: #f2dada;
+}
+
+.dashnoti ul li.dlstart{
+    background-color: #dae7f2;
+}

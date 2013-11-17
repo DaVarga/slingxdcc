@@ -27,12 +27,12 @@ div(ng-controller="SettingsCtrl")
                                             .col-md-10
                                                 input(type="text",id="nick" ng-model="server.nick", required).form-control
                                     li.list-group-item
-                                        button.btn.btn-danger(type="delete" ng-click="removeServer()")
-                                            span Delete &nbsp;
-                                            span.glyphicon.glyphicon-remove
                                         button.btn.btn-default(type="submit").pull-right
                                             span Save &nbsp;
                                             span.glyphicon.glyphicon-ok
+                                        button.btn.btn-danger(type="delete" ng-click="removeServer()")
+                                            span Delete &nbsp;
+                                            span.glyphicon.glyphicon-remove
 
                         .col-md-4
                             h3 Channels

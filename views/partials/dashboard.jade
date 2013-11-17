@@ -4,7 +4,6 @@ div(ng-controller="DashboardCtrl").dashboard
             button(type="button",ng-click="getData()").btn.btn-default.pull-right
                 span.glyphicon.glyphicon-refresh
             h1 Dashboard
-
             .row
                 .col-lg-6
                     hr
@@ -37,5 +36,18 @@ div(ng-controller="DashboardCtrl").dashboard
                             li.list-group-item
                                 span Offline:
                                 span.label.label-danger.pull-right {{offServerPercentage() | number:1}}%
-
-
+            .row(ng-controller="NotificationCtrl")
+                .col-lg-6.dashnoti
+                    hr
+                    button(type="button",ng-click="clearNotifications()").pull-right.btn.btn-xs.btn-default clear
+                    h3 Download notifications
+                    ul.list-group
+                        li(ng-repeat='notification in notifications | reverse', ng-class='[notification.type]').list-group-item
+                            .col-lg-9
+                                .row
+                                    span(tooltip-placement="bottom", tooltip="{{notification.packObj.filename}}") {{notification.packObj.filename | truncate:50}}
+                                .row
+                                    span(tooltip="{{getError(notification)}}") {{getError(notification) | truncate:50}}
+                            .col-lg-3
+                                span.pull-right {{notification.time | timeago}}
+                .col-lg-6

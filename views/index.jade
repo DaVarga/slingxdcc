@@ -1,7 +1,7 @@
 extends layout
 
 block body
-    .navbar.navbar-inverse.navbar-static-top(role="navigation", ng-controller='SearchBarCtrl')
+    .navbar.navbar-inverse.navbar-static-top(role="navigation")
         .navbar-header
             button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-ex1-collapse")
                 span.sr-only Toggle navigation
@@ -9,6 +9,13 @@ block body
                 span.icon-bar
                 span.icon-bar
             a.navbar-brand(href="#") Slingxdcc
+                .navcount(ng-controller='NotificationCountCtrl')
+                    span(tooltip="Downloads started", tooltip-placement="bottom").badge.badge-info {{notificationCount.dlstart}}
+                    span &nbsp;
+                    span(tooltip="Downloads finished", tooltip-placement="bottom").badge.badge-success {{notificationCount.dlsuccess}}
+                    span &nbsp;
+                    span(tooltip="Download errors", tooltip-placement="bottom").badge.badge-danger {{notificationCount.dlerror}}
+
 
 
         .collapse.navbar-collapse.navbar-ex1-collapse
@@ -20,9 +27,9 @@ block body
                 li
                     a(href="settings") Settings
 
-            form.navbar-form.navbar-right(role="search", ng-submit="setSearch()", style="width:350px")
+            form.navbar-form.navbar-right(ng-controller='SearchBarCtrl', role="search", ng-submit="setSearch()", style="width:350px")
                 input.form-control(type="text", placeholder="Search", ng-model="searchString", typeahead="item for item in history | limitTo:8 | filter:$viewValue")
-            p.navbar-text.pull-right Packets # {{packetCount.absPackets}}
+            p(ng-controller='PacketcountCtrl').navbar-text.pull-right Packets # {{packetCount.absPackets}}
 
     .container
         div(ng-view)
@@ -41,6 +48,9 @@ block body
     script(src='js/controllers/serversettings.js')
     script(src='js/controllers/settings.js')
     script(src='js/controllers/downloads.js')
+    script(src='js/controllers/packetcount.js')
+    script(src='js/controllers/notification.js')
+    script(src='js/controllers/notificationcount.js')
     script(src='js/filters.js')
     script(src='js/directives.js')
     script(src='js/lib/jquery/jquery-2.0.3.min.js')

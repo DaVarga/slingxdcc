@@ -14,19 +14,10 @@ function ServerSettingsCtrl($scope, $http, socket){
     $scope.joinChanStr = "";
     $scope.init = function (key){
         $scope.server = $scope.servers[key];
-
-        socket.on('send:irc_error:'+key, function(data){
-            $scope.server.error = data.server.error;
-        })
-        socket.on('send:irc_connected:'+key, function(data){
-            $scope.server.connected = true;
-        });
-
-    }
+    };
 
     $scope.$on('$destroy', function () {
-        socket.off('send:irc_connected:'+$scope.server.key);
-        socket.off('send:irc_error:'+$scope.server.key);
+        socket.off('send:irc_error');
     });
 
     $scope.editServer = function (){
@@ -38,7 +29,7 @@ function ServerSettingsCtrl($scope, $http, socket){
             nick          : $scope.server.nick,
             channels      : $scope.server.channels.length > 0 ? $scope.server.channels.join(' ') : "",
             observchannels: $scope.server.observchannels.length > 0 ? $scope.server.observchannels.join(' ') : ""
-        }
+        };
         $http.post('/api/server/', server).success(function (data){
             $scope.server.connected = false;
             angular.copy($scope.server,$scope.servers[server.key]);
@@ -60,13 +51,13 @@ function ServerSettingsCtrl($scope, $http, socket){
                 $scope.joinChanStr = "";
             });
         }
-    }
+    };
 
     $scope.partChannel = function (channel){
         $http.put('/api/channel/', {srvkey: $scope.server.key, channels: channel, type: "part"}).success(function (data){
             $scope.server.channels.splice($scope.server.channels.indexOf(channel), 1);
         });
-    }
+    };
 
     $scope.toggleObserv = function (channel){
         if ($scope.isObserved(channel)){
@@ -78,23 +69,15 @@ function ServerSettingsCtrl($scope, $http, socket){
                 $scope.server.observchannels.push(channel);
             });
         }
-    }
+    };
 
     $scope.hasErrors = function (){
-        if ($scope.server.error.length > 0){
-            return true;
-        }else{
-            return false;
-        }
-    }
+        return ($scope.server.error.length > 0)
+    };
 
     $scope.isObserved = function (channel){
-        if ($scope.server.observchannels.indexOf(channel) != -1){
-            return true;
-        }else{
-            return false;
-        }
-    }
+        return ($scope.server.observchannels.indexOf(channel) != -1);
+    };
 
 }
 

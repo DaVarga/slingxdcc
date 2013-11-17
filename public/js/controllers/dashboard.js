@@ -10,7 +10,7 @@
 
 /* Dashboard */
 
-function DashboardCtrl($scope, $http, socket, $timeout) {
+function DashboardCtrl($scope, $http, $timeout) {
 
     $scope.servers = {};
     $scope.onServers = 0;
@@ -20,7 +20,7 @@ function DashboardCtrl($scope, $http, socket, $timeout) {
         redPackets: 0,
         conPackets: 0,
         offPackets: 0
-    }
+    };
 
 
     $scope.chartServerData = [
@@ -51,23 +51,23 @@ function DashboardCtrl($scope, $http, socket, $timeout) {
 
     $scope.redPacketPercentage = function () {
         return $scope.packetCount.redPackets / ($scope.packetCount.absPackets + $scope.packetCount.redPackets) * 100;
-    }
+    };
 
     $scope.onPacketPercentage = function () {
         return $scope.packetCount.conPackets / ($scope.packetCount.absPackets + $scope.packetCount.redPackets) * 100;
-    }
+    };
 
     $scope.offPacketPercentage = function () {
         return $scope.packetCount.offPackets / ($scope.packetCount.absPackets + $scope.packetCount.redPackets) * 100;
-    }
+    };
 
     $scope.onServerPercentage = function () {
         return $scope.onServers / $scope.numServers * 100;
-    }
+    };
 
     $scope.offServerPercentage = function () {
         return 100 - $scope.onServerPercentage();
-    }
+    };
 
     $scope.getData = function () {
 
@@ -87,7 +87,7 @@ function DashboardCtrl($scope, $http, socket, $timeout) {
             $scope.chartServerData[1].value = $scope.numServers - $scope.onServers;
 
 
-        })
+        });
 
         $http.get('/api/packet/').success(function (data, status, headers, config) {
             $scope.packetCount = data;
@@ -101,7 +101,7 @@ function DashboardCtrl($scope, $http, socket, $timeout) {
             $scope.nextDbCleanup = data.nextCompacting;
         })
 
-    }
+    };
 
 
     $scope.chartPacketOptions = {
@@ -147,11 +147,11 @@ function DashboardCtrl($scope, $http, socket, $timeout) {
             $scope.getData();
             repeat();
         }, 30000)
-    };
+    }
 
     $scope.$on('$destroy', function () {
         $timeout.cancel(timeout);
     });
 }
 
-DashboardCtrl.$inject = ['$scope', '$http', 'socket', '$timeout'];
+DashboardCtrl.$inject = ['$scope', '$http', '$timeout'];

@@ -92,6 +92,8 @@ nconf.load(function(){
 
     app.get('/api/db/compacting/', api.getNextCompacting);
     app.get('/api/downloads/', api.getDownloads);
+    app.get('/api/downloads/notifications/', api.getDlNotifications);
+    app.get('/api/downloads/notifications/count/', api.getDlNotificationCount);
 
     app.put('/api/packet/sorting/', api.setSorting);
     app.put('/api/packet/filter/', api.setFilter);
@@ -105,6 +107,8 @@ nconf.load(function(){
     app.post('/api/downloads/cancel', api.cancelDownload);
 
     app.delete('/api/server/:key', api.removeServer);
+    app.delete('/api/downloads/notifications/', api.clearDlNotifications);
+    app.delete('/api/downloads/notifications/count/', api.clearDlNotificationCount);
 
     app.get('*', routes.index);
 

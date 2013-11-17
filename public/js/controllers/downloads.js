@@ -8,7 +8,7 @@
  */
 'use strict';
 
-/* Downloads */
+/* Downloads controller */
 
 function DownloadsCtrl($scope, $http, socket){
 
@@ -28,18 +28,18 @@ function DownloadsCtrl($scope, $http, socket){
         for (var i=0; i<$scope.dlList.length; i++) {
             if($scope.dlList[i].server == data.packObj.server && $scope.dlList[i].nick == data.packObj.nick && $scope.dlList[i].nr == data.packObj.nr){
 
-                data.packObj.progress = parseInt(data.packObj.received / $scope.dlList[i].realsize * 1000)/10
+                data.packObj.progress = parseInt(data.packObj.received / $scope.dlList[i].realsize * 1000)/10;
 
                 $scope.speedsum -= $scope.dlList[i].speed;
                 $scope.speedsum += data.packObj.speed;
 
                 angular.extend($scope.dlList[i], data.packObj);
                 var secondsleft = parseInt(($scope.dlList[i].realsize - $scope.dlList[i].received) / $scope.dlList[i].speed);
-                $scope.dlList[i].eta = parseInt(Date.now() + secondsleft*1000)
+                $scope.dlList[i].eta = parseInt(Date.now() + secondsleft*1000);
                 break;
             }
         }
-    })
+    });
 
     socket.on('send:dlerror',function(data){
         $scope.getData();
@@ -62,7 +62,7 @@ function DownloadsCtrl($scope, $http, socket){
             $scope.dlList = queuesToArray(data.dlQueue);
             $scope.speedsum = speedsum();
         });
-    }
+    };
 
     $scope.cancelDownload = function(packet){
         $http.post('/api/downloads/cancel/', {packObj:packet}).success(function (data, status, headers, config){
@@ -71,7 +71,7 @@ function DownloadsCtrl($scope, $http, socket){
                 $scope.speedsum = speedsum();
             }
         });
-    }
+    };
 
     $scope.rowClass = function(pack){
         if(pack.queuePos == 0){
@@ -79,7 +79,7 @@ function DownloadsCtrl($scope, $http, socket){
         }else{
             return 'dlinactive';
         }
-    }
+    };
 
 
 
@@ -87,9 +87,9 @@ function DownloadsCtrl($scope, $http, socket){
         $http.put('/api/downloads/upqueue/', {packObj:packet}).success(function (data, status, headers, config){
             if(data.success){
                 $scope.getData();
-            };
+            }
         });
-    }
+    };
 
     $scope.downqueue = function(packet){
         $http.put('/api/downloads/downqueue/', {packObj:packet}).success(function (data, status, headers, config){
@@ -97,29 +97,19 @@ function DownloadsCtrl($scope, $http, socket){
                 $scope.getData();
             }
         });
-    }
+    };
 
     $scope.fistqueue = function(packet, index){
-        if(packet.queuePos == 1){
-            return true;
-        }
-        return false;
-    }
+        return (packet.queuePos == 1);
+    };
 
     $scope.lastqueue = function(packet, index){
-        if(typeof $scope.dlList[index+1] === "undefined" || !($scope.dlList[index+1].queuePos > packet.queuePos)){
-            return true;
-        }
-        return false;
-    }
+        return (typeof $scope.dlList[index+1] === "undefined" || !($scope.dlList[index+1].queuePos > packet.queuePos));
+    };
 
     $scope.hasRealSize = function(packet){
-        if(packet.realsize > 0){
-            return true;
-        }else{
-            return false;
-        }
-    }
+        return (packet.realsize > 0);
+    };
 
     function queuesToArray(queues){
         var array = [];
@@ -131,9 +121,9 @@ function DownloadsCtrl($scope, $http, socket){
                         pack.progress = parseInt(pack.received / pack.realsize * 1000)/10
                     }
                     array.push(pack);
-                })
-            })
-        })
+                });
+            });
+        });
         return array;
     }
 

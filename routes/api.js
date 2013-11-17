@@ -14,7 +14,7 @@
 var logger = require("../lib/xdcclogger");
 var packdb = require("../lib/packdb");
 var downloadHandler = require("../lib/downloadHandler");
-var nconf = require("nconf")
+var nconf = require("nconf");
 
 nconf.add('settings', {type: 'file', file: 'config/settings.json'});
 
@@ -28,6 +28,22 @@ nconf.defaults({
 });
 nconf.set('packetList',nconf.get('packetList'));
 nconf.save();
+
+var notificationCount = {
+    dlerror : 0,
+    dlsuccess : 0,
+    dlstart: 0
+};
+
+downloadHandler.on('dlerror',function(){
+    notificationCount.dlerror++;
+});
+downloadHandler.on('dlsuccess',function(){
+    notificationCount.dlsuccess++;
+});
+downloadHandler.on('dlstart',function(){
+    notificationCount.dlstart++;
+});
 
 // GET
 
@@ -104,7 +120,7 @@ exports.getNumPackets = function (req, res){
         redPackets : redpackets,
         offPackets : offpackets
     });
-}
+};
 
 exports.getNextCompacting = function (req, res){
     res.json({nextCompacting:packdb.getNextCompacting()});
@@ -112,6 +128,14 @@ exports.getNextCompacting = function (req, res){
 
 exports.getDownloads = function (req, res){
     res.json({dlQueue:downloadHandler.getDownloads()});
+};
+
+exports.getDlNotifications = function (req, res){
+    res.json(downloadHandler.getNotifications());
+};
+
+exports.getDlNotificationCount = function (req, res){
+    res.json(notificationCount);
 };
 
 // PUT
@@ -139,7 +163,7 @@ exports.setPageLimit = function (req, res){
 };
 
 exports.channels = function (req, res){
-    var type = req.body.type
+    var type = req.body.type;
     var srvkey = req.body.srvkey;
     var channels = req.body.channels.length > 0 ? req.body.channels.toString().split(" ") : [];
     if(channels.length > 0){
@@ -190,13 +214,13 @@ exports.addServer = function (req, res){
 exports.startDownload = function (req,res){
     var success = downloadHandler.startDownload(req.body.packObj);
     res.json({success: success});
-}
+};
 
 
 exports.cancelDownload = function (req,res){
     var success = downloadHandler.cancelDownload(req.body.packObj);
     res.json({success: success});
-}
+};
 
 // DELETE
 exports.removeServer = function (req, res){
@@ -209,4 +233,24 @@ exports.removeServer = function (req, res){
         res.json(false);
     }
 };
+
+exports.clearDlNotifications = function (req, res){
+    downloadHandler.clearNotifications();
+    notificationCount = {
+        dlerror : 0,
+        dlsuccess : 0,
+        dlstart: 0
+    };
+    res.json(true);
+};
+
+exports.clearDlNotificationCount = function (req, res){
+    notificationCount = {
+        dlerror : 0,
+        dlsuccess : 0,
+        dlstart: 0
+    };
+    res.json(true);
+};
+
 
