@@ -107,10 +107,6 @@ function DownloadsCtrl($scope, $http, socket){
         return (typeof $scope.dlList[index+1] === "undefined" || !($scope.dlList[index+1].queuePos > packet.queuePos));
     };
 
-    $scope.hasRealSize = function(packet){
-        return (packet.realsize > 0);
-    };
-
     function queuesToArray(queues){
         var array = [];
         jQuery.each(queues,function(srvkey,srvcol){
