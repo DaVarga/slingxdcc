@@ -1,0 +1,20 @@
+tr(ng-repeat="packet in packets")
+    td
+        span {{packet.server}}
+    td
+        span {{packet.nick}}
+    td
+        span {{packet.nr}}
+    td
+        span {{packet.downloads}}
+    td
+        span {{packet.filesize|bytes}}
+    td
+        span(tooltip-placement="bottom", tooltip="{{packet.filename}}") {{packet.filename|truncate:50}}
+    td
+        span(tooltip-placement="bottom", tooltip="{{packet.lastseen | date:'medium'}}") {{packet.lastseen| timeago}}
+    td
+        button(type="button",ng-click="startDownload(packet)", ng-class="{collapse:!dlActive(packet)}").btn.btn-default.btn-xs
+            span.glyphicon.glyphicon-download
+        button(type="button",ng-click="cancelDownload(packet)", ng-class="{collapse:dlActive(packet)}").btn.btn-default.btn-xs
+            span.glyphicon.glyphicon-stop

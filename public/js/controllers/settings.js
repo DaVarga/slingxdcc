@@ -33,7 +33,6 @@ function SettingsCtrl($scope, $http, socket){
                 data[i].key = i;
             }
             $scope.servers = data;
-            $scope.$apply();
         })
 
     };

@@ -12,16 +12,16 @@
 angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'ui.bootstrap', 'angles', 'ngRoute']).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider){
         $routeProvider
             .when('/', {
-                templateUrl: 'partials/dashboard'
+                templateUrl: 'partials/dashboard/'
             })
             .when('/packets', {
-                templateUrl: 'partials/packets'
+                templateUrl: 'partials/packetlist/'
             })
             .when('/settings', {
-                templateUrl: 'partials/settings'
+                templateUrl: 'partials/settings/'
             })
             .when('/downloads', {
-                templateUrl: 'partials/downloads'
+                templateUrl: 'partials/downloads/'
             })
             .otherwise({
                 redirectTo: '/'

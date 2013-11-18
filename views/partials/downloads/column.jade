@@ -1,0 +1,27 @@
+tr(ng-repeat="(key, pack) in dlList", ng-class="rowClass(pack)")
+    td
+        span(tooltip="Server: {{pack.server}}, Pack#: {{pack.nr}}") {{pack.nick}}
+    td
+        span.queuepos {{pack.queuePos}}
+    td
+        .row
+            .col-xs-12
+                span(tooltip-placement="bottom", tooltip="{{pack.filename}}") {{pack.filename|truncate:100}}
+        .row
+            .col-xs-12
+                .progress(ng-class="{collapse:!hasRealSize(pack)}", tooltip="{{pack.progress}}% ~ {{pack.received|bytes}} of {{pack.realsize|bytes}}")
+                    .progress-bar(ng-class="{'progress-bar-success':(pack.speed > 0)}", role='progressbar', aria-valuenow='{{pack.progress}}', aria-valuemin='0', aria-valuemax='100', style='width: {{pack.progress}}%;')
+    td
+        span(ng-class="{collapse:!(pack.received > 0)}").dlreceived {{pack.received|bytes}}/<br>
+        span(ng-class="{collapse:hasRealSize(pack)}") {{pack.filesize|bytes}}
+        span(ng-class="{collapse:!hasRealSize(pack)}") {{pack.realsize|bytes}}
+    td
+        span(tooltip="ETA: {{pack.eta|timeago}}", ng-class="{collapse:(pack.speed == -1)}").dlspeed {{pack.speed|bytes}}/s
+        .btn-group.queueupdown
+            button(type="button",ng-click="downqueue(pack)", ng-class="{disabled:fistqueue(pack,key)}").btn.btn-default.btn-xs
+                span.glyphicon.glyphicon-arrow-up
+            button(type="button",ng-click="upqueue(pack)", ng-class="{disabled:lastqueue(pack,key)}").btn.btn-default.btn-xs
+                span.glyphicon.glyphicon-arrow-down
+    td
+        button(type="button",ng-click="cancelDownload(pack)").btn.btn-default.btn-xs
+            span.glyphicon.glyphicon-stop

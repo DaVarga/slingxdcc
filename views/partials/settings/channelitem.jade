@@ -1,0 +1,6 @@
+.row
+    span.col-xs-8 {{channel}}
+    span(tooltip-placement="left", tooltip="{{isObserved(channel)|observTooltip}}").col-xs-2
+        span(ng-class="{false:'glyphicon-eye-close text-danger', true:'glyphicon-eye-open text-success'}[isObserved(channel)]",ng-click="toggleObserv(channel)").glyphicon
+    span(tooltip-placement="left", tooltip="Part {{channel}}").col-xs-2
+        span(ng-click="partChannel(channel)").text-danger.glyphicon.glyphicon-ban-circle

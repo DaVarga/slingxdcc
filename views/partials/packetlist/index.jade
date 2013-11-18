@@ -1,0 +1,14 @@
+div(ng-controller="PacketListCtrl" select="init(search)")
+    .row
+        .col-lg-12
+            button(type="button",ng-click="setPage(1)").btn.btn-default.pull-right
+                span.glyphicon.glyphicon-refresh
+            h1 Packets {{searchString}}
+            .table-responsive
+                table(style="opacity:{{getOpacity()}}").table.table-hover.table-striped.table-condensed
+                    thead
+                        include tablehead
+                    tfoot
+                        include tablefoot
+                    tbody
+                        include column

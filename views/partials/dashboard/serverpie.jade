@@ -1,0 +1,12 @@
+hr
+h3 Server
+.col-sm-8
+    canvas(donutchart,options="chartOptions",data="chartServerData",height="300px")
+.col-sm-4
+    ul.list-group
+        li.list-group-item
+            span Online:
+            span.label.label-success.pull-right {{onServerPercentage() | number:1}}%
+        li.list-group-item
+            span Offline:
+            span.label.label-danger.pull-right {{offServerPercentage() | number:1}}%

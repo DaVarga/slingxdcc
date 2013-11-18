@@ -1,17 +1,7 @@
-/*
- * ----------------------------------------------------------------------------
- * "THE BEER-WARE LICENSE" (Revision 42):
- * <varga.daniel@gmx.de> wrote this file. As long as you retain this notice you
- * can do whatever you want with this stuff. If we meet some day, and you think
- * this stuff is worth it, you can buy me a beer in return Daniel Varga
- * ----------------------------------------------------------------------------
- */
-'use strict';
-
-/* Dashboard */
 
 function DashboardCtrl($scope, $http, $timeout) {
 
+    $scope.notifications = [];
     $scope.servers = {};
     $scope.onServers = 0;
     $scope.numServers = 0;
@@ -99,12 +89,16 @@ function DashboardCtrl($scope, $http, $timeout) {
 
         $http.get('/api/db/compacting/').success(function (data, status, headers, config) {
             $scope.nextDbCleanup = data.nextCompacting;
-        })
+        });
+
+        $http.get('/api/downloads/notifications/').success(function (data, status, headers, config){
+            $scope.notifications = data;
+        });
 
     };
 
 
-    $scope.chartPacketOptions = {
+    $scope.chartOptions = {
         //Boolean - Whether we should show a stroke on each segment
         segmentShowStroke: true,
 
@@ -134,7 +128,7 @@ function DashboardCtrl($scope, $http, $timeout) {
     };
 
     function deaktivateAnimation() {
-        $scope.chartPacketOptions.animateRotate = false;
+        $scope.chartOptions.animateRotate = false;
     }
 
     $scope.getData();
@@ -155,3 +149,62 @@ function DashboardCtrl($scope, $http, $timeout) {
 }
 
 DashboardCtrl.$inject = ['$scope', '$http', '$timeout'];
+'use strict';
+/* Notification controller */
+
+function NotificationCtrl($scope, $http, socket, $rootScope){
+
+    socket.on('send:dlstart',function(data){
+        $scope.notifications.push(data);
+    });
+
+    socket.on('send:dlerror',function(data){
+        $scope.notifications.push(data);
+    });
+
+    socket.on('send:dlsuccess',function(data){
+        $scope.notifications.push(data);
+    });
+
+    $scope.$on('$destroy', function () {
+        socket.off('send:dlerror');
+        socket.off('send:dlstart');
+        socket.off('send:dlsuccess');
+    });
+
+    $scope.clearNotifications = function(){
+        $http.delete('/api/downloads/notifications/').success(function (data, status, headers, config){
+            $scope.notifications=[];
+            $rootScope.$emit('notificationsClear');
+        })
+    };
+
+    $scope.getError = function(notification){
+
+        if(notification.type == "dlerror"){
+            return errordecoder(notification);
+        }else{
+            return "";
+        }
+
+        function errordecoder(notification){
+            var error = notification.error;
+            if(error == "filename mismatch"){
+                return "Filename mismatch, got "+notification.gotFile;
+            }
+            if(typeof error == "string"){
+                return error
+            }
+            if(error.code == "ETIMEDOUT")
+                return "Connection timeout";
+            if(error.code == "ECONNREFUSED")
+                return "Connection refused";
+            if(error.code == "ECONNRESET")
+                return "Connection reset";
+            return error.code;
+        }
+    };
+
+}
+
+NotificationCtrl.$inject = ['$scope', '$http', 'socket', '$rootScope'];

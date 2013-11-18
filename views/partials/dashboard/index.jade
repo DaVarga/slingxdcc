@@ -1,0 +1,15 @@
+div(ng-controller="DashboardCtrl").dashboard
+    .row
+        .col-lg-12
+            button(type="button",ng-click="getData()").btn.btn-default.pull-right
+                span.glyphicon.glyphicon-refresh
+            h1 Dashboard
+            .row
+                .col-lg-6
+                    include packetpie
+                .col-lg-6
+                    include serverpie
+            .row
+                .col-lg-6
+                    include dlnotification
+                .col-lg-6

@@ -1,0 +1,29 @@
+div(ng-controller="DownloadsCtrl").downloads
+    .row
+        .col-lg-12
+            button(type="button",ng-click="getData()").btn.btn-default.pull-right
+                span.glyphicon.glyphicon-refresh
+            h1 Downloads
+            .table-responsive
+                table.table.table-hover.table-condensed.table-striped
+                    thead
+                        tr
+                            th(style="width:200px") Bot
+                            th(style="width:40px") Q
+                            th Filename
+                            th(style="width:100px") Size
+                            th(style="width:85px") Speed
+                            th(style="width:50px")
+                    tfoot
+                        tr
+                            td
+                            td
+                            td
+                            td
+                            td(ng-class="{collapse:!(speedsum >= 0)}") {{speedsum|bytes}}/s
+                            td
+
+                    tbody
+                        include column
+
+

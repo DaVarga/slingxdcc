@@ -1,0 +1,10 @@
+div(ng-controller="SettingsCtrl")
+    .row
+        .col-lg-12
+            button(type="button",ng-click="getServers()").btn.btn-default.pull-right
+                span.glyphicon.glyphicon-refresh
+            h1 Servers
+            tabset
+                include editserver
+
+                include addserver
