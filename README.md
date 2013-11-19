@@ -35,7 +35,8 @@ settings.json
         "ssl.key": "ssl/server.key"		// Path to ssl.key
       },
 	  "logger": {
-	    "packRegex": "#(\\d+)\\s+(\\d+)x\\s+\\[\\s*[><]?([0-9\\.]+)([TGMKtgmk]?)\\]\\s+(.*)", // Regex for pack information
+	    "packRegex": "#(\\d+)\\s+(\\d+)x\\s+\\[\\s*[><]?([0-9\\.]+)([TGMKtga
+	    k]?)\\]\\s+(.*)", // Regex for pack information
 	    "packdb": "packets.db"			// Path to packdb file
 	    "autocleandb": true,			// Clean redundant entries from packdb
 	    "cleandb_Xminutes": 60			// Clean every X minutes
