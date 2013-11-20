@@ -17,7 +17,9 @@ var express = require('express'),
     path = require('path'),
     fs = require('fs'),
     io = require('socket.io'),
-    nconf = require('nconf');
+    nconf = require('nconf'),
+    logger = require("./lib/xdcclogger"),
+    downloadHandler = require("./lib/downloadHandler");
 
 nconf.add('settings', {type: 'file', file: 'config/settings.json'});
 
@@ -32,12 +34,17 @@ nconf.defaults({
 nconf.set('webserver',nconf.get('webserver'));
 nconf.save();
 
+process.on('SIGINT', function () {
+    console.log('Shuting down');
+    downloadHandler.exit();
+    logger.exit();
+    process.exit();
+});
+
 nconf.load(function(){
 
     var routes = require('./routes'),
         api = require('./routes/api');
-
-    require("./lib/xdcclogger");
 
     var app = module.exports = express();
 
