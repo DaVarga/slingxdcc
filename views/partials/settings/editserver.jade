@@ -1,6 +1,6 @@
 tab(ng-repeat="serv in servers")
     tab-heading
-        span(ng-class="{true:'label-success', false:'label-danger'}[servers[serv.key].connected]").label {{serv.key}}
+        span(ng-class="servers[serv.key].connected ? 'label-success' : 'label-danger'").label {{serv.key}}
     .row(ng-controller="ServerSettingsCtrl", ng-init="init(serv.key)")
         .col-md-3
             h3 Server settings

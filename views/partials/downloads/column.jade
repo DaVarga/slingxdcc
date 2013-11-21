@@ -1,4 +1,4 @@
-tr(ng-repeat="(key, pack) in dlList", ng-class="rowClass(pack)")
+tr(ng-repeat="(key, pack) in dlList", ng-class="(pack.queuePos == 0) ? 'dlactive' : 'dlqueued'")
     td
         span(tooltip="Server: {{pack.server}}, Pack#: {{pack.nr}}") {{pack.nick}}
     td
@@ -16,7 +16,7 @@ tr(ng-repeat="(key, pack) in dlList", ng-class="rowClass(pack)")
         span(ng-class="{collapse:(pack.realsize > 0)}") {{pack.filesize|bytes}}
         span(ng-class="{collapse:!(pack.realsize > 0)}") {{pack.realsize|bytes}}
     td
-        span(tooltip="ETA: {{pack.eta|timeago}}", ng-class="{collapse:(pack.speed == -1)}").dlspeed {{pack.speed|bytes}}/s
+        span(tooltip="ETA: {{pack.eta|timeago}}", ng-class="{collapse:!(pack.speed)}").dlspeed {{pack.speed|bytes}}/s
         .btn-group.queueupdown
             button(type="button",ng-click="downqueue(pack)", ng-class="{disabled:fistqueue(pack,key)}").btn.btn-default.btn-xs
                 span.glyphicon.glyphicon-arrow-up

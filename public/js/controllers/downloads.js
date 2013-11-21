@@ -77,7 +77,7 @@ function DownloadsCtrl($scope, $http, socket){
         if(pack.queuePos == 0){
             return 'dlactive';
         }else{
-            return 'dlinactive';
+            return 'dlqueued';
         }
     };
 

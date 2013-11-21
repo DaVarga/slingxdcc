@@ -20,7 +20,8 @@ div(ng-controller="DownloadsCtrl").downloads
                             td
                             td
                             td
-                            td(ng-class="{collapse:(!(speedsum >= 0)||dlList.length < 2)}") {{speedsum|bytes}}/s
+                            td
+                                span(ng-class="{collapse:(!(speedsum >= 0)||dlList.length < 2)}") {{speedsum|bytes}}/s
                             td
                     tbody
                         include column

@@ -32,15 +32,20 @@ table thead tr th span.glyphicon {
     margin-top: 10px;
 }
 
-tr.dlinactive {
+.progress-bar {
+    -webkit-transition: background-color 0.6s ease, width 0.6s ease;
+            transition: background-color 0.6s ease, width 0.6s ease;
+}
+
+tr.dlqueued {
     color: #838383;
 }
 
-tr.dlinactive td:first-child{
+tr.dlqueued td:first-child{
     padding-left: 25px !important;
 }
 
-tr.dlinactive .progress, tr.dlinactive .dlspeed , tr.dlactive .queueupdown, tr.dlactive .queuepos, tr.dlinactive .dlreceived{
+tr.dlqueued .progress, tr.dlqueued .dlspeed , tr.dlactive .queueupdown, tr.dlactive .queuepos, tr.dlqueued .dlreceived{
     display: none;
 }
 
