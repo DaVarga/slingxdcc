@@ -123,7 +123,12 @@ exports.getNumPackets = function (req, res){
 };
 
 exports.getNextCompacting = function (req, res){
-    res.json({nextCompacting:packdb.getNextCompacting()});
+    res.json({
+        nextCompacting: packdb.getNextCompacting(),
+        autoCompacting: nconf.get('logger:autocleandb'),
+        redPercentage: nconf.get('logger:redundantPercentage'),
+        interval: nconf.get('logger:cleandb_Xminutes')
+    });
 };
 
 exports.getDownloads = function (req, res){
@@ -139,6 +144,11 @@ exports.getDlNotificationCount = function (req, res){
 };
 
 // PUT
+
+exports.compactDb = function (req, res){
+    packdb.compactDb();
+    res.json({success: true});
+};
 
 exports.setSorting = function (req, res){
     nconf.set("packetList:sortBy",req.body.sortBy);
@@ -198,6 +208,10 @@ exports.downQueueDownload = function (req, res){
     res.json({success:success});
 };
 
+exports.cancelDownload = function (req,res){
+    var success = downloadHandler.cancelDownload(req.body.packObj);
+    res.json({success: success});
+};
 
 // POST
 exports.addServer = function (req, res){
@@ -216,10 +230,14 @@ exports.startDownload = function (req,res){
     res.json({success: success});
 };
 
-
-exports.cancelDownload = function (req,res){
-    var success = downloadHandler.cancelDownload(req.body.packObj);
-    res.json({success: success});
+exports.startCompactCronjob = function (req, res){
+    packdb.startCompactCronjob(req.body.minutes,req.body.percentage);
+    res.json({
+        nextCompacting: packdb.getNextCompacting(),
+        autoCompacting: true,
+        redPercentage: req.body.percentage,
+        interval: req.body.minutes
+    });
 };
 
 // DELETE
@@ -252,5 +270,16 @@ exports.clearDlNotificationCount = function (req, res){
     };
     res.json(true);
 };
+
+exports.stopCompactCronjob = function (req, res){
+    packdb.stopCompactCronjob();
+    res.json({
+        nextCompacting: 0,
+        autoCompacting : false,
+        redPercentage: nconf.get('logger:redundantPercentage'),
+        interval: nconf.get('logger:cleandb_Xminutes')
+    });
+};
+
 
 

@@ -65,7 +65,7 @@ function DownloadsCtrl($scope, $http, socket){
     };
 
     $scope.cancelDownload = function(packet){
-        $http.post('/api/downloads/cancel/', {packObj:packet}).success(function (data, status, headers, config){
+        $http.put('/api/downloads/cancel/', {packObj:packet}).success(function (data, status, headers, config){
             if(data.success){
                 removeArrayItem($scope.dlList, packet);
                 $scope.speedsum = speedsum();

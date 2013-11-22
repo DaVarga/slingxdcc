@@ -1,10 +1,18 @@
 div(ng-controller="SettingsCtrl")
     .row
         .col-lg-12
-            button(type="button",ng-click="getServers()").btn.btn-default.pull-right
+            button(type="button",ng-click="getData()").btn.btn-default.pull-right
                 span.glyphicon.glyphicon-refresh
-            h1 Servers
-            tabset
-                include editserver
+            h1 Settings
+            accordion
+                accordion-group(close-others="true", is-open="true")
+                    accordion-heading
+                        | Irc servers
+                    tabset
+                        include editserver
 
-                include addserver
+                        include addserver
+                accordion-group
+                    accordion-heading
+                        | Database
+                    include database

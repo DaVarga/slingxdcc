@@ -5,7 +5,7 @@ function DashboardCtrl($scope, $http, $timeout) {
     $scope.servers = {};
     $scope.onServers = 0;
     $scope.numServers = 0;
-    $scope.nextDbCleanup = 0;
+    $scope.compacting = {};
     $scope.packetCount = {
         redPackets: 0,
         conPackets: 0,
@@ -80,7 +80,7 @@ function DashboardCtrl($scope, $http, $timeout) {
         });
 
         $http.get('/api/packet/').success(function (data, status, headers, config) {
-            $scope.packetCount = data;
+            angular.extend($scope.packetCount, data);
             $scope.chartPacketData[0].value = $scope.packetCount.absPackets-$scope.packetCount.offPackets;
             $scope.chartPacketData[1].value = $scope.packetCount.offPackets;
             $scope.chartPacketData[2].value = $scope.packetCount.redPackets;
@@ -88,7 +88,7 @@ function DashboardCtrl($scope, $http, $timeout) {
         });
 
         $http.get('/api/db/compacting/').success(function (data, status, headers, config) {
-            $scope.nextDbCleanup = data.nextCompacting;
+            angular.extend($scope.compacting, data);
         });
 
         $http.get('/api/downloads/notifications/').success(function (data, status, headers, config){

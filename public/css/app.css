@@ -142,3 +142,20 @@ tr.dlqueued .progress, tr.dlqueued .dlspeed , tr.dlactive .queueupdown, tr.dlact
 .dashnoti ul li.dlstart{
     background-color: #dae7f2;
 }
+
+.panel-title{
+    font-weight: 500;
+    font-size: 24px;
+}
+
+.dbsettings .input-group-addon{
+    width: 50px;
+}
+
+.dbsettings .disabled{
+    opacity: 0.7;
+}
+
+.dashboard .collapse{
+    display: none !important;
+}

@@ -1,2 +1,2 @@
 td(colspan="8")
-    pagination(total-items="numPackets", items-per-page="pageItemLimit", page="getCurrentPage()", max-size="9", boundary-links="true", on-select-page="setPage(page)", previous-text="‹", next-text="›", first-text="«", last-text="»")
+    pagination(total-items="(numPackets > 0)?numPackets:1", items-per-page="pageItemLimit", page="getCurrentPage()", max-size="9", boundary-links="true", on-select-page="setPage(page)", previous-text="‹", next-text="›", first-text="«", last-text="»")

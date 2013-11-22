@@ -14,4 +14,5 @@ h3 Packets/Database
             span Redundant:
             span.label.label-default.pull-right {{redPacketPercentage() | number:1}}%
         li.list-group-item
-            span Next database cleanup: {{nextDbCleanup | date:'dd.MM HH:mm'}}
+            span(ng-class="{collapse:!(compacting.autoCompacting)}") Next database cleanup: {{compacting.nextCompacting | date:'dd.MM HH:mm'}}
+            span.label.label-warning.center-block(ng-class="{collapse:(compacting.autoCompacting)}")  No Database Cleanup
