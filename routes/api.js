@@ -131,6 +131,12 @@ exports.getNextCompacting = function (req, res){
     });
 };
 
+exports.getCompactingFilter = function (req, res){
+    res.json({
+        filter: nconf.get('logger:removePacketsOlder_Xhours')
+    });
+};
+
 exports.getDownloads = function (req, res){
     res.json({dlQueue:downloadHandler.getDownloads()});
 };
@@ -149,6 +155,13 @@ exports.compactDb = function (req, res){
     packdb.compactDb();
     res.json({success: true});
 };
+
+exports.setCompactngFilter = function (req, res){
+    packdb.setCompactngFilter(req.body.filter)
+    res.json({
+        filter: req.body.filter
+    });
+}
 
 exports.setSorting = function (req, res){
     nconf.set("packetList:sortBy",req.body.sortBy);

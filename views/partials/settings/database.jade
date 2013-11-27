@@ -1,45 +1,58 @@
-.row(ng-controller="DbSettingsCtrl").dbsettings
-    .col-sm-4
-        h4 Next cleanup
-            button(type="button",ng-click="compactDb()").btn.btn-xs.btn-success.pull-right
-                span Clean Now
-        hr
-        span(ng-class="{collapse:!(compacting.autoCompacting)}")
-            p Next database cleanup at {{compacting.nextCompacting | date:'dd.MM HH:mm'}}
-            p if more than {{compacting.redPercentage}}&nbsp;% of the packets are redundant.
-        span(ng-class="{collapse:(compacting.autoCompacting)}") No database cleanup scheduled
+.dbsettings(ng-controller="DbSettingsCtrl")
+    .row
+        .col-sm-4
+            h4 Next compacting
+                button(tooltip="Compact database now", tooltip-placement="left", type="button",ng-click="compactDb()").btn.btn-xs.btn-success.pull-right
+                    span.glyphicon.glyphicon-compressed
+            hr
+            span(ng-class="{collapse:!(compacting.autoCompacting)}")
+                p Next database compacting at {{compacting.nextCompacting | date:'dd.MM HH:mm'}}
+                p if more than {{compacting.redPercentage}}&nbsp;% of the packets are redundant.
+                p Packets older than {{compactingfilter}}h will be deleted
+            span(ng-class="{collapse:(compacting.autoCompacting)}") No database compacting scheduled
 
-    .col-sm-4
-        h4 Cleanup schedule
-            button(type="button", ng-model="compacting.autoCompacting", btn-checkbox, btn-checkbox-true="true", btn-checkbox-false="false", ng-class="compacting.autoCompacting ? 'btn-info' : 'btn-warning'", ng-click="toggleCompacting()").btn.btn-xs.pull-right
-                span.glyphicon.glyphicon-repeat
-        div(ng-class="{disabled:compacting.autoCompacting}")
+        .col-sm-4
+            h4 Compacting schedule
+                button(ng-attr-tooltip="{{compacting.autoCompacting && 'Deactivate auto compacting' || 'Activate auto compacting' }}", tooltip-placement="left" ,type="button", ng-model="compacting.autoCompacting", btn-checkbox, btn-checkbox-true="true", btn-checkbox-false="false", ng-class="compacting.autoCompacting ? 'btn-info' : 'btn-warning'", ng-click="toggleCompacting()").btn.btn-xs.pull-right
+                    span.glyphicon.glyphicon-repeat
+            div.compactingsettings(ng-class="{disabled:compacting.autoCompacting}")
+                hr
+                .form-group
+                    label.col-md-7.control-label Compact interval:
+                    .col-md-5
+                        .input-group
+                            input(type="text",id="mins" ng-model="compacting.interval").form-control.input-sm
+                            span.input-group-addon min
+                br
+                br
+                .form-group
+                    label.col-md-7.control-label Minimum redundance:
+                    .col-md-5
+                        .input-group
+                            input(type="text",id="percent" ng-model="compacting.redPercentage").form-control.input-sm
+                            span.input-group-addon %
+
+        .col-sm-4
+            h4 Package statistics
+            hr
+            p
+                span.label.label-default {{packetCount.redPackets}}
+                span &nbsp; redundant Packets
+            p
+                span.label.label-success {{packetCount.absPackets}}
+                span &nbsp; effective Packets
+            p
+                span.label(ng-class="{'label-success':(redPercentage <= compacting.redPercentage), 'label-warning':(redPercentage > compacting.redPercentage && redPercentage <=compacting.redPercentage*2), 'label-danger':(redPercentage > compacting.redPercentage*2)}") {{redPercentage | number:1}} %
+                span &nbsp; redundant
+    .row
+        .col-sm-4
+            h4 Delete old packets on compacting
+                button(tooltip="Save", tooltip-placement="left" ,type="button", ng-click="setFilter()").btn.btn-xs.pull-right
+                    span.glyphicon.glyphicon-repeat
             hr
             .form-group
-                label(for="host").col-md-7.control-label Cleaning interval:
+                label.col-md-7.control-label Maximal package age:
                 .col-md-5
                     .input-group
-                        input(type="text",id="mins" ng-model="compacting.interval", placeholder="Clean interval in minutes").form-control.input-sm
-                        span.input-group-addon min
-            br
-            br
-            .form-group
-                label(for="host").col-md-7.control-label Minimum redundance:
-                .col-md-5
-                    .input-group
-                        input(type="text",id="percent" ng-model="compacting.redPercentage", placeholder="Redundant database percentage").form-control.input-sm
-                        span.input-group-addon %
-
-    .col-sm-4
-        h4 Package statistics
-        hr
-        p
-            span.label.label-default {{packetCount.redPackets}}
-            span &nbsp; redundant Packets
-        p
-            span.label.label-success {{packetCount.absPackets}}
-            span &nbsp; effective Packets
-        p
-            span.label(ng-class="{'label-success':(redPercentage <= compacting.redPercentage), 'label-warning':(redPercentage > compacting.redPercentage && redPercentage <=compacting.redPercentage*2), 'label-danger':(redPercentage > compacting.redPercentage*2)}") {{redPercentage | number:1}} %
-            span &nbsp; redundant
-
+                        input(type="text",id="hours" ng-model="tmpfilter", ng-submit="setFilter()").form-control.input-sm
+                        span.input-group-addon h

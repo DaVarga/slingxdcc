@@ -15,6 +15,8 @@ function SettingsCtrl($scope, $http, socket){
     $scope.servers = {};
     $scope.packetCount = {};
     $scope.compacting = {};
+    $scope.compactingfilter = {};
+    $scope.tmpfilter = false;
 
     socket.on('send:irc_connected', function(data){
         $scope.servers[data.server.key].connected = true;
@@ -39,8 +41,12 @@ function SettingsCtrl($scope, $http, socket){
         $http.get('/api/db/compacting/').success(function (data, status, headers, config){
             angular.extend($scope.compacting, data);
             if(data.autoCompacting){
-                $('.dbsettings input').prop('disabled', true);
+                $('.dbsettings .compactingsettings input').prop('disabled', true);
             }
+        });
+        $http.get('/api/db/compactingfilter/').success(function (data, status, headers, config){
+            $scope.compactingfilter = data.filter;
+            $scope.tmpfilter = data.filter;
         });
         $http.get('/api/packet/').success(function (data, status, headers, config) {
             angular.extend($scope.packetCount, data);

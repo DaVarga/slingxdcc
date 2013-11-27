@@ -98,6 +98,7 @@ nconf.load(function(){
     app.get('/api/server/', api.getServer);
 
     app.get('/api/db/compacting/', api.getNextCompacting);
+    app.get('/api/db/compactingfilter/', api.getCompactingFilter);
     app.get('/api/downloads/', api.getDownloads);
     app.get('/api/downloads/notifications/', api.getDlNotifications);
     app.get('/api/downloads/notifications/count/', api.getDlNotificationCount);
@@ -106,6 +107,7 @@ nconf.load(function(){
     app.put('/api/packet/filter/', api.setFilter);
     app.put('/api/packet/pagelimit/', api.setPageLimit);
     app.put('/api/db/compacting/', api.compactDb);
+    app.put('/api/db/compactingfilter/', api.setCompactngFilter);
     app.put('/api/channel/', api.channels);
     app.put('/api/downloads/upqueue/', api.upQueueDownload);
     app.put('/api/downloads/downqueue/', api.downQueueDownload);

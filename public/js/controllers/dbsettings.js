@@ -27,12 +27,18 @@ function DbSettingsCtrl($scope, $http, socket){
         $scope.redPercentage = 0;
         $scope.packetCount.redPackets = 0;
     }
+2
+    $scope.setFilter = function(){
+        $http.put('/api/db/compactingfilter/',{filter: $scope.tmpfilter}).success(function (data, status, headers, config){
+            $scope.compactingfilter = $scope.tmpfilter;
+        });
+    }
 
     $scope.toggleCompacting = function(){
         if($scope.compacting.autoCompacting){
             $http.delete('/api/db/compacting/').success(function (data, status, headers, config){
                 angular.extend($scope.compacting, data);
-                $('.dbsettings input').prop('disabled', false);
+                $('.dbsettings .compactingsettings input').prop('disabled', false);
             });
         }else{
             var interval = isNaN(parseInt($scope.compacting.interval)) ? 60 : parseInt($scope.compacting.interval);
@@ -49,7 +55,7 @@ function DbSettingsCtrl($scope, $http, socket){
 
             $http.post('/api/db/compacting/',{minutes: interval, percentage: percentage}).success(function (data, status, headers, config){
                 angular.extend($scope.compacting, data);
-                $('.dbsettings input').prop('disabled', true);
+                $('.dbsettings .compactingsettings input').prop('disabled', true);
             });
         }
     }
