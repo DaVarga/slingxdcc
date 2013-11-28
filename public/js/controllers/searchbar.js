@@ -25,14 +25,14 @@ function SearchBarCtrl($scope, $rootScope, $http, $location){
         }
 
         $scope.history.push($scope.searchString.toLowerCase());
-        $rootScope.searchString = $scope.searchString;
+        $rootScope.searchString = angular.copy($scope.searchString);
         $scope.$emit("setSearch");
         $location.path("packets");
     };
 
     $scope.selectHistory = function (item){
         $scope.searchString = item;
-        $rootScope.searchString = $scope.searchString;
+        $rootScope.searchString = angular.copy($scope.searchString);
         $rootScope.$emit("setSearch");
     };
 

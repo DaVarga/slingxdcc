@@ -19,6 +19,7 @@ function DownloadsCtrl($scope, $http, socket){
         for (var i=0; i<$scope.dlList.length; i++) {
             if($scope.dlList[i].server == data.packObj.server && $scope.dlList[i].nick == data.packObj.nick && $scope.dlList[i].nr == data.packObj.nr){
                 angular.extend($scope.dlList[i], data.packObj);
+                $scope.dlList[i].queuePos = 0;
                 break;
             }
         }
@@ -42,7 +43,8 @@ function DownloadsCtrl($scope, $http, socket){
     });
 
     socket.on('send:dlerror',function(data){
-        $scope.getData();
+        removeArrayItem($scope.dlList, data.packObj);
+        $scope.speedsum = speedsum();
     });
 
     socket.on('send:dlsuccess',function(data){

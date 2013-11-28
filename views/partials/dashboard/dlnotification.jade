@@ -3,11 +3,48 @@
     button(type="button",ng-click="clearNotifications()").pull-right.btn.btn-xs.btn-default clear
     h3 Download notifications
     ul.list-group
-        li(ng-repeat='notification in notifications | reverse', ng-class='[notification.type]').list-group-item
-            .col-lg-9
-                .row
-                    span(tooltip-placement="bottom", tooltip="{{notification.packObj.filename}}") {{notification.packObj.filename | truncate:50}}
-                .row
-                    span(tooltip="{{getError(notification)}}") {{getError(notification) | truncate:50}}
-            .col-lg-3
-                span.pull-right {{notification.time | timeago}}
+        li(ng-repeat='notification in notifications | reverse', ng-switch="notification.type").list-group-item
+            div(ng-switch-when="dlsuccess")
+                .col-lg-1
+                    .row
+                        span.badge.badge-success
+                            span.glyphicon.glyphicon-thumbs-up
+                .col-lg-8
+                    .row
+                        span(tooltip-placement="bottom", tooltip="{{notification.packObj.filename}}") {{notification.packObj.filename | truncate:40}}
+                    .row
+                        span Download Finished
+                .col-lg-3
+                    .row
+                        span.pull-right {{notification.time | timeago}}
+            div(ng-switch-when="dlstart")
+                .col-lg-1
+                    .row
+                        span.badge.badge-info
+                            span.glyphicon.glyphicon-play
+                .col-lg-8
+                    .row
+                        span(tooltip-placement="bottom", tooltip="{{notification.packObj.filename}}") {{notification.packObj.filename | truncate:40}}
+                    .row
+                        span Download Started
+                .col-lg-3
+                    .row
+                        span.pull-right {{notification.time | timeago}}
+            div(ng-switch-default)
+                .col-lg-1
+                    .row
+                        span.badge.badge-danger
+                            span.glyphicon.glyphicon-thumbs-down
+                .col-lg-8
+                    .row
+                        span(tooltip-placement="bottom", tooltip="{{notification.packObj.filename}}") {{notification.packObj.filename | truncate:40}}
+                    .row
+                        span(tooltip="{{getError(notification)}}") {{getError(notification) | truncate:50}}
+                .col-lg-3
+                    .row
+                        span.pull-right {{notification.time | timeago}}
+                    .row
+                        button.pull-right.btn-default.btn.btn-xs(tooltip="Search packet", tooltip-placement="left" ,type="button", ng-click="searchPacket(notification.packObj.filename)")
+                            span.glyphicon.glyphicon-search
+
+

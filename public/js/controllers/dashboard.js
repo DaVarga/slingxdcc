@@ -152,7 +152,7 @@ DashboardCtrl.$inject = ['$scope', '$http', '$timeout'];
 'use strict';
 /* Notification controller */
 
-function NotificationCtrl($scope, $http, socket, $rootScope){
+function NotificationCtrl($scope, $http, socket, $rootScope, $location){
 
     socket.on('send:dlstart',function(data){
         $scope.notifications.push(data);
@@ -205,6 +205,12 @@ function NotificationCtrl($scope, $http, socket, $rootScope){
         }
     };
 
+    $scope.searchPacket = function(name){
+        $rootScope.searchString = angular.copy(name);
+        $scope.$emit("setSearch");
+        $location.path("packets");
+    }
+
 }
 
-NotificationCtrl.$inject = ['$scope', '$http', 'socket', '$rootScope'];
+NotificationCtrl.$inject = ['$scope', '$http', 'socket', '$rootScope', '$location'];
