@@ -107,7 +107,7 @@ nconf.load(function(){
     app.put('/api/packet/filter/', api.setFilter);
     app.put('/api/packet/pagelimit/', api.setPageLimit);
     app.put('/api/db/compacting/', api.compactDb);
-    app.put('/api/db/compactingfilter/', api.setCompactngFilter);
+    app.put('/api/db/compactingfilter/', api.setCompactingFilter);
     app.put('/api/channel/', api.channels);
     app.put('/api/downloads/upqueue/', api.upQueueDownload);
     app.put('/api/downloads/downqueue/', api.downQueueDownload);

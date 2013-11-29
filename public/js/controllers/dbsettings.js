@@ -27,11 +27,22 @@ function DbSettingsCtrl($scope, $http, socket){
         $scope.redPercentage = 0;
         $scope.packetCount.redPackets = 0;
     }
-2
+
     $scope.setFilter = function(){
-        $http.put('/api/db/compactingfilter/',{filter: $scope.tmpfilter}).success(function (data, status, headers, config){
-            $scope.compactingfilter = $scope.tmpfilter;
+        var hours = isNaN(parseInt($scope.tmpfilter)) ? 24 : parseInt($scope.tmpfilter);
+        $http.put('/api/db/compactingfilter/',{filter: hours}).success(function (data, status, headers, config){
+            $scope.compactingfilter = hours;
+            $scope.autoDeleting = true;
         });
+    }
+
+    $scope.toggleAutoDeleting = function(){
+        if($scope.autoDeleting){
+            $http.put('/api/db/compactingfilter/',{filter: false});
+            $scope.autoDeleting = false;
+        }else{
+            $scope.setFilter();
+        }
     }
 
     $scope.toggleCompacting = function(){

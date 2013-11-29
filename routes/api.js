@@ -156,8 +156,8 @@ exports.compactDb = function (req, res){
     res.json({success: true});
 };
 
-exports.setCompactngFilter = function (req, res){
-    packdb.setCompactngFilter(req.body.filter)
+exports.setCompactingFilter = function (req, res){
+    packdb.setCompactingFilter(req.body.filter)
     res.json({
         filter: req.body.filter
     });

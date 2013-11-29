@@ -10,7 +10,7 @@ module.exports = function (socket) {
     var lastPacketCount = 0;
 
     setInterval(function () {
-        if(lastPacketCount < packdb.numberOfPackets()){
+        if(lastPacketCount != packdb.numberOfPackets()){
             lastPacketCount = packdb.numberOfPackets();
 
             var abspackets = packdb.numberOfPackets();

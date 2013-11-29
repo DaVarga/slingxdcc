@@ -6,25 +6,30 @@
                     span.glyphicon.glyphicon-compressed
             hr
             span(ng-class="{collapse:!(compacting.autoCompacting)}")
-                p Next database compacting at {{compacting.nextCompacting | date:'dd.MM HH:mm'}}
-                p if more than {{compacting.redPercentage}}&nbsp;% of the packets are redundant.
-                p Packets older than {{compactingfilter}}h will be deleted
-            span(ng-class="{collapse:(compacting.autoCompacting)}") No database compacting scheduled
+                | Next database compacting at
+                strong  {{compacting.nextCompacting | date:'dd.MM HH:mm'}}
+                |  if more than
+                strong  {{compacting.redPercentage}}&nbsp;%
+                |  of the packets are redundant.
+            span(ng-class="{collapse:!(autoDeleting)}")  Packets older than
+                strong  {{compactingfilter}}&nbsp;h
+                |  will be deleted while compacting!
+            p(ng-class="{collapse:(compacting.autoCompacting)}") No database compacting scheduled
 
         .col-sm-4
             h4 Compacting schedule
-                button(ng-attr-tooltip="{{compacting.autoCompacting && 'Deactivate auto compacting' || 'Activate auto compacting' }}", tooltip-placement="left" ,type="button", ng-model="compacting.autoCompacting", btn-checkbox, btn-checkbox-true="true", btn-checkbox-false="false", ng-class="compacting.autoCompacting ? 'btn-info' : 'btn-warning'", ng-click="toggleCompacting()").btn.btn-xs.pull-right
+                button(ng-attr-tooltip="{{compacting.autoCompacting && 'Auto compacting active' || 'Auto compacting inactive' }}", tooltip-placement="left" ,type="button", ng-model="compacting.autoCompacting", btn-checkbox, btn-checkbox-true="true", btn-checkbox-false="false", ng-class="compacting.autoCompacting ? 'btn-info' : 'btn-default'", ng-click="toggleCompacting()").btn.btn-xs.pull-right
                     span.glyphicon.glyphicon-repeat
             div.compactingsettings(ng-class="{disabled:compacting.autoCompacting}")
                 hr
+
+
                 .form-group
-                    label.col-md-7.control-label Compact interval:
+                    label(for="mins").col-md-7.control-label Compact interval:
                     .col-md-5
                         .input-group
                             input(type="text",id="mins" ng-model="compacting.interval").form-control.input-sm
                             span.input-group-addon min
-                br
-                br
                 .form-group
                     label.col-md-7.control-label Minimum redundance:
                     .col-md-5
@@ -32,6 +37,22 @@
                             input(type="text",id="percent" ng-model="compacting.redPercentage").form-control.input-sm
                             span.input-group-addon %
 
+        .col-sm-4
+            h4 Delete old packets on compacting
+                button(ng-attr-tooltip="{{autoDeleting && 'Deleting old packets' || 'Keeping old packets' }}", tooltip-placement="left" ,type="button", ng-model="autoDeleting", btn-checkbox, btn-checkbox-true="true", btn-checkbox-false="false", ng-class="autoDeleting ? 'btn-info' : 'btn-default'", ng-click="toggleAutoDeleting()").btn.btn-xs.pull-right
+                    span(ng-class="autoDeleting ? 'glyphicon-ok-circle' : 'glyphicon-ban-circle'").glyphicon
+            hr
+            form(ng-submit="setFilter()").form-group.autodeletesettings
+                label.col-md-7.control-label Maximal package age:
+                .col-md-5
+                    .input-group
+                        input(type="text",id="hours" ng-model="tmpfilter").form-control.input-sm
+                        span.input-group-addon h
+
+                button(type="submit").btn.btn-default.btn-sm.pull-left
+                    span Save&nbsp;
+                    span.glyphicon.glyphicon-ok
+    .row
         .col-sm-4
             h4 Package statistics
             hr
@@ -44,15 +65,5 @@
             p
                 span.label(ng-class="{'label-success':(redPercentage <= compacting.redPercentage), 'label-warning':(redPercentage > compacting.redPercentage && redPercentage <=compacting.redPercentage*2), 'label-danger':(redPercentage > compacting.redPercentage*2)}") {{redPercentage | number:1}} %
                 span &nbsp; redundant
-    .row
-        .col-sm-4
-            h4 Delete old packets on compacting
-                button(tooltip="Save", tooltip-placement="left" ,type="button", ng-click="setFilter()").btn.btn-xs.pull-right
-                    span.glyphicon.glyphicon-repeat
-            hr
-            .form-group
-                label.col-md-7.control-label Maximal package age:
-                .col-md-5
-                    .input-group
-                        input(type="text",id="hours" ng-model="tmpfilter", ng-submit="setFilter()").form-control.input-sm
-                        span.input-group-addon h
+
+
