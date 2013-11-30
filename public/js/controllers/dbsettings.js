@@ -29,17 +29,16 @@ function DbSettingsCtrl($scope, $http, socket){
     }
 
     $scope.setFilter = function(){
-        var hours = isNaN(parseInt($scope.tmpfilter)) ? 24 : parseInt($scope.tmpfilter);
+        var hours = isNaN(parseInt($scope.filter.tmpfilter)) ? 24 : parseInt($scope.filter.tmpfilter);
         $http.put('/api/db/compactingfilter/',{filter: hours}).success(function (data, status, headers, config){
-            $scope.compactingfilter = hours;
-            $scope.autoDeleting = true;
+            $scope.filter.compactingfilter = hours;
+            $scope.filter.autoDeleting = true;
         });
     }
 
     $scope.toggleAutoDeleting = function(){
-        if($scope.autoDeleting){
+        if($scope.filter.autoDeleting){
             $http.put('/api/db/compactingfilter/',{filter: false});
-            $scope.autoDeleting = false;
         }else{
             $scope.setFilter();
         }

@@ -30,7 +30,7 @@ block body
             form.navbar-form.navbar-right(ng-controller='SearchBarCtrl', role="search", ng-submit="setSearch()")
                 .right-inner-addon
                     span.glyphicon.glyphicon-search
-                    input.topsearch.form-control(type="text", placeholder="Search", ng-model="searchString", typeahead="item for item in history | limitTo:8 | filter:$viewValue")
+                    input.topsearch.form-control(type="text", placeholder="Search", ng-model="searchString", typeahead="item for item in history | limitTo:8 | filter:$viewValue", ng-blur="rescueSearch()", ng-focus="restoreSearch()")
             span(ng-controller='PacketcountCtrl').navbar-text.pull-right Packets # {{packetCount.absPackets}}
 
     .container

@@ -6,14 +6,14 @@
                     span.glyphicon.glyphicon-compressed
             hr
             span(ng-class="{collapse:!(compacting.autoCompacting)}")
-                | Next database compacting at
+                | Next database compacting at&nbsp;
                 strong  {{compacting.nextCompacting | date:'dd.MM HH:mm'}}
-                |  if more than
+                | &nbsp;if more than&mbsp;
                 strong  {{compacting.redPercentage}}&nbsp;%
-                |  of the packets are redundant.
-            span(ng-class="{collapse:!(autoDeleting)}")  Packets older than
-                strong  {{compactingfilter}}&nbsp;h
-                |  will be deleted while compacting!
+                | &nbsp;of the packets are redundant.
+            span(ng-class="{collapse:!(filter.autoDeleting)}")  Packets older than
+                strong &nbsp;{{filter.compactingfilter}}&nbsp;h
+                | &nbsp;will be deleted while compacting!
             p(ng-class="{collapse:(compacting.autoCompacting)}") No database compacting scheduled
 
         .col-sm-4
@@ -39,14 +39,14 @@
 
         .col-sm-4
             h4 Delete old packets on compacting
-                button(ng-attr-tooltip="{{autoDeleting && 'Deleting old packets' || 'Keeping old packets' }}", tooltip-placement="left" ,type="button", ng-model="autoDeleting", btn-checkbox, btn-checkbox-true="true", btn-checkbox-false="false", ng-class="autoDeleting ? 'btn-info' : 'btn-default'", ng-click="toggleAutoDeleting()").btn.btn-xs.pull-right
-                    span(ng-class="autoDeleting ? 'glyphicon-ok-circle' : 'glyphicon-ban-circle'").glyphicon
+                button(ng-attr-tooltip="{{filter.autoDeleting && 'Deleting old packets' || 'Keeping old packets' }}", tooltip-placement="left" ,type="button", ng-model="filter.autoDeleting", btn-checkbox, btn-checkbox-true="true", btn-checkbox-false="false", ng-class="filter.autoDeleting ? 'btn-info' : 'btn-default'", ng-click="toggleAutoDeleting()").btn.btn-xs.pull-right
+                    span(ng-class="filter.autoDeleting ? 'glyphicon-ok-circle' : 'glyphicon-ban-circle'").glyphicon
             hr
             form(ng-submit="setFilter()").form-group.autodeletesettings
                 label.col-md-7.control-label Maximal package age:
                 .col-md-5
                     .input-group
-                        input(type="text",id="hours" ng-model="tmpfilter").form-control.input-sm
+                        input(type="text",id="hours" ng-model="filter.tmpfilter").form-control.input-sm
                         span.input-group-addon h
 
                 button(type="submit").btn.btn-default.btn-sm.pull-left

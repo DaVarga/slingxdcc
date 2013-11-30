@@ -147,6 +147,7 @@ nconf.load(function(){
             }
             // Hook Socket.io into Express
             io = io.listen(server);
+            io.set('log level', 1);
 
             // Socket.io Communication
             io.sockets.on('connection', require('./routes/socket'));

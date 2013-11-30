@@ -10,9 +10,10 @@
 
 /* Searchbarcontroller handels the searches */
 
-function SearchBarCtrl($scope, $rootScope, $http, $location){
+function SearchBarCtrl($scope, $rootScope, $http, $location, $timeout){
     $scope.history = [];
     $scope.packetCount = 0;
+    var rescuedSearch = "";
 
 
     $http({method: 'GET', url: '/api/packet/'}).success(function (data, status, headers, config){
@@ -30,6 +31,18 @@ function SearchBarCtrl($scope, $rootScope, $http, $location){
         $location.path("packets");
     };
 
+    $scope.rescueSearch = function(){
+        rescuedSearch = $scope.searchString;
+        $scope.searchString = "";
+    }
+
+    $scope.restoreSearch = function(){
+        $scope.searchString = rescuedSearch;
+        $timeout(function(){
+            $(".topsearch").select();
+        },0);
+    }
+
     $scope.selectHistory = function (item){
         $scope.searchString = item;
         $rootScope.searchString = angular.copy($scope.searchString);
@@ -38,4 +51,4 @@ function SearchBarCtrl($scope, $rootScope, $http, $location){
 
 }
 
-SearchBarCtrl.$inject = ['$scope', '$rootScope', '$http', '$location'];
+SearchBarCtrl.$inject = ['$scope', '$rootScope', '$http', '$location', '$timeout'];

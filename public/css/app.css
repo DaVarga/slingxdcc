@@ -200,3 +200,7 @@ tr.dlqueued .progress, tr.dlqueued .dlspeed , tr.dlactive .queueupdown, tr.dlact
 .dashboard .collapse{
     display: none !important;
 }
+
+.dropdown-menu{
+    overflow-x: hidden;
+}
