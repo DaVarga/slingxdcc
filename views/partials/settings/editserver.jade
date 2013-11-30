@@ -3,7 +3,8 @@ tab(ng-repeat="serv in servers")
         span(ng-class="servers[serv.key].connected ? 'label-success' : 'label-danger'").label {{serv.key}}
     .row(ng-controller="ServerSettingsCtrl", ng-init="init(serv.key)")
         .col-md-3
-            h3 Server settings
+            h4 Server settings
+            hr
             form.form-horizontal(role="{server.key}settings",ng-submit="editServer()")
                 ul.list-group
                     li.list-group-item
@@ -28,7 +29,8 @@ tab(ng-repeat="serv in servers")
                             span.glyphicon.glyphicon-remove
 
         .col-md-4
-            h3 Channels
+            h4 Channels
+            hr
             ul.list-group
                 li(ng-repeat="channel in server.channels").list-group-item
                     include channelitem
@@ -38,7 +40,8 @@ tab(ng-repeat="serv in servers")
 
 
         .col-md-5
-            h3 Errors
+            h4 Errors
+            hr
             .alert.alert-success(ng-class="{hide:hasErrors()}") No errors recorded
             .alert.alert-danger(ng-repeat="error in server.error | reverse")
                 .row

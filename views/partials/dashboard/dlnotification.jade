@@ -1,7 +1,7 @@
 .dashnoti(ng-controller="NotificationCtrl")
-    hr
     button(type="button",ng-click="clearNotifications()").pull-right.btn.btn-xs.btn-default clear
     h3 Download notifications
+    hr
     ul.list-group
         li(ng-repeat='notification in notifications | reverse', ng-switch="notification.type").list-group-item
             div(ng-switch-when="dlsuccess")
