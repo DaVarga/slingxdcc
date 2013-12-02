@@ -11,7 +11,7 @@
     "bugs": {
         "url": "http://github.com/DaVarga/slingxdcc/issues"
     },
-    "slingxdcc": {
+    "bin": {
         "slingxdcc": "./server.js"
     },
     "readmeFilename": "README.md",
