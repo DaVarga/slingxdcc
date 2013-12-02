@@ -21,8 +21,5 @@
         "socket.io": "~0.9.16",
         "nconf": "0.6.8",
         "axdcc": "0.2.23"
-    },
-    "bin": {
-        "slingxdcc": "./slingxdcc.js"
     }
 }

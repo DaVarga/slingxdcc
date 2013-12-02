@@ -12,8 +12,13 @@ Installation
 Grab the source or clone the repo, 
 then in terminal:
 
-    npm install
-    node app.js
+    $ npm install
+    $ node app.js
+
+or via NPM
+
+    # npm install -g slingxdcc
+    $ slingxdcc start
     
 Point your browser to localhost:3000
 
