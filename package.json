@@ -1,8 +1,8 @@
 {
     "author": "Daniel Varga",
     "name": "slingxdcc",
-    "description": "XDCC downloadmanager with web frontend written in node.js",
-    "keywords": ["XDCC", "downloadmanager", "dcc", "irc", "angular", "bootstrap"],
+    "description": "XDCC download manager with web frontend written in node.js",
+    "keywords": ["XDCC", "downloadmanager", "download", "manager", "dcc", "irc", "angular", "bootstrap"],
     "version": "0.1.0",
     "repository": {
         "type": "git",
