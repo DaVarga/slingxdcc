@@ -38,6 +38,8 @@ Copy server.key and server.crt into ssl directory and make sure ssl is activated
 settings.json
 ------------
 
+The settings.json is located at $HOME/.slingxdcc/config/settings.json
+
 	{
       "webserver": {
         "port": 3000					// Webserver port
