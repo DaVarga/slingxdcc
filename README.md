@@ -6,16 +6,17 @@ requires [Node.js](http://nodejs.org)
 
 Tested on Windows and Linux
 
-Installation
+Installation via source
 ------------
 
 Grab the source or clone the repo, 
 then in terminal:
 
     $ npm install
-    $ node app.js
+    $ node slingxdcc
 
-or via NPM:
+Installation via npm
+------------
 
     # npm install -g slingxdcc
 
