@@ -8,7 +8,7 @@
             span(ng-class="{collapse:!(compacting.autoCompacting)}")
                 | Next database compacting at&nbsp;
                 strong  {{compacting.nextCompacting | date:'dd.MM HH:mm'}}
-                | &nbsp;if more than&mbsp;
+                | &nbsp;if more than&nbsp;
                 strong  {{compacting.redPercentage}}&nbsp;%
                 | &nbsp;of the packets are redundant.
             span(ng-class="{collapse:!(filter.autoDeleting)}")  Packets older than
