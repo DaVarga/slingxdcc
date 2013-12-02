@@ -11,6 +11,8 @@ settings.json
 *.key
 *.crt
 
+*~
+
 .idea
 node_modules
 
