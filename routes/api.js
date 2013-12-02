@@ -16,7 +16,10 @@ var packdb = require("../lib/packdb");
 var downloadHandler = require("../lib/downloadHandler");
 var nconf = require("nconf");
 
-nconf.add('settings', {type: 'file', file: 'config/settings.json'});
+var homePath = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+var appHome = homePath+'/.slingxdcc/';
+
+nconf.add('settings', {type: 'file', file: appHome+'config/settings.json'});
 
 nconf.defaults({
     "packetList": {
