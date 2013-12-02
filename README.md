@@ -15,10 +15,15 @@ then in terminal:
     $ npm install
     $ node app.js
 
-or via NPM
+or via NPM:
 
     # npm install -g slingxdcc
-    $ slingxdcc start
+
+Make sure you config your downloads folder!
+Then start via:
+
+    $ slingxdcc
+
     
 Point your browser to localhost:3000
 
