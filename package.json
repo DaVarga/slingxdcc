@@ -11,8 +11,11 @@
     "bugs": {
         "url": "http://github.com/DaVarga/slingxdcc/issues"
     },
+    "engines": {
+        "node": ">=0.1.13"
+    },
     "bin": {
-        "slingxdcc": "./server.js"
+        "slingxdcc": "server.js"
     },
     "readmeFilename": "README.md",
     "license" : "BEER-WARE",
