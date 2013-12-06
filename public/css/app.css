@@ -234,3 +234,8 @@ tr.dlqueued .progress, tr.dlqueued .dlspeed , tr.dlactive .queueupdown, tr.dlact
 .donate li.list-group-item:hover{
     background-color: #ffe8d8;
 }
+
+.tooltip-inner{
+    word-wrap: break-word;
+    max-width: 300px;
+}
