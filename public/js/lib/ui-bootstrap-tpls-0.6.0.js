@@ -3290,9 +3290,10 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
 angular.module("template/accordion/accordion-group.html", []).run(["$templateCache", function($templateCache) {
     $templateCache.put("template/accordion/accordion-group.html",
         "<div class=\"panel panel-default\">\n" +
-        "<div class=\"panel-heading\">\n" +
+        "<div class=\"panel-heading\" ng-click=\"isOpen = !isOpen\">\n" +
+        "<span class=\"glyphicon pull-right\" ng-class=\"isOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right'\"></span>\n" +
         "<h4 class=\"panel-title\">\n" +
-        "<a href=\"\" class=\"accordion-toggle\" ng-click=\"isOpen = !isOpen\" accordion-transclude=\"heading\">{{heading}}</a>\n" +
+        "<a href=\"\" class=\"accordion-toggle\" accordion-transclude=\"heading\">{{heading}}</a>\n" +
         "</h4>\n" +
         "</div>\n" +
         "<div class=\"panel-collapse\" collapse=\"!isOpen\">\n" +
