@@ -3,7 +3,8 @@ div(ng-controller="PacketListCtrl" select="init(search)")
         .col-lg-12
             button(type="button",ng-click="setPage(1)").btn.btn-default.pull-right
                 span.glyphicon.glyphicon-refresh
-            h1 Packets {{searchString}}
+            h1(ng-class="{collapse:(searchString)}") List of all packets
+            h1(ng-class="{collapse:(!searchString)}") Search for: {{searchString}}
             .table-responsive
                 table(style="opacity:{{getOpacity()}}").table.table-hover.table-striped.table-condensed
                     thead
