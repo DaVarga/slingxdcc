@@ -147,6 +147,8 @@ function DownloadsCtrl($scope, $http, socket){
         for (var i = 0; i < $scope.dlList.length; i++) {
             if ($scope.dlList[i].speed > 0) {
                 speedsum += $scope.dlList[i].speed;
+            }else{
+                $scope.dlList[i].speed = 0;
             }
         }
         return speedsum;
