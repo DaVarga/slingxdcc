@@ -6,17 +6,14 @@ div(ng-controller="SettingsCtrl")
             h1 Settings
             accordion
                 accordion-group(close-others="true", is-open="true")
-                    accordion-heading
-                        | Irc servers
+                    accordion-heading Irc servers
                     tabset
                         include editserver
 
                         include addserver
                 accordion-group
-                    accordion-heading
-                        | Database
+                    accordion-heading Database
                     include database
                 accordion-group
-                    accordion-heading
-                        | About
+                    accordion-heading About
                     include about
