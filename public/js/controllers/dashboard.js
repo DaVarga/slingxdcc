@@ -155,14 +155,17 @@ DashboardCtrl.$inject = ['$scope', '$http', '$timeout'];
 function NotificationCtrl($scope, $http, socket, $rootScope, $location){
 
     socket.on('send:dlstart',function(data){
+        data.type = 'dlstart';
         $scope.notifications.push(data);
     });
 
     socket.on('send:dlerror',function(data){
+        data.type = 'dlerror';
         $scope.notifications.push(data);
     });
 
     socket.on('send:dlsuccess',function(data){
+        data.type = 'dlsuccess';
         $scope.notifications.push(data);
     });
 
