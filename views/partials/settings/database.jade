@@ -23,35 +23,37 @@
             div.compactingsettings(ng-class="{disabled:compacting.autoCompacting}")
                 hr
 
-
-                .form-group
-                    label(for="mins").col-md-7.control-label Compact interval:
-                    .col-md-5
-                        .input-group
-                            input(type="text",id="mins" ng-model="compacting.interval").form-control.input-sm
-                            span.input-group-addon min
-                .form-group
-                    label.col-md-7.control-label Minimum redundance:
-                    .col-md-5
-                        .input-group
-                            input(type="text",id="percent" ng-model="compacting.redPercentage").form-control.input-sm
-                            span.input-group-addon %
+                form.form-horizontal
+                    .form-group
+                        label(for="mins").col-md-7.control-label Compact interval:
+                        .col-md-5
+                            .input-group
+                                input(type="text",id="mins" ng-model="compacting.interval").form-control.input-sm
+                                span.input-group-addon min
+                    .form-group
+                        label(for="percent").col-md-7.control-label Minimum redundance:
+                        .col-md-5
+                            .input-group
+                                input(type="text",id="percent" ng-model="compacting.redPercentage").form-control.input-sm
+                                span.input-group-addon %
 
         .col-sm-4
             h4 Delete old packets on compacting
                 button(ng-attr-tooltip="{{filter.autoDeleting && 'Deleting old packets' || 'Keeping old packets' }}", tooltip-placement="left" ,type="button", ng-model="filter.autoDeleting", btn-checkbox, btn-checkbox-true="true", btn-checkbox-false="false", ng-class="filter.autoDeleting ? 'btn-info' : 'btn-default'", ng-click="toggleAutoDeleting()").btn.btn-xs.pull-right
                     span(ng-class="filter.autoDeleting ? 'glyphicon-ok-circle' : 'glyphicon-ban-circle'").glyphicon
             hr
-            form(ng-submit="setFilter()").form-group.autodeletesettings
-                label.col-md-7.control-label Maximal package age:
-                .col-md-5
-                    .input-group
-                        input(type="text",id="hours" ng-model="filter.tmpfilter").form-control.input-sm
-                        span.input-group-addon h
-
-                button(type="submit").btn.btn-default.btn-sm.pull-left
-                    span Save&nbsp;
-                    span.glyphicon.glyphicon-ok
+            form(ng-submit="setFilter()").autodeletesettings.form-horizontal
+                .form-group
+                    label(for="hours").col-md-7.control-label Maximal package age:
+                    .col-md-5
+                        .input-group
+                            input(type="text",id="hours" ng-model="filter.tmpfilter").form-control.input-sm
+                            span.input-group-addon h
+                .form-group
+                    .col-md-offset-7.col-md-5
+                        button(type="submit" id="agesubmit").btn.btn-default.btn-sm.pull-right
+                            span Save&nbsp;
+                            span.glyphicon.glyphicon-ok
     .row
         .col-sm-4
             h4 Package statistics
