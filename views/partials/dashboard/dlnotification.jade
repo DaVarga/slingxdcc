@@ -7,44 +7,44 @@
             div(ng-switch-when="dlsuccess")
                 .col-lg-1
                     .row
-                        span(tooltip="Server:{{notification.packObj.server}}, Bot:{{notification.packObj.nick}}, Pack:{{notification.packObj.nr}}", tooltip-placement="right").badge.badge-success
+                        span(tooltip-append-to-body="true", tooltip="Server:{{notification.packObj.server}}, Bot:{{notification.packObj.nick}}, Pack:{{notification.packObj.nr}}", tooltip-placement="right").badge.badge-success
                             span.glyphicon.glyphicon-thumbs-up
                 .col-lg-8
                     .row
-                        span(tooltip-placement="bottom", tooltip="{{notification.packObj.filename}}") {{notification.packObj.filename | truncate:40}}
+                        span(tooltip-append-to-body="true", tooltip-placement="bottom", tooltip="{{notification.packObj.filename}}") {{notification.packObj.filename | truncate:40}}
                     .row
                         span Download Finished
                 .col-lg-3
                     .row
-                        span(tooltip="{{notification.time | date:'medium'}}", tooltip-placement="left").pull-right {{notification.time | timeago}}
+                        span(tooltip-append-to-body="true", tooltip="{{notification.time | date:'medium'}}", tooltip-placement="left").pull-right {{notification.time | timeago}}
             div(ng-switch-when="dlstart")
                 .col-lg-1
                     .row
-                        span(tooltip="Server:{{notification.packObj.server}}, Bot:{{notification.packObj.nick}}, Pack:{{notification.packObj.nr}}", tooltip-placement="right").badge.badge-info
+                        span(tooltip-append-to-body="true", tooltip="Server:{{notification.packObj.server}}, Bot:{{notification.packObj.nick}}, Pack:{{notification.packObj.nr}}", tooltip-placement="right").badge.badge-info
                             span.glyphicon.glyphicon-play
                 .col-lg-8
                     .row
-                        span(tooltip-placement="bottom", tooltip="{{notification.packObj.filename}}") {{notification.packObj.filename | truncate:40}}
+                        span(tooltip-append-to-body="true", tooltip-placement="bottom", tooltip="{{notification.packObj.filename}}") {{notification.packObj.filename | truncate:40}}
                     .row
                         span Download Started
                 .col-lg-3
                     .row
-                        span(tooltip="{{notification.time | date:'medium'}}", tooltip-placement="left").pull-right {{notification.time | timeago}}
+                        span(tooltip-append-to-body="true", tooltip="{{notification.time | date:'medium'}}", tooltip-placement="left").pull-right {{notification.time | timeago}}
             div(ng-switch-default)
                 .col-lg-1
                     .row
-                        span(tooltip="Server:{{notification.packObj.server}}, Bot:{{notification.packObj.nick}}, Pack:{{notification.packObj.nr}}", tooltip-placement="right").badge.badge-danger
+                        span(tooltip-append-to-body="true", tooltip="Server:{{notification.packObj.server}}, Bot:{{notification.packObj.nick}}, Pack:{{notification.packObj.nr}}", tooltip-placement="right").badge.badge-danger
                             span.glyphicon.glyphicon-thumbs-down
                 .col-lg-8
                     .row
-                        span(tooltip-placement="bottom", tooltip="{{notification.packObj.filename}}") {{notification.packObj.filename | truncate:40}}
+                        span(tooltip-append-to-body="true", tooltip-placement="bottom", tooltip="{{notification.packObj.filename}}") {{notification.packObj.filename | truncate:40}}
                     .row
-                        span(tooltip="{{getError(notification)}}") {{getError(notification) | truncate:50}}
+                        span(tooltip-append-to-body="true", tooltip="{{getError(notification)}}") {{getError(notification) | truncate:50}}
                 .col-lg-3
                     .row
-                        span(tooltip="{{notification.time | date:'medium'}}", tooltip-placement="left").pull-right {{notification.time | timeago}}
+                        span(tooltip-append-to-body="true", tooltip="{{notification.time | date:'medium'}}", tooltip-placement="left").pull-right {{notification.time | timeago}}
                     .row
-                        button.pull-right.btn-default.btn.btn-xs(tooltip="Search packet", tooltip-placement="left" ,type="button", ng-click="searchPacket(notification.packObj.filename)")
+                        button.pull-right.btn-default.btn.btn-xs(tooltip-append-to-body="true", tooltip="Search packet", tooltip-placement="left" ,type="button", ng-click="searchPacket(notification.packObj.filename)")
                             span.glyphicon.glyphicon-search
 
 
