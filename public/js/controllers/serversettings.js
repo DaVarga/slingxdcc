@@ -56,6 +56,9 @@ function ServerSettingsCtrl($scope, $http, socket){
     $scope.partChannel = function (channel){
         $http.put('/api/channel/', {srvkey: $scope.server.key, channels: channel, type: "part"}).success(function (data){
             $scope.server.channels.splice($scope.server.channels.indexOf(channel), 1);
+            if ($scope.isObserved(channel)){
+                $scope.server.observchannels.splice($scope.server.observchannels.indexOf(channel), 1);
+            }
         });
     };
 

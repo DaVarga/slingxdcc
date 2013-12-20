@@ -19,11 +19,19 @@ function SettingsCtrl($scope, $http, socket){
     $scope.filter = {};
 
     socket.on('send:irc_connected', function(data){
-        $scope.servers[data.server.key].connected = true;
+        if(typeof $scope.servers[data.server.key] == 'undefined'){
+            getServerData();
+        }else{
+            $scope.servers[data.server.key].connected = true;
+        }
     });
 
     socket.on('send:irc_error', function(data){
-        $scope.servers[data.server.key].error = data.server.error;
+        if(typeof $scope.servers[data.server.key] == 'undefined'){
+            getServerData();
+        }else{
+            $scope.servers[data.server.key].error = data.server.error;
+        }
     });
 
     $scope.$on('$destroy', function () {
@@ -32,12 +40,20 @@ function SettingsCtrl($scope, $http, socket){
     });
 
     $scope.getData = function (){
+        getServerData();
+        getDbData();
+    };
+
+    function getServerData(){
         $http.get('/api/server/').success(function (data, status, headers, config){
             for (var i in data){
                 data[i].key = i;
             }
             $scope.servers = data;
         });
+    }
+
+    function getDbData(){
         $http.get('/api/db/compacting/').success(function (data, status, headers, config){
             angular.extend($scope.compacting, data);
             if(data.autoCompacting){
@@ -53,8 +69,7 @@ function SettingsCtrl($scope, $http, socket){
             angular.extend($scope.packetCount, data);
             $scope.redPercentage = $scope.packetCount.redPackets / ($scope.packetCount.absPackets + $scope.packetCount.redPackets) * 100;
         });
-
-    };
+    }
 
     $scope.getData();
 
