@@ -93,7 +93,6 @@ function PacketListCtrl($scope, $rootScope, $http){
 
     function refreshPageScope(){
         loadDone = false;
-        $scope.numPackets = -1;
         var url;
         if ($scope.searchString.length > 0){
             url = '/api/packet/search/' + $scope.searchString + '/' + $scope.currentPage + '/';
