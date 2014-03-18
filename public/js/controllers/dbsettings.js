@@ -26,7 +26,7 @@ function DbSettingsCtrl($scope, $http, socket){
         $http.put('/api/db/compacting/');
         $scope.redPercentage = 0;
         $scope.packetCount.redPackets = 0;
-    }
+    };
 
     $scope.setFilter = function(){
         var hours = isNaN(parseInt($scope.filter.tmpfilter)) ? 24 : parseInt($scope.filter.tmpfilter);
@@ -34,7 +34,7 @@ function DbSettingsCtrl($scope, $http, socket){
             $scope.filter.compactingfilter = hours;
             $scope.filter.autoDeleting = true;
         });
-    }
+    };
 
     $scope.toggleAutoDeleting = function(){
         if($scope.filter.autoDeleting){
@@ -42,7 +42,7 @@ function DbSettingsCtrl($scope, $http, socket){
         }else{
             $scope.setFilter();
         }
-    }
+    };
 
     $scope.toggleCompacting = function(){
         if($scope.compacting.autoCompacting){
@@ -55,7 +55,7 @@ function DbSettingsCtrl($scope, $http, socket){
             if(interval < 10)
                 interval = 10;
             if(interval > 60 * 24)
-                interval = 60 * 24
+                interval = 60 * 24;
 
             var percentage = isNaN(parseInt($scope.compacting.redPercentage)) ? 25 : parseInt($scope.compacting.redPercentage);
             if(percentage < 0)
@@ -68,7 +68,7 @@ function DbSettingsCtrl($scope, $http, socket){
                 $('.dbsettings .compactingsettings input').prop('disabled', true);
             });
         }
-    }
+    };
 
     $('#toggle').button()
 }
