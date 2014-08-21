@@ -31,6 +31,8 @@ angular.module('myApp.filters', []).filter('interpolate', ['version', function (
         };
     }).filter('reverse',function (){
         return function (items){
+            if (typeof items === 'undefined')
+                return;
             return items.slice().reverse();
         };
     }).filter('observTooltip',function (){
@@ -93,6 +95,6 @@ angular.module('myApp.filters', []).filter('interpolate', ['version', function (
             var units = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'],
                 number = Math.floor(Math.log(bytes) / Math.log(1024));
             if(bytes == 0) return 0 +  ' ' + units[0];
-            return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  ' ' + units[number];
+            return (bytes / Math.pow(1024, number)).toFixed(precision) +  ' ' + units[number];
         }
     });

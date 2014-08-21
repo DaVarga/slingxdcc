@@ -16,12 +16,18 @@ var nodefs = require("node-fs");
 
 var homePath = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
 var appHome = homePath+'/.slingxdcc/';
-nodefs.mkdir(appHome+"config",0777,true,function(){
+
+nodefs.mkdir(appHome+"config",0775,true,function(){
 
 
     var logger = require("./lib/xdcclogger"),
         downloadHandler = require("./lib/downloadHandler"),
         express = require('express'),
+        morgan = require('morgan'),
+        bodyParser = require('body-parser'),
+        methodOverride = require('method-override'),
+       errorhandler = require('errorhandler'),
+
         https = require('https'),
         http = require('http'),
         path = require('path'),
@@ -66,16 +72,16 @@ nodefs.mkdir(appHome+"config",0777,true,function(){
         app.set('port', nconf.get('webserver:port'));
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade');
-        app.use(express.logger('dev'));
-        app.use(express.json());
-        app.use(express.urlencoded());
-        app.use(express.methodOverride());
+
+        app.use(morgan('dev'));
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded());
+        app.use(methodOverride());
         app.use(express.static(path.join(__dirname, 'public')));
-        app.use(app.router);
 
         // development only
         if (app.get('env') === 'development'){
-            app.use(express.errorHandler());
+            app.use(errorhandler());
         }
 
         // production only

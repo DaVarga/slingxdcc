@@ -1,16 +1,16 @@
 tr
-    th(ng-click="setSorting('server')") Server
+    th.server(ng-click="setSorting('server')") Server
         span(ng-class="{desc:'glyphicon-chevron-down', asc:'glyphicon-chevron-up', none:''}[sorted('server')]").glyphicon
-    th(ng-click="setSorting('nick')") Bot
+    th.bot(ng-click="setSorting('nick')") Bot
         span(ng-class="{desc:'glyphicon-chevron-down', asc:'glyphicon-chevron-up', none:''}[sorted('nick')]").glyphicon
-    th(ng-click="setSorting('nr')") #
+    th.packetnr(ng-click="setSorting('nr')") #
         span(ng-class="{desc:'glyphicon-chevron-down', asc:'glyphicon-chevron-up', none:''}[sorted('nr')]").glyphicon
-    th(ng-click="setSorting('downloads')") Gets
+    th.gets(ng-click="setSorting('downloads')") Gets
         span(ng-class="{desc:'glyphicon-chevron-down', asc:'glyphicon-chevron-up', none:''}[sorted('downloads')]").glyphicon
-    th(ng-click="setSorting('filesize')") Size
+    th.size(ng-click="setSorting('filesize')") Size
         span(ng-class="{desc:'glyphicon-chevron-down', asc:'glyphicon-chevron-up', none:''}[sorted('filesize')]").glyphicon
-    th(ng-click="setSorting('filename')") Filename
+    th.filename(ng-click="setSorting('filename')") Filename
         span(ng-class="{desc:'glyphicon-chevron-down', asc:'glyphicon-chevron-up', none:''}[sorted('filename')]").glyphicon
-    th(ng-click="setSorting('lastseen')") Last seen
+    th.lastseen(ng-click="setSorting('lastseen')") Last seen
         span(ng-class="{desc:'glyphicon-chevron-down', asc:'glyphicon-chevron-up', none:''}[sorted('lastseen')]").glyphicon
-    th
+    th.download

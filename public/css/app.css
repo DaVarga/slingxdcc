@@ -243,3 +243,31 @@ tr.dlqueued .progress, tr.dlqueued .dlspeed , tr.dlactive .queueupdown, tr.dlact
     word-wrap: break-word;
     max-width: 300px;
 }
+
+table.packets .server{
+    width: 10%;
+}
+
+table.packets .bot{
+    width: 15%;
+}
+
+table.packets .packetnr{
+    width: 4%;
+}
+
+table.packets .gets{
+    width: 5%;
+}
+
+table.packets .size{
+    width: 11%;
+}
+
+table.packets .lastseen{
+    width: 15%;
+}
+
+table.packets .download{
+    width: 40px;
+}
