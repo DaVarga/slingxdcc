@@ -75,7 +75,7 @@ nodefs.mkdir(appHome+"config",0775,true,function(){
 
         app.use(morgan('dev'));
         app.use(bodyParser.json());
-        app.use(bodyParser.urlencoded());
+        app.use(bodyParser.urlencoded({extended:false}));
         app.use(methodOverride());
         app.use(express.static(path.join(__dirname, 'public')));
 
@@ -162,8 +162,6 @@ nodefs.mkdir(appHome+"config",0775,true,function(){
                 }
                 // Hook Socket.io into Express
                 io = io.listen(server);
-                io.set('log level', 1);
-
                 // Socket.io Communication
                 io.sockets.on('connection', require('./routes/socket'));
 

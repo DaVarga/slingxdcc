@@ -8,11 +8,8 @@ hr
             span Online:
             span.label.label-success.pull-right {{onPacketPercentage() | number:1}}%
         li.list-group-item
-            span Offline:
-            span.label.label-danger.pull-right {{offPacketPercentage() | number:1}}%
-        li.list-group-item
             span Redundant:
-            span.label.label-default.pull-right {{redPacketPercentage() | number:1}}%
+            span.label.label-danger.pull-right {{redPacketPercentage() | number:1}}%
         li.list-group-item
             span(ng-class="{collapse:!(compacting.autoCompacting)}") Next database compacting: {{compacting.nextCompacting | date:'dd.MM HH:mm'}}
             span.label.label-warning.center-block(ng-class="{collapse:(compacting.autoCompacting)}")  No Database Cleanup

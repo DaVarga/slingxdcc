@@ -112,16 +112,12 @@ exports.getServer = function (req, res){
 };
 
 exports.getNumPackets = function (req, res){
-    var conpackets = packdb.numberOfConnPackets();
     var abspackets = packdb.numberOfPackets();
     var redpackets = packdb.numberOfRedundantPackets();
-    var offpackets = abspackets - conpackets;
 
     res.json({
-        conPackets : conpackets,
         absPackets : abspackets,
         redPackets : redpackets,
-        offPackets : offpackets
     });
 };
 

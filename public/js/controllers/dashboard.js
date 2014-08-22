@@ -81,9 +81,8 @@ function DashboardCtrl($scope, $http, $timeout) {
 
         $http.get('/api/packet/').success(function (data, status, headers, config) {
             angular.extend($scope.packetCount, data);
-            $scope.chartPacketData[0].value = $scope.packetCount.absPackets-$scope.packetCount.offPackets;
-            $scope.chartPacketData[1].value = $scope.packetCount.offPackets;
-            $scope.chartPacketData[2].value = $scope.packetCount.redPackets;
+            $scope.chartPacketData[0].value = $scope.packetCount.absPackets
+            $scope.chartPacketData[1].value = $scope.packetCount.redPackets;
 
         });
 
