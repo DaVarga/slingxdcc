@@ -8,8 +8,7 @@ function DashboardCtrl($scope, $http, $timeout) {
     $scope.compacting = {};
     $scope.packetCount = {
         redPackets: 0,
-        conPackets: 0,
-        offPackets: 0
+        absPackets: 0
     };
 
 
@@ -40,16 +39,13 @@ function DashboardCtrl($scope, $http, $timeout) {
     ];
 
     $scope.redPacketPercentage = function () {
-        return $scope.packetCount.redPackets / ($scope.packetCount.absPackets + $scope.packetCount.redPackets) * 100;
+      return $scope.packetCount.redPackets / ($scope.packetCount.absPackets + $scope.packetCount.redPackets) * 100;
     };
 
-    $scope.onPacketPercentage = function () {
-        return $scope.packetCount.conPackets / ($scope.packetCount.absPackets + $scope.packetCount.redPackets) * 100;
+    $scope.unqPacketPercentage = function () {
+      return 100 - $scope.redPacketPercentage();
     };
 
-    $scope.offPacketPercentage = function () {
-        return $scope.packetCount.offPackets / ($scope.packetCount.absPackets + $scope.packetCount.redPackets) * 100;
-    };
 
     $scope.onServerPercentage = function () {
         return $scope.onServers / $scope.numServers * 100;
