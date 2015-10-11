@@ -1,0 +1,47 @@
+{
+  "author": "Daniel Varga",
+  "name": "slingxdcc",
+  "description": "XDCC download manager with web frontend written in node.js",
+  "keywords": [
+    "XDCC",
+    "downloadmanager",
+    "download",
+    "manager",
+    "dcc",
+    "irc",
+    "angular",
+    "bootstrap"
+  ],
+  "version": "0.3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DaVarga/slingxdcc"
+  },
+  "bugs": {
+    "url": "https://github.com/DaVarga/slingxdcc/issues"
+  },
+  "contributors": [
+    {
+      "name": "Daniel Varga",
+      "email": "varga.daniel@gmx.de"
+    }
+  ],
+  "engines": {
+    "node": ">=4.1.0"
+  },
+  "bin": {
+    "slingxdcc": "server.js"
+  },
+  "readmeFilename": "README.md",
+  "private": true,
+  "dependencies": {
+    "irc": "^0.4.0",
+    "lodash": "^3.10.1",
+    "nominandi": "^1.0.1"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "lib"
+  ]
+}
