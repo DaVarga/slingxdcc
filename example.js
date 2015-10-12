@@ -6,21 +6,12 @@
 
 "use strict";
 
+let SlingIrc = require("./lib/SlingIrc");
 let SlingChannel = require("./lib/SlingChannel");
 
-let nominandi = require("nominandi");
-let nom = new nominandi()
+let channel = [];
+channel.push(new SlingChannel("#elitewarez"));
+channel.push(new SlingChannel("#elite-chat"));
 
-let test = [];
+let server = new SlingIrc("irc.criten.net", channel);
 
-test.push(
-  new SlingChannel("#moviegods")
-);
-test.push(
-  new SlingChannel("#mg-chat", false)
-);
-test.push(
-  new SlingChannel("#mg-lounge", false)
-);
-
-console.log(nom.generate());
