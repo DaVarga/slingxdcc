@@ -15,3 +15,6 @@ channel.push(new SlingChannel("#elite-chat"));
 
 let server = new SlingIrc("irc.criten.net", channel);
 
+console.log(""+channel[0]);
+
+
