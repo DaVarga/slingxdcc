@@ -35,9 +35,11 @@
   "readmeFilename": "README.md",
   "private": true,
   "dependencies": {
+    "async": "^1.4.2",
     "irc": "^0.4.0",
     "lodash": "^3.10.1",
-    "nominandi": "^1.0.1"
+    "nominandi": "^1.0.1",
+    "winston": "^1.1.0"
   },
   "files": [
     "LICENSE",
