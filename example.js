@@ -7,23 +7,59 @@
 "use strict";
 
 const winston       = require("winston");
-winston.level = "info";
+winston.level = "debug";
 let SlingIrc = require("./lib/SlingIrc");
 let SlingChannel = require("./lib/SlingChannel");
 let SlingDatabase = require("./lib/SlingDatabase");
 
-let channel = [];
-channel.push(new SlingChannel("#elitewarez"));
-channel.push(new SlingChannel("#elite-chat",null,false));
+let networks = [
+    {
+        name: "elitewarez",
+        host:"irc.criten.net",
+        channel:[
+            {
+                name:"#elitewarez",
+                observe:true
+            },{
+                name:"#elite-chat",
+                observe:false
+            }
+        ]
+    },
+    {
+        name: "moviegods",
+        host:"irc.abjects.net",
+        channel:[
+            {
+                name:"#moviegods",
+                observe:true
+            },{
+                name:"#mg-chat",
+                observe:false
+            }
+        ]
+    }
+];
 
-let server = new SlingIrc("irc.criten.net", undefined,channel);
-let logger = new SlingDatabase("elitewarez");
 
-server.onPackinfo(function (packData, channel, nick){
-    let id = packData.id;
-    let fileName = packData.fileName;
-    delete packData.id;
-    delete packData.fileName;
-    logger.addPack(id, fileName, nick, packData);
-});
+let servers = [];
+let loggers = [];
+
+for(let nw of networks){
+    let logger = new SlingDatabase(nw.name);
+    loggers.push(logger);
+    let cnls = [];
+    for(let chan of nw.channel){
+        cnls.push(new SlingChannel(chan.name,null,chan.observe));
+    }
+    let srv = new SlingIrc(nw.host, undefined,cnls);
+    srv.onPackinfo((packData, channel, nick) => {
+        let id = packData.id;
+        let fileName = packData.fileName;
+        delete packData.id;
+        delete packData.fileName;
+        logger.addPack(id, fileName, nick, packData);
+    });
+    servers.push(srv);
+}
 
