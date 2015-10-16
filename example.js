@@ -10,7 +10,7 @@ const winston       = require("winston");
 winston.level = "debug";
 let SlingIrc = require("./lib/SlingIrc");
 let SlingChannel = require("./lib/SlingChannel");
-let SlingDatabase = require("./lib/SlingDatabase");
+let SlingLogger = require("./lib/SlingLogger");
 
 let networks = [
     {
@@ -46,7 +46,7 @@ let servers = [];
 let loggers = [];
 
 for(let nw of networks){
-    let logger = new SlingDatabase(nw.name);
+    let logger = new SlingLogger(nw.name);
     loggers.push(logger);
     let cnls = [];
     for(let chan of nw.channel){
