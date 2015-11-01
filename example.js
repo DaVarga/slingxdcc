@@ -1,20 +1,11 @@
-/*
- * Slingxdcc - XDCC download manager
- * example usage
- * MIT Licensed
- */
-
 "use strict";
 
 const winston = require("winston");
 winston.level = "debug";
-let SlingIrc = require("./lib/SlingIrc");
 let SlingChannel = require("./lib/SlingChannel");
-let SlingManager = require("./lib/SlingManager");
 let ds = require("./lib/SlingDatastore");
 let SlingDb = require("./lib/SlingDB");
-let async = require("async");
-let _ = require("lodash");
+
 
 let networks = [
     {
@@ -42,36 +33,45 @@ let networks = [
                 observe: false
             }
         ]
+    },
+    {
+        name: "beast",
+        host: "irc.abjects.net",
+        channel: [
+            {
+                name: "#beast-xdcc",
+                observe: true
+            }, {
+                name: "#beast-chat",
+                observe: false
+            }
+        ]
     }
 ];
 
-let slingManager = new SlingManager();
 
+ds.initialize((err)=> {
 
-ds.initalize((err)=> {
     let db = new SlingDb();
+    let SlingManager = require("./lib/SlingManager");
+    let slingmanager = SlingManager.instance;
+
 
     for (let nw of networks) {
         let cnls = [];
         for (let chan of nw.channel) {
-            cnls.push(new SlingChannel(chan.name, null, chan.observe));
+            cnls.push(new SlingChannel(chan.name, {observe: chan.observe}));
         }
-        slingManager.addNetwork(nw.name, nw.host, undefined, cnls);
+        slingmanager.addNetwork(nw.name, nw.host, {channels: cnls});
     }
+    var stdin = process.openStdin();
 
-    setTimeout(()=> {
-        db.search({}, (err, docs, total, cacheKey)=> {
-            winston.debug("search", err, docs, total, cacheKey);
+    stdin.addListener("data", function(d) {
 
-            setTimeout(()=> {
-                let x = db.getPage(0, cacheKey);
-                winston.debug("get page", x);
-            }, 1000);
-            setTimeout(()=> {
-                let x = db.getPage(0, cacheKey);
-                winston.debug("get page", x);
-            }, 7000);
-
+        slingmanager.addDownload(d.toString().trim(), function (err, data) {
+            winston.debug("example", err, data);
         });
-    }, 10);
+
+    });
+
 });
