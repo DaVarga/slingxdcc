@@ -38,7 +38,7 @@ module.exports.addNetwork = function* addNetwork(next) {
         }
     }
 
-    this.body = sling.addNetwork(name, hostname, opts);
+    this.body = JSON.stringify(sling.addNetwork(name, hostname, opts));
 };
 
 module.exports.addChannel = function* addChannel(network, next) {
