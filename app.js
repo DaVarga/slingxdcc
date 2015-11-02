@@ -27,17 +27,35 @@ ds.initialize(err => {
     if (err) return;
 
     const cApi = require("./controllers/api"),
-        cPackets = require("./controllers/packets");
+        cPackets = require("./controllers/packets"),
+        cNetworks = require("./controllers/networks");
 
+    app.use(bodyParser({
+        detectJSON: function (ctx) {
+            return /\.json$/i.test(ctx.path);
+        },
+        extendTypes: {
+            json: ['application/x-javascript']
+        }
+    }));
     //use koa logger
     app.use(logger());
 
-    app.use(bodyParser());
+
     //routes
     app.use(route.get("/api/", cApi.home));
-    app.use(route.post("/api/search/", cPackets.search));
-    app.use(route.get("/api/search/:cacheKey/:page", cPackets.getPage));
 
+    app.use(route.get("/api/packet/search/:cacheKey/:page", cPackets.getPage));
+    app.use(route.get("/api/packet/count/", cPackets.count));
+    app.use(route.get("/api/packet/count/:network", cPackets.countNet));
+    app.use(route.get("/api/packet/:id", cPackets.getPack));
+    app.use(route.delete("/api/packet/search/:cacheKey/", cPackets.deleteCache));
+    app.use(route.post("/api/packet/search/", cPackets.search));
+
+    app.use(route.post("/api/network/", cNetworks.addNetwork));
+    app.use(route.post("/api/network/:network", cNetworks.addChannel));
+    app.use(route.delete("/api/network/:network", cNetworks.rmNetwork));
+    app.use(route.delete("/api/network/:network/:channel", cNetworks.rmChannel));
 
 
     // Serve static files
@@ -47,7 +65,3 @@ ds.initialize(err => {
     app.listen(3000);
     winston.info("listening on port 3000");
 });
-
-
-
-
