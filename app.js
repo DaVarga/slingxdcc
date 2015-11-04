@@ -30,14 +30,7 @@ ds.initialize(err => {
         cPackets = require("./controllers/packets"),
         cNetworks = require("./controllers/networks");
 
-    app.use(bodyParser({
-        detectJSON: function (ctx) {
-            return /\.json$/i.test(ctx.path);
-        },
-        extendTypes: {
-            json: ['application/x-javascript']
-        }
-    }));
+    app.use(bodyParser());
     //use koa logger
     app.use(logger());
 

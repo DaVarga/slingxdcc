@@ -13,25 +13,24 @@ const _ = require("lodash"),
 
 module.exports.addNetwork = function* addNetwork(next) {
     if ("POST" != this.method) return yield next;
-    console.log(this.request.body);
 
     const name = this.request.body.name,
         hostname = this.request.body.hostname,
         opts = {};
 
-    if(!_.isUndefined(this.request.body.opts)){
+    if (!_.isUndefined(this.request.body.opts)) {
         const o = this.request.body.opts;
-        if(_.isObject(o.options))
+        if (_.isObject(o.options))
             opts.options = o.options;
-        if(_.isArray(o.commands))
+        if (_.isArray(o.commands))
             opts.commands = o.commands;
-        if(_.isArray(o.channels)){
+        if (_.isArray(o.channels)) {
             opts.channels = [];
-            for(let c of o.channels){
-                opts.channels.push(new SlingChannel(c.name,{
-                    password:c.password,
-                    observed:c.observed,
-                    regex: c.regex,
+            for (let c of o.channels) {
+                opts.channels.push(new SlingChannel(c.name, {
+                    password: c.password,
+                    observed: c.observed === "true",
+                    regex: c.regex ? new RegExp(c.regex) : undefined,
                     groupOrder: c.groupOrder
                 }));
             }
@@ -47,10 +46,10 @@ module.exports.addChannel = function* addChannel(network, next) {
     const nw = sling.getNetwork(network);
 
 
-    const chan = new SlingChannel(this.request.body.channel,{
+    const chan = new SlingChannel(this.request.body.name, {
         password: this.request.body.password,
-        observed: this.request.body.observed,
-        regex: this.request.body.regex,
+        observed: this.request.body.observed === "true",
+        regex: this.request.body.regex ? new RegExp(this.request.body.regex) : undefined,
         groupOrder: this.request.body.groupOrder
     });
 
@@ -72,15 +71,8 @@ module.exports.rmChannel = function* rmChannel(network, channel, next) {
     const nw = sling.getNetwork(network);
 
     const chans = nw.chans;
-    let c = false;
-    for(let chan of chans){
-        if(chan.name == channel){
-            c = chan;
-            break;
-        }
-    }
 
-    const result = yield thunkify(nw.removeChannel.bind(sling))(c);
+    let result = yield thunkify(nw.removeChannel.bind(sling))(chans.get("#"+channel));
 
     this.body = result;
 };
