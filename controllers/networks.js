@@ -53,7 +53,6 @@ module.exports.addChannel = function* addChannel(network, next) {
         groupOrder: this.request.body.groupOrder
     });
 
-
     this.body = yield thunkify(nw.addChannel.bind(nw))(chan);
 };
 
@@ -72,7 +71,7 @@ module.exports.rmChannel = function* rmChannel(network, channel, next) {
 
     const chans = nw.chans;
 
-    let result = yield thunkify(nw.removeChannel.bind(sling))(chans.get("#"+channel));
+    let result = yield thunkify(nw.removeChannel.bind(sling))(chans.get("#" + channel));
 
     this.body = result;
 };
