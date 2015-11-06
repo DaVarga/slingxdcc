@@ -45,6 +45,7 @@ ds.initialize(err => {
     app.use(route.delete("/api/packet/search/:cacheKey/", cPackets.deleteCache));
     app.use(route.post("/api/packet/search/", cPackets.search));
 
+    app.use(route.get("/api/network/", cNetworks.getNetworks));
     app.use(route.post("/api/network/", cNetworks.addNetwork));
     app.use(route.post("/api/network/:network", cNetworks.addChannel));
     app.use(route.delete("/api/network/:network", cNetworks.rmNetwork));

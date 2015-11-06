@@ -75,3 +75,10 @@ module.exports.rmChannel = function* rmChannel(network, channel, next) {
 
     this.body = result;
 };
+
+
+module.exports.getNetworks = function* getNetworks(next) {
+    if ("GET" != this.method) return yield next;
+
+    this.body = JSON.stringify(sling);
+};
