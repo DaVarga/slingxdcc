@@ -18,8 +18,8 @@ const winston = require("winston"),
     koa = require("koa"),
     app = koa();
 
-//set log level
-winston.level = "debug";
+    //set log level
+    winston.level = "debug";
 
 
 //initialize datastore first
@@ -28,6 +28,7 @@ ds.initialize(err => {
 
     const cApi = require("./controllers/api"),
         cPackets = require("./controllers/packets"),
+        cDownloads = require("./controllers/downloads"),
         cNetworks = require("./controllers/networks");
 
     app.use(bodyParser());
@@ -48,8 +49,20 @@ ds.initialize(err => {
     app.use(route.get("/api/network/", cNetworks.getNetworks));
     app.use(route.post("/api/network/", cNetworks.addNetwork));
     app.use(route.post("/api/network/:network", cNetworks.addChannel));
+    app.use(route.get("/api/network/:network", cNetworks.getNetwork));
     app.use(route.delete("/api/network/:network", cNetworks.rmNetwork));
     app.use(route.delete("/api/network/:network/:channel", cNetworks.rmChannel));
+
+    //app.use(route.get("/api/download/", cDownloads.getDownloads));
+    //app.use(route.get("/api/download/:network", cDownloads.getDownloadsNw));
+    //app.use(route.get("/api/download/:network/:bot", cDownloads.getDownloadsBot));
+    //app.use(route.get("/api/download/:network/:bot/:number", cDownloads.getDownload));
+    app.use(route.post("/api/download/", cDownloads.addDownload));
+    app.use(route.delete("/api/download/:network/:bot/:number", cDownloads.cancelDownload));
+    //app.use(route.put("/api/download/:network/:bot/:number", cDownloads.orderDownload));
+
+
+
 
 
     // Serve static files

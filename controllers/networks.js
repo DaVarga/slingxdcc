@@ -37,13 +37,20 @@ module.exports.addNetwork = function* addNetwork(next) {
         }
     }
 
-    this.body = JSON.stringify(sling.addNetwork(name, hostname, opts));
+    this.body = sling.addNetwork(name, hostname, opts).toJSON();
 };
+
+module.exports.getNetwork = function* getNetwork(network, next) {
+    if ("GET" != this.method) return yield next;
+
+    this.body = sling.getNetwork(network);
+};
+
 
 module.exports.addChannel = function* addChannel(network, next) {
     if ("POST" != this.method) return yield next;
 
-    const nw = sling.getNetwork(network);
+    const irc = sling.getNetwork(network).irc;
 
 
     const chan = new SlingChannel(this.request.body.name, {
@@ -53,7 +60,7 @@ module.exports.addChannel = function* addChannel(network, next) {
         groupOrder: this.request.body.groupOrder
     });
 
-    this.body = yield thunkify(nw.addChannel.bind(nw))(chan);
+    this.body = yield thunkify(irc.addChannel.bind(irc))(chan);
 };
 
 module.exports.rmNetwork = function* rmNetwork(network, next) {
@@ -80,5 +87,5 @@ module.exports.rmChannel = function* rmChannel(network, channel, next) {
 module.exports.getNetworks = function* getNetworks(next) {
     if ("GET" != this.method) return yield next;
 
-    this.body = JSON.stringify(sling);
+    this.body = sling;
 };
