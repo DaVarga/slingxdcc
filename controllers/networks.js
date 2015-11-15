@@ -36,8 +36,11 @@ module.exports.addNetwork = function* addNetwork(next) {
             }
         }
     }
-
-    this.body = sling.addNetwork(name, hostname, opts).toJSON();
+    try {
+        this.body = sling.addNetwork(name, hostname, opts).toJSON();
+    } catch (e) {
+        this.body = e;
+    }
 };
 
 module.exports.getNetwork = function* getNetwork(network, next) {
@@ -50,25 +53,27 @@ module.exports.getNetwork = function* getNetwork(network, next) {
 module.exports.addChannel = function* addChannel(network, next) {
     if ("POST" != this.method) return yield next;
 
-    const irc = sling.getNetwork(network).irc;
+    const irc = sling.getNetwork(network).irc,
+        opts = {
+            password: this.request.body.password,
+            observed: this.request.body.observed === "true",
+            regex: this.request.body.regex ? new RegExp(this.request.body.regex) : undefined,
+            groupOrder: this.request.body.groupOrder
+        },
+        chan = new SlingChannel(this.request.body.name, opts);
 
 
-    const chan = new SlingChannel(this.request.body.name, {
-        password: this.request.body.password,
-        observed: this.request.body.observed === "true",
-        regex: this.request.body.regex ? new RegExp(this.request.body.regex) : undefined,
-        groupOrder: this.request.body.groupOrder
-    });
-
-    this.body = yield thunkify(irc.addChannel.bind(irc))(chan);
+    try {
+        this.body = yield thunkify(irc.addChannel.bind(irc))(chan);
+    } catch (e) {
+        this.body = e;
+    }
 };
 
 module.exports.rmNetwork = function* rmNetwork(network, next) {
     if ("DELETE" != this.method) return yield next;
 
-    const result = yield thunkify(sling.removeNetwork.bind(sling))(network, this.request.body.flush);
-
-    this.body = result;
+    this.body = yield thunkify(sling.removeNetwork.bind(sling))(network, this.request.body.flush);
 };
 
 module.exports.rmChannel = function* rmChannel(network, channel, next) {
@@ -78,9 +83,8 @@ module.exports.rmChannel = function* rmChannel(network, channel, next) {
 
     const chans = nw.chans;
 
-    let result = yield thunkify(nw.removeChannel.bind(sling))(chans.get("#" + channel));
+    this.body = yield thunkify(nw.removeChannel.bind(sling))(chans.get("#" + channel));
 
-    this.body = result;
 };
 
 

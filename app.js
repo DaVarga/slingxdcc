@@ -9,6 +9,7 @@
 /** Module dependencies. */
 const winston = require("winston"),
     ds = require("./lib/SlingDatastore"),
+    config = require("./lib/SlingConfig").settings,
     compress = require("koa-compress"),
     logger = require("koa-logger"),
     serve = require("koa-static"),
@@ -19,7 +20,7 @@ const winston = require("winston"),
     app = koa();
 
     //set log level
-    winston.level = "debug";
+    winston.level = config.get("basic:logLevel");
 
 
 //initialize datastore first
@@ -31,9 +32,23 @@ ds.initialize(err => {
         cDownloads = require("./controllers/downloads"),
         cNetworks = require("./controllers/networks");
 
+    app.use(function *(next) {
+        try {
+            yield next;
+        } catch (err) {
+            this.status = err.status || 500;
+            this.body = err.message;
+            this.app.emit('error', err, this);
+        }
+    });
+
     app.use(bodyParser());
-    //use koa logger
-    app.use(logger());
+
+    if(winston.level == "debug"){
+        //use koa logger
+        app.use(logger());
+    }
+
 
 
     //routes
@@ -61,14 +76,12 @@ ds.initialize(err => {
     app.use(route.delete("/api/download/:network/:bot/:number", cDownloads.cancelDownload));
     //app.use(route.put("/api/download/:network/:bot/:number", cDownloads.orderDownload));
 
-
-
-
-
     // Serve static files
     app.use(serve(path.join(__dirname, "public")));
 
+    const port = config.get("basic:httpPort");
 
-    app.listen(3000);
-    winston.info("listening on port 3000");
+    app.listen(port);
+
+    winston.info(`listening on port ${port}`);
 });
