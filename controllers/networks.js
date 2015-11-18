@@ -27,12 +27,7 @@ module.exports.addNetwork = function* addNetwork(next) {
         if (_.isArray(o.channels)) {
             opts.channels = [];
             for (let c of o.channels) {
-                opts.channels.push(new SlingChannel(c.name, {
-                    password: c.password,
-                    observed: c.observed === "true",
-                    regex: c.regex ? new RegExp(c.regex) : undefined,
-                    groupOrder: c.groupOrder
-                }));
+                opts.channels.push(SlingChannel.fromJSON(c));
             }
         }
     }

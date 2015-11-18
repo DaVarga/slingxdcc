@@ -60,7 +60,7 @@ ds.initialize((err)=> {
     for (let nw of networks) {
         let cnls = [];
         for (let chan of nw.channel) {
-            cnls.push(new SlingChannel(chan.name, {observe: chan.observe}));
+            cnls.push(new SlingChannel(chan.name, {observed: chan.observe}));
         }
         slingmanager.addNetwork(nw.name, nw.host, {channels: cnls});
     }
