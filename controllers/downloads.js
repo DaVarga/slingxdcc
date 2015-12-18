@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * Slingxdcc api controller - networks
+ * Slingxdcc api controller - downloads
  */
 
 
