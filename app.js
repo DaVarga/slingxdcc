@@ -19,8 +19,8 @@ const winston = require("winston"),
     koa = require("koa"),
     app = koa();
 
-    //set log level
-    winston.level = config.get("basic:logLevel");
+//set log level
+winston.level = config.get("basic:logLevel");
 
 
 //initialize datastore first
@@ -52,20 +52,34 @@ ds.initialize(err => {
 
 
     //routes
+
+    // usage, api documentation
     app.use(route.get("/api/", cApi.home));
 
+    // get an page of search results
     app.use(route.get("/api/packet/search/:cacheKey/:page", cPackets.getPage));
+    // get package count
     app.use(route.get("/api/packet/count/", cPackets.count));
+    // get package count of network
     app.use(route.get("/api/packet/count/:network", cPackets.countNet));
+    // get packet details
     app.use(route.get("/api/packet/:id", cPackets.getPack));
+    // remove search cache
     app.use(route.delete("/api/packet/search/:cacheKey/", cPackets.deleteCache));
+    // emit new search cache
     app.use(route.post("/api/packet/search/", cPackets.search));
 
+    //gets network data
     app.use(route.get("/api/network/", cNetworks.getNetworks));
+    //adds a new network
     app.use(route.post("/api/network/", cNetworks.addNetwork));
+    //adds a new channel
     app.use(route.post("/api/network/:network", cNetworks.addChannel));
+    //gets network inforamtion
     app.use(route.get("/api/network/:network", cNetworks.getNetwork));
+    //leaves a network and all channels
     app.use(route.delete("/api/network/:network", cNetworks.rmNetwork));
+    //leaves a channel
     app.use(route.delete("/api/network/:network/:channel", cNetworks.rmChannel));
 
     //app.use(route.get("/api/download/", cDownloads.getDownloads));

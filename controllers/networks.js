@@ -7,7 +7,7 @@
 const _ = require("lodash"),
     SlingManager = require("../lib/SlingManager"),
     SlingChannel = require("../lib/SlingChannel"),
-    thunkify = require("thunkify"),
+    wrap = require("../lib/thunkywrap").wrap,
     sling = SlingManager.instance;
 
 
@@ -59,7 +59,7 @@ module.exports.addChannel = function* addChannel(network, next) {
 
 
     try {
-        this.body = yield thunkify(irc.addChannel.bind(irc))(chan);
+        this.body = yield wrap(irc,"addChannel")(chan);
     } catch (e) {
         this.body = e;
     }
@@ -68,7 +68,7 @@ module.exports.addChannel = function* addChannel(network, next) {
 module.exports.rmNetwork = function* rmNetwork(network, next) {
     if ("DELETE" != this.method) return yield next;
 
-    this.body = yield thunkify(sling.removeNetwork.bind(sling))(network, this.request.body.flush);
+    this.body = yield wrap(sling,"removeNetwork")(network, this.request.body.flush);
 };
 
 module.exports.rmChannel = function* rmChannel(network, channel, next) {
@@ -78,7 +78,7 @@ module.exports.rmChannel = function* rmChannel(network, channel, next) {
 
     const chans = nw.chans;
 
-    this.body = yield thunkify(nw.removeChannel.bind(sling))(chans.get("#" + channel));
+    this.body = yield wrap(nw,"removeChannel")(chans.get("#" + channel));
 
 };
 

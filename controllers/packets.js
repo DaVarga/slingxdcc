@@ -5,7 +5,7 @@
  */
 
 const SlingDb = require("../lib/SlingDB"),
-    thunkify = require("thunkify"),
+    wrap = require("../lib/thunkywrap").wrap,
     db = new SlingDb();
 
 
@@ -16,7 +16,7 @@ module.exports.search = function* search(next) {
         name: this.request.body.name,
         sort: this.request.body.sort
     };
-    const result = yield thunkify(db.search.bind(db))(search);
+    const result = yield wrap(db,"search")(search);
 
     this.body = {page: result[0], cacheKey: result[1]};
 };
@@ -29,19 +29,19 @@ module.exports.getPage = function* getPage(cacheKey, page, next) {
 
 module.exports.countNet = function* countNet(network, next) {
     if ("GET" != this.method) return yield next;
-    const result = yield thunkify(db.count.bind(db))(network);
+    const result = yield wrap(db,"count")(network);
     this.body = result;
 };
 
 module.exports.count = function* count(next) {
     if ("GET" != this.method) return yield next;
-    const result = yield thunkify(db.count.bind(db))(null);
+    const result = yield wrap(db,"count")(null);
     this.body = result;
 };
 
 module.exports.getPack = function* getPack(id, next) {
     if ("GET" != this.method) return yield next;
-    const result = yield thunkify(db.getItem.bind(db))(id);
+    const result = yield wrap(db,"getItem")(id);
     this.body = result;
 };
 
