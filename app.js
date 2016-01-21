@@ -27,10 +27,10 @@ winston.level = config.get("basic:logLevel");
 ds.initialize(err => {
     if (err) return;
 
-    const cApi = require("./controllers/api"),
-        cPackets = require("./controllers/packets"),
-        cDownloads = require("./controllers/downloads"),
-        cNetworks = require("./controllers/networks");
+    const cApi = require("./node/controllers/api"),
+        cPackets = require("./node/controllers/packets"),
+        cDownloads = require("./node/controllers/downloads"),
+        cNetworks = require("./node/controllers/networks");
 
     app.use(function *(next) {
         try {

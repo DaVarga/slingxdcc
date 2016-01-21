@@ -37,7 +37,7 @@
   "readmeFilename": "README.md",
   "private": true,
   "dependencies": {
-    "async": "^1.4.2",
+    "async": "^1.5.2",
     "axdcc": "^1.0.0",
     "irc": "^0.4.0",
     "koa": "^1.1.2",
@@ -48,7 +48,7 @@
     "koa-static": "^1.5.2",
     "lodash": "^3.10.1",
     "nconf": "^0.8.2",
-    "nedb": "^1.4.0",
+    "nedb": "^1.7.1",
     "nominandi": "^1.0.2",
     "thunkify": "^2.1.2",
     "uuid": "^2.0.1",

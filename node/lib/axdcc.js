@@ -97,11 +97,8 @@ handle.message = function (nick, to, text, message) {
     this.emit("message", pack, msg);
 
 
-    if (
-        pack.status == "requesting" &&
-        opts.ssl &&
-        _.contains(text, "command is unsupported")
-    ) {
+    if (pack.status == "requesting" && opts.ssl &&
+        _.contains(text, "command is unsupported")) {
         if (opts.unencryptedFallback) {
             this.fallback();
         } else {
@@ -131,8 +128,11 @@ handle.dccMessage = function (nick, to, text) {
         to != client.nick
     ) return;
 
-    privates.pack = _.defaults(Axdcc.parseDccMessage(text), privates.pack);
-
+    const msgInfo = Axdcc.parseDccMessage(text);
+    if (!_.isString(msgInfo.type))
+        return;
+        
+    privates.pack = _.defaults(msgInfo, privates.pack);
     const pack = privates.pack;
 
     if (pack.type == "SEND" || pack.type == "SSEND") {
@@ -180,7 +180,7 @@ class Axdcc extends EventEmitter {
      * @param {boolean} [opts.resume = true] - resume files instead overwrite
      * @param {boolean} [opts.ssl = false] - uses ssl encrypted file transfer via XDCC SSEND.
      * @param {boolean} [opts.unencryptedFallback = false] - uses unencrypted file transfer via XDCC SEND
-     * if bot don't supports SSL or SSL version is not Compatible with nodejs.
+     * if bot don't supports SSL or SSL version is not compatible with nodejs.
      * @param {int} [opts.progressThreshold = 1024] - emit progress every x Byte received
      * @constructs Request
      * @throws Error - on invalid parameter
@@ -327,11 +327,9 @@ class Axdcc extends EventEmitter {
                 } else if (pack.received != pack.fileSize && pack.status == "connected") {// Download incomplete
                     this.emit("dlerror", pack, "Server unexpected closed connection");
                     pack.status = "error";
-                    this.unregister();
                 } else if (pack.status == "aborting") {// Download aborted
                     pack.status = "canceled";
                     this.emit("progress", pack);
-                    this.unregister();
                 }
 
                 this.unregister();
@@ -423,6 +421,7 @@ class Axdcc extends EventEmitter {
         });
     }
 
+
     /**
      * parses an xdcc message.
      * @param {string} message - Text got from a bot
@@ -430,7 +429,8 @@ class Axdcc extends EventEmitter {
      * @private
      */
     static parseDccMessage(message) {
-        if (message.substr(0, 4) != "DCC ") return false;
+        if (message.substr(0, 4) != "DCC ") 
+            return {};
         const parser = /DCC (\w+) "?'?(.+?)'?"? (\d+) (\d+) ?(\d+)?/,
             params = message.match(parser),
             data = {
