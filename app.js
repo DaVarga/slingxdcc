@@ -8,8 +8,8 @@
 
 /** Module dependencies. */
 const winston = require("winston"),
-    ds = require("./lib/SlingDatastore"),
-    config = require("./lib/SlingConfig").settings,
+    ds = require("./node/lib/SlingDatastore"),
+    config = require("./node/lib/SlingConfig").settings,
     compress = require("koa-compress"),
     logger = require("koa-logger"),
     serve = require("koa-static"),
