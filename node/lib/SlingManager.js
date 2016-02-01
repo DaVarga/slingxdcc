@@ -11,7 +11,7 @@
 
 /** Module dependencies. */
 const _ = require("lodash"),
-    Axdcc = require("./axdcc"),
+    Axdcc = require("axdcc"),
     winston = require("winston"),
     sc = require("./SlingConfig"),
     SlingIrc = require("./SlingIrc"),

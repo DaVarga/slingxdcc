@@ -38,7 +38,7 @@
   "private": true,
   "dependencies": {
     "async": "^1.5.2",
-    "axdcc": "^1.0.0",
+    "axdcc": "git@github.com:DaVarga/node-axdcc.git#es6",
     "irc": "^0.4.0",
     "koa": "^1.1.2",
     "koa-bodyparser": "^2.0.1",
