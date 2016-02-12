@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "outDir": "public/app",
+    "target": "ES6",
+    "module": "system",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "removeComments": false,
+    "noImplicitAny": true,
+    "suppressImplicitAnyIndexErrors": true
+  },
+  "filesGlob": [
+    "websrc/**/*.ts",
+    "typings/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "node"
+  ],
+  "files": [
+    "typings/browser.d.ts",
+    "typings/main.d.ts",
+    "websrc/app/app.component.ts",
+    "websrc/app/boot.ts",
+    "websrc/app/dashboard.component.ts",
+    "websrc/app/hero-detail.component.ts",
+    "websrc/app/hero.service.ts",
+    "websrc/app/heroes.component.ts",
+    "websrc/app/main.ts",
+    "websrc/app/mock-heroes.ts"
+  ]
+}

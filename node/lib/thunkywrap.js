@@ -7,7 +7,7 @@
 const thunkify = require("thunkify");
 
 /**
- * Thunkifys the funktion in binds given instance
+ * Thunkifys the funktion and binds given instance
  * @param instance
  * @param fnName
  */

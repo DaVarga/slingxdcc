@@ -8,9 +8,8 @@
 
 /** Module dependencies. */
 const winston = require("winston"),
-    ds = require("./node/lib/SlingDatastore"),
-    config = require("./node/lib/SlingConfig").settings,
-    compress = require("koa-compress"),
+    ds = require("./lib/SlingDatastore"),
+    config = require("./lib/SlingConfig").settings,
     logger = require("koa-logger"),
     serve = require("koa-static"),
     route = require("koa-route"),
@@ -27,10 +26,10 @@ winston.level = config.get("basic:logLevel");
 ds.initialize(err => {
     if (err) return;
 
-    const cApi = require("./node/controllers/api"),
-        cPackets = require("./node/controllers/packets"),
-        cDownloads = require("./node/controllers/downloads"),
-        cNetworks = require("./node/controllers/networks");
+    const cApi = require("./controllers/api"),
+        cPackets = require("./controllers/packets"),
+        cDownloads = require("./controllers/downloads"),
+        cNetworks = require("./controllers/networks");
 
     app.use(function *(next) {
         try {
@@ -38,7 +37,7 @@ ds.initialize(err => {
         } catch (err) {
             this.status = err.status || 500;
             this.body = err.message;
-            this.app.emit('error', err, this);
+            this.app.emit("error", err, this);
         }
     });
 

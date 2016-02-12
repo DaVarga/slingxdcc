@@ -38,7 +38,6 @@ const handle = {};
 
 /**
  * Axdcc handler reaction for "connect"
- * @todo check filename on connect
  * @public
  */
 handle.xdccConnect = function (dbpack, pack) {
@@ -62,7 +61,7 @@ handle.xdccConnect = function (dbpack, pack) {
  * Axdcc handler reaction for "progress"
  * @public
  */
-handle.xdccProgress = function (dbpack, pack, received) {
+handle.xdccProgress = function (dbpack, pack) {
     let nw = networks.get(dbpack.network),
         xdcc = nw.xdcc[dbpack.bot];
 
@@ -88,9 +87,6 @@ handle.xdccProgress = function (dbpack, pack, received) {
  * @public
  */
 handle.xdccMessage = function (dbpack, pack, message) {
-    let nw = networks.get(dbpack.network),
-        xdcc = nw.xdcc[dbpack.bot];
-
     winston.debug("SlingManager xdcc message:", pack, message);
     //TODO: we need some notification mechanism here
 };
@@ -215,7 +211,6 @@ class SlingManager {
         winston.debug("SlingManager network added:", network);
 
         sc.nw.set(network, {
-            name: network,
             hostname: hostname,
             opts: opts
         });
@@ -386,7 +381,6 @@ class SlingManager {
                         const settingsArr = sc.dl.get(`${pack.network}:${pack.bot}`) || [];
                         settingsArr.push({
                             pack: pack.id,
-                            nick: pack.bot,
                             name: pack.name
                         });
                         sc.dl.set(`${pack.network}:${pack.bot}`, settingsArr);
@@ -468,7 +462,7 @@ class SlingManager {
             jDownloads = sc.dl.get() || {};
         for (var key in jNetwork) {
             let nw = jNetwork[key];
-            let logger = new SlingLogger(nw.name);
+            let logger = new SlingLogger(key);
             nw.opts.onPackinfo = (packData, channel, nick) => {
                 let id = packData.id,
                     fileName = packData.fileName;
@@ -477,13 +471,13 @@ class SlingManager {
                 logger.addPack(id, nick, fileName, packData);
             };
             let irc = SlingIrc.fromJSON(nw);
-            networks.set(nw.name, {irc: irc, logger: logger, xdcc: {}});
+            networks.set(key, {irc: irc, logger: logger, xdcc: {}});
 
             if (_.isObject(jDownloads[key])) {
                 for (var bot in jDownloads[key]) {
                     if (_.isArray(jDownloads[key][bot]) && jDownloads[key][bot].length) {
                         for (let dl of jDownloads[key][bot]) {
-                            this.addDownload(`${key}:${dl.nick}:${dl.pack}`, true);
+                            this.addDownload(`${key}:${bot}:${dl.pack}`, true);
                         }
                     }
                 }

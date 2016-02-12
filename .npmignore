@@ -1,0 +1,9 @@
+*
+!node
+node/.eslintrc
+!public
+!README.md
+!HISTORY.md
+!LICENSE
+!package.json
+!.npmignore

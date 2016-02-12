@@ -5,9 +5,7 @@
  */
 
 
-const _ = require("lodash"),
-    SlingManager = require("../lib/SlingManager"),
-    SlingChannel = require("../lib/SlingChannel"),
+const SlingManager = require("../lib/SlingManager"),
     wrap = require("../lib/thunkywrap").wrap,
     sling = SlingManager.instance;
 
