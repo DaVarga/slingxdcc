@@ -14,10 +14,10 @@
 * Much better documented code
 * Moved to angular2
 * Server side code written in ES6
-* Added gulp taskrunner
+* Added gulp task runner
 * Added HISTORY.md
 * Changed license
-* Added definitely typedtyp
+* Added definitely typed
 
 1.0.0-alpha.1.2015-11-13
 ==================

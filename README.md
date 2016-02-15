@@ -1,7 +1,4 @@
-#Slingxdcc
-===================
-
-[![Build Status](https://travis-ci.org/DaVarga/slingxdcc.svg?branch=es6)](https://travis-ci.org/DaVarga/slingxdcc)
+#Slingxdcc [![Build Status](https://travis-ci.org/DaVarga/slingxdcc.svg?branch=es6)](https://travis-ci.org/DaVarga/slingxdcc)
 
 Slingxdcc is an XDCC download manager completely written in ES6 / TypeScript.
 
