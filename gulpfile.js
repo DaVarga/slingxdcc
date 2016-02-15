@@ -112,9 +112,9 @@ gulp.task('serve', ['build'], (cb) => {
 });
 
 
-
-gulp.task('build', ['eslint', 'clean', 'tsconfig-glob', 'tslint', 'compile', 'copy:libs', 'copy:assets']);
+gulp.task('lint',['eslint', 'tslint']);
+gulp.task('build:nolint', ['clean', 'tsconfig-glob', 'compile', 'copy:libs', 'copy:assets']);
+gulp.task('build', ['lint', 'build:nolint']);
 gulp.task('buildAndReload', ['build'], browserSync.reload);
 gulp.task('watch', ['watch:assets', 'watch:ts']);
 gulp.task('default', ['build']);
-

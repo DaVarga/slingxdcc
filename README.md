@@ -18,7 +18,7 @@ cd in the project directory to install the dependencies via
 
     $ cd slingxdcc
     $ npm install
-    $ npm typings
+    $ npm run typings
     
 Make sure you have [gulp installed](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md).
 Initialize transpiling with following command:

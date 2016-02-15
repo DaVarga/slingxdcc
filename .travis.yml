@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - "4.1"
+before_script:
+  - npm install -g gulp
+  - npm run typings
+script:
+  - gulp lint
+  - gulp build:nolint
+branches:
+  only:
+    - es6
