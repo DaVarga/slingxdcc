@@ -20,6 +20,8 @@
     "node"
   ],
   "files": [
+    "typings/browser.d.ts",
+    "typings/main.d.ts",
     "websrc/app/boot.ts",
     "websrc/app/main.ts"
   ]
