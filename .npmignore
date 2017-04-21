@@ -15,6 +15,7 @@ settings.json
 
 .idea
 node_modules
+public/bower_components
 
 pids
 logs
