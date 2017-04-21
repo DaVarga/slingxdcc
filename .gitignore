@@ -20,6 +20,8 @@ pids
 logs
 results
 
-
+public/bower_components
 
 npm-debug.log
+/.settings/
+/.project

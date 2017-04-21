@@ -1,5 +1,6 @@
+'use strict';
 
-function DashboardCtrl($scope, $http, $timeout) {
+angular.module('myApp').controller('DashboardCtrl', ['$scope', '$http', '$timeout', function DashboardCtrl($scope, $http, $timeout) {
 
     $scope.notifications = [];
     $scope.servers = {};
@@ -11,32 +12,19 @@ function DashboardCtrl($scope, $http, $timeout) {
         absPackets: 0
     };
 
+    // Initial data for charts, will be filled by live data afterwards
+    $scope.chartServerData = [0,0];
+    $scope.chartPacketData = [0,0,0];
 
-    $scope.chartServerData = [
-        {
-            value: 0,
-            color: "#5cb85c"
-        },
-        {
-            value: 0,
-            color: "#d9534f"
-        }
-    ];
+    // Default chart colors
+    $scope.chartColors =['#5cb85c', '#d9534f', '#999'];
+    // Labels for Packet chart
+    $scope.chartPacketLabels =['Unique', 'Redundant'];
+    // Labels for Server chart
+    $scope.chartServerLabels =['Online', 'Offline'];
 
-    $scope.chartPacketData = [
-        {
-            value: 0,
-            color: "#5cb85c"
-        },
-        {
-            value: 0,
-            color: "#d9534f"
-        },
-        {
-            value: 0,
-            color: "#999"
-        }
-    ];
+    
+    
 
     $scope.redPacketPercentage = function () {
       return $scope.packetCount.redPackets / ($scope.packetCount.absPackets + $scope.packetCount.redPackets) * 100;
@@ -57,44 +45,52 @@ function DashboardCtrl($scope, $http, $timeout) {
 
     $scope.getData = function () {
 
-        $http.get('/api/server/').success(function (data, status, headers, config) {
+    	// retrieve status of servers
+        $http.get('/api/server/').then(function (response) {
             $scope.onServers = 0;
             $scope.numServers = 0;
-            for (var i in data) {
-                data[i].key = i;
-                if (data[i].connected) {
+            for (var i in response.data) {
+                response.data[i].key = i;
+                if (response.data[i].connected) {
                     $scope.onServers++;
                 }
                 $scope.numServers++;
             }
-            $scope.servers = data;
+            $scope.servers = response.data;
 
-            $scope.chartServerData[0].value = $scope.onServers;
-            $scope.chartServerData[1].value = $scope.numServers - $scope.onServers;
-
+            $scope.chartServerData = [ $scope.onServers, $scope.numServers - $scope.onServers];
 
         });
 
-        $http.get('/api/packet/').success(function (data, status, headers, config) {
-            angular.extend($scope.packetCount, data);
-            $scope.chartPacketData[0].value = $scope.packetCount.absPackets
-            $scope.chartPacketData[1].value = $scope.packetCount.redPackets;
+    	// retrieve status of packet information
+        $http.get('/api/packet/').then(function (response) {
+            angular.extend($scope.packetCount, response.data);
+            $scope.chartPacketData = [ $scope.packetCount.absPackets, $scope.packetCount.redPackets ];
 
         });
 
-        $http.get('/api/db/compacting/').success(function (data, status, headers, config) {
-            angular.extend($scope.compacting, data);
+    	// retrieve status of compacting information
+        $http.get('/api/db/compacting/').then(function (response) {
+            angular.extend($scope.compacting, response.data);
         });
 
-        $http.get('/api/downloads/notifications/').success(function (data, status, headers, config){
-            $scope.notifications = data;
+    	// retrieve notifiations
+        $http.get('/api/downloads/notifications/').then(function (response){
+            $scope.notifications = response.data;
         });
 
     };
 
 
+    function deaktivateAnimation() {
+        $scope.chartOptions.animation.animateRotate = false;
+    }
+    
     $scope.chartOptions = {
-        //Boolean - Whether we should show a stroke on each segment
+    	responsive: false,
+    	maintainAspectRatio: false,
+    		
+    		//Boolean - Whether we should show a stroke on each segment
         segmentShowStroke: true,
 
         //String - The colour of each segment stroke
@@ -104,50 +100,39 @@ function DashboardCtrl($scope, $http, $timeout) {
         segmentStrokeWidth: 2,
 
         //Boolean - Whether we should animate the chart
-        animation: true,
-
-        //Number - Amount of animation steps
-        animationSteps: 100,
-
-        //String - Animation easing effect
-        animationEasing: "easeOutQuart",
-
-        //Boolean - Whether we animate the rotation of the Pie
-        animateRotate: true,
-
-        //Boolean - Whether we animate scaling the Pie from the centre
-        animateScale: false,
-
-        //Function - Will fire on animation completion.
+        animation: {
+        	numSteps: 100,
+        	easing: "easeOutQuart",
+        	//Function - Will fire on animation completion.
+            onComplete: deaktivateAnimation
+        },
+      
         onAnimationComplete: deaktivateAnimation
     };
 
-    function deaktivateAnimation() {
-        $scope.chartOptions.animateRotate = false;
-    }
+
 
     $scope.getData();
-
     var timeout;
-    repeat();
-
+    
     function repeat() {
         timeout = $timeout(function () {
             $scope.getData();
             repeat();
-        }, 30000)
+        }, 30000);
     }
-
+    
     $scope.$on('$destroy', function () {
         $timeout.cancel(timeout);
     });
-}
+    
+    repeat();
+}]);
 
-DashboardCtrl.$inject = ['$scope', '$http', '$timeout'];
-'use strict';
+
+
 /* Notification controller */
-
-function NotificationCtrl($scope, $http, socket, $rootScope, $location){
+angular.module('myApp').controller('NotificationCtrl', ['$scope', '$http', 'socket', '$rootScope', '$location',  function ($scope, $http, socket, $rootScope, $location){
 
     socket.on('send:dlstart',function(data){
         data.type = 'dlstart';
@@ -171,44 +156,48 @@ function NotificationCtrl($scope, $http, socket, $rootScope, $location){
     });
 
     $scope.clearNotifications = function(){
-        $http.delete('/api/downloads/notifications/').success(function (data, status, headers, config){
+        $http.delete('/api/downloads/notifications/').then(function (response){
             $scope.notifications=[];
             $rootScope.$emit('notificationsClear');
-        })
+        });
     };
 
     $scope.getError = function(notification){
 
-        if(notification.type == "dlerror"){
+    	function errordecoder(notification){
+            var error = notification.error;
+            console.log(error);
+            if(error === "filename mismatch"){
+                return "Filename mismatch, got "+notification.gotFile;
+            }
+            if(typeof error === "string"){
+                return error;
+            }
+            if(error.code === "ETIMEDOUT"){
+                return "Connection timeout";
+            }
+            if(error.code === "ECONNREFUSED"){
+                return "Connection refused";
+            }
+            if(error.code === "ECONNRESET"){
+                return "Connection reset";
+    		}
+            return error.code;
+        }
+    	
+        if(notification.type === "dlerror"){
             return errordecoder(notification);
         }else{
             return "";
         }
 
-        function errordecoder(notification){
-            var error = notification.error;
-            if(error == "filename mismatch"){
-                return "Filename mismatch, got "+notification.gotFile;
-            }
-            if(typeof error == "string"){
-                return error
-            }
-            if(error.code == "ETIMEDOUT")
-                return "Connection timeout";
-            if(error.code == "ECONNREFUSED")
-                return "Connection refused";
-            if(error.code == "ECONNRESET")
-                return "Connection reset";
-            return error.code;
-        }
+        
     };
 
     $scope.searchPacket = function(name){
         $rootScope.searchString = angular.copy(name);
         $scope.$emit("setSearch");
         $location.path("packets");
-    }
+    };
 
-}
-
-NotificationCtrl.$inject = ['$scope', '$http', 'socket', '$rootScope', '$location'];
+}]);

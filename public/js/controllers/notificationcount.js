@@ -9,8 +9,8 @@
 'use strict';
 
 /* Notification controller */
-
-function NotificationCountCtrl($scope, $http, socket, $rootScope){
+angular.module('myApp')
+  .controller('NotificationCountCtrl', ['$scope', '$http', 'socket', '$rootScope', function ($scope, $http, socket, $rootScope){
     $scope.notificationCount = {
         dlstart: 0,
         dlsuccess: 0,
@@ -44,24 +44,22 @@ function NotificationCountCtrl($scope, $http, socket, $rootScope){
     });
 
     $scope.getData = function (){
-        $http.get('/api/downloads/notifications/count/').success(function (data, status, headers, config){
-            $scope.notificationCount = data;
-        })
+        $http.get('/api/downloads/notifications/count/').then(function (response){
+            $scope.notificationCount = response.data;
+        });
     };
 
     $scope.clearNotifications = function(){
-        $http.delete('/api/downloads/notifications/count/').success(function (data, status, headers, config){
+        $http.delete('/api/downloads/notifications/count/').then(function (response){
             $scope.notificationCount = {
                 dlstart: 0,
                 dlsuccess: 0,
                 dlerror: 0
             };
-        })
+        });
     };
 
     $scope.getData();
 
 
-}
-
-NotificationCountCtrl.$inject = ['$scope', '$http', 'socket', '$rootScope'];
+}]);

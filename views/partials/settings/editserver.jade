@@ -1,5 +1,5 @@
-tab(ng-repeat="serv in servers")
-    tab-heading
+uib-tab(ng-repeat="serv in servers")
+    uib-tab-heading
         span(ng-class="servers[serv.key].connected ? 'label-success' : 'label-danger'").label {{serv.key}}
     .row(ng-controller="ServerSettingsCtrl", ng-init="init(serv.key)")
         .col-md-3

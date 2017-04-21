@@ -10,8 +10,8 @@
 
 /* Settingscontroller parent controller for settings */
 
-
-function SettingsCtrl($scope, $http, socket){
+angular.module('myApp')
+  .controller('SettingsCtrl', ['$scope', '$http', 'socket', function ($scope, $http, socket){
     $scope.servers = {};
     $scope.packetCount = {};
     $scope.compacting = {};
@@ -45,28 +45,28 @@ function SettingsCtrl($scope, $http, socket){
     };
 
     function getServerData(){
-        $http.get('/api/server/').success(function (data, status, headers, config){
-            for (var i in data){
-                data[i].key = i;
+        $http.get('/api/server/').then(function (response){
+            for (var i in response.data){
+                response.data[i].key = i;
             }
-            $scope.servers = data;
+            $scope.servers = response.data;
         });
     }
 
     function getDbData(){
-        $http.get('/api/db/compacting/').success(function (data, status, headers, config){
-            angular.extend($scope.compacting, data);
-            if(data.autoCompacting){
+        $http.get('/api/db/compacting/').then(function (response){
+            angular.extend($scope.compacting, response.data);
+            if(response.data.autoCompacting){
                 $('.dbsettings .compactingsettings input').prop('disabled', true);
             }
         });
-        $http.get('/api/db/compactingfilter/').success(function (data, status, headers, config){
-            $scope.filter.compactingfilter = data.filter;
-            $scope.filter.tmpfilter = data.filter ? data.filter : 24;
-            $scope.filter.autoDeleting = (data.filter ? true : false);
+        $http.get('/api/db/compactingfilter/').then(function (response){
+            $scope.filter.compactingfilter = response.data.filter;
+            $scope.filter.tmpfilter = response.data.filter ? response.data.filter : 24;
+            $scope.filter.autoDeleting = (response.data.filter ? true : false);
         });
-        $http.get('/api/packet/').success(function (data, status, headers, config) {
-            angular.extend($scope.packetCount, data);
+        $http.get('/api/packet/').then(function (response) {
+            angular.extend($scope.packetCount,response.data);
             $scope.redPercentage = $scope.packetCount.redPackets / ($scope.packetCount.absPackets + $scope.packetCount.redPackets) * 100;
         });
     }
@@ -77,6 +77,6 @@ function SettingsCtrl($scope, $http, socket){
         toggle: false
     })
 
-}
+}]);
 
-SettingsCtrl.$inject = ['$scope', '$http', 'socket'];
+//SettingsCtrl.$inject = ['$scope', '$http', 'socket'];

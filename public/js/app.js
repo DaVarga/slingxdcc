@@ -9,7 +9,8 @@
 'use strict';
 
 // Declare app level module which depends on filters, and services
-angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'ui.bootstrap', 'angles', 'ngRoute']).config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider){
+angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'ui.bootstrap', 'chart.js', 'ngRoute']).
+	config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider){
         $routeProvider
             .when('/', {
                 templateUrl: 'partials/dashboard/'
