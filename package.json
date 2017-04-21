@@ -29,12 +29,13 @@
   "scripts": {
     "preinstall": "npm install bower",
     "postinstall": "bower install"
-    },
+  },
   "readmeFilename": "README.md",
   "license": "BEER-WARE",
   "dependencies": {
     "axdcc": "0.2.23",
     "body-parser": "~1.17.1",
+    "common-errors": "^1.0.0",
     "dirty-query": "~0.1.1",
     "errorhandler": "~1.5.0",
     "express": "~4.15.2",

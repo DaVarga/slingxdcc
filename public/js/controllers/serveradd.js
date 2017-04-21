@@ -35,7 +35,7 @@ angular.module('myApp')
             observchannels: $scope.nServConf.observchannels.length > 0 ? $scope.nServConf.observchannels.join(' ') : ""
         };
 
-        $http.post('/api/server/', server).success(function (data){
+        $http.post('/api/server/', server).then(function (data){
                 $scope.servers[$scope.nServConf.key] = {};
                 $scope.nServConf.connected = false;
                 angular.copy($scope.nServConf, $scope.servers[$scope.nServConf.key]);
