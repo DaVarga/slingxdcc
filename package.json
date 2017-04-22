@@ -1,36 +1,51 @@
 {
-    "author": "Daniel Varga",
-    "name": "slingxdcc",
-    "description": "XDCC download manager with web frontend written in node.js",
-    "keywords": ["XDCC", "downloadmanager", "download", "manager", "dcc", "irc", "angular", "bootstrap"],
-    "version": "0.1.1",
-    "repository": {
-        "type": "git",
-        "url": "http://github.com/DaVarga/slingxdcc"
-    },
-    "bugs": {
-        "url": "http://github.com/DaVarga/slingxdcc/issues"
-    },
-    "engines": {
-        "node": ">=0.1.13"
-    },
-    "bin": {
-        "slingxdcc": "server.js"
-    },
-    "readmeFilename": "README.md",
-    "license" : "BEER-WARE",
-    "dependencies": {
-        "express": "~4.8.5",
-        "body-parser": "~1.6.5",
-        "method-override": "~2.1.3",
-        "errorhandler": "~1.1.1",
-        "morgan": "~1.2.3",
-        "jade": "~1.5.0",
-        "irc": "~0.3.7",
-        "dirty-query": "~0.1.1",
-        "socket.io": "~1.0.6",
-        "nconf": "0.6.9",
-        "axdcc": "0.2.23",
-        "node-fs": "0.1.7"
-    }
+  "author": "Daniel Varga",
+  "name": "slingxdcc",
+  "description": "XDCC download manager with web frontend written in node.js",
+  "keywords": [
+    "XDCC",
+    "downloadmanager",
+    "download",
+    "manager",
+    "dcc",
+    "irc",
+    "angular",
+    "bootstrap"
+  ],
+  "version": "0.1.1",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/DaVarga/slingxdcc"
+  },
+  "bugs": {
+    "url": "http://github.com/DaVarga/slingxdcc/issues"
+  },
+  "engines": {
+    "node": ">=0.1.13"
+  },
+  "bin": {
+    "slingxdcc": "server.js"
+  },
+  "scripts": {
+    "preinstall": "npm install bower",
+    "postinstall": "bower install"
+  },
+  "readmeFilename": "README.md",
+  "license": "BEER-WARE",
+  "dependencies": {
+    "axdcc": "0.2.23",
+    "body-parser": "~1.17.1",
+    "common-errors": "^1.0.0",
+    "dirty-query": "~0.1.1",
+    "errorhandler": "~1.5.0",
+    "express": "~4.15.2",
+    "irc": "~0.5.2",
+    "jade": "~1.11.0",
+    "log4js": "^1.1.1",
+    "method-override": "~2.3.8",
+    "morgan": "~1.8.1",
+    "nconf": "0.8.4",
+    "node-fs": "0.1.7",
+    "socket.io": "~1.7.3"
+  }
 }

@@ -4,16 +4,15 @@ div(ng-controller="SettingsCtrl")
             button(type="button",ng-click="getData()").btn.btn-default.pull-right
                 span.glyphicon.glyphicon-refresh
             h1 Settings
-            accordion
-                accordion-group(close-others="true", is-open="true")
-                    accordion-heading Irc servers
-                    tabset
+            uib-accordion
+                div(uib-accordion-group='', close-others="true", is-open="true")
+                    div(uib-accordion-heading='') Irc servers
+                    uib-tabset
                         include editserver
-
                         include addserver
-                accordion-group
-                    accordion-heading Database
+                div(uib-accordion-group='')
+                    div(uib-accordion-heading='') Database
                     include database
-                accordion-group
-                    accordion-heading About
+                div(uib-accordion-group='')
+                    uib-accordion-heading About
                     include about

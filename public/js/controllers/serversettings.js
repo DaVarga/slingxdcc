@@ -9,8 +9,8 @@
 'use strict';
 
 /* ServerSettingsCtrl for editing a server in settings */
-
-function ServerSettingsCtrl($scope, $http, socket){
+angular.module('myApp')
+  .controller('ServerSettingsCtrl', ['$scope', '$http', 'socket', function ($scope, $http, socket){
     $scope.joinChanStr = "";
     $scope.init = function (key){
         $scope.server = $scope.servers[key];
@@ -21,7 +21,10 @@ function ServerSettingsCtrl($scope, $http, socket){
     });
 
     $scope.editServer = function (){
-        if ($scope.server.host.length == 0 || parseInt($scope.server.port) > 65535 || parseInt($scope.server.port) < 0 || $scope.server.nick.length == 0) return;
+        if ($scope.server.host.length === 0 || parseInt($scope.server.port) > 65535 || parseInt($scope.server.port) < 0 || $scope.server.nick.length === 0) {
+        	return;
+        }
+        
         var server = {
             srvkey        : $scope.server.key,
             host          : $scope.server.host,
@@ -30,23 +33,23 @@ function ServerSettingsCtrl($scope, $http, socket){
             channels      : $scope.server.channels.length > 0 ? $scope.server.channels.join(' ') : "",
             observchannels: $scope.server.observchannels.length > 0 ? $scope.server.observchannels.join(' ') : ""
         };
-        $http.post('/api/server/', server).success(function (data){
+        $http.post('/api/server/', server).then(function (response){
             $scope.server.connected = false;
             angular.copy($scope.server,$scope.servers[server.key]);
             $scope.joinChanStr = "";
             $scope.getData();
-        })
+        });
     };
 
     $scope.removeServer = function (){
-        $http.delete('/api/server/' + $scope.server.key).success(function (data){
+        $http.delete('/api/server/' + $scope.server.key).then(function (response){
             delete $scope.servers[$scope.server.key];
         });
     };
 
     $scope.joinChannels = function (){
         if ($scope.joinChanStr.length > 0){
-            $http.put('/api/channel/', {srvkey: $scope.server.key, channels: $scope.joinChanStr, type: "join"}).success(function (data){
+            $http.put('/api/channel/', {srvkey: $scope.server.key, channels: $scope.joinChanStr, type: "join"}).then(function (response){
                 $scope.server.channels = $scope.server.channels.concat($scope.joinChanStr.split(" "));
                 $scope.joinChanStr = "";
             });
@@ -54,7 +57,7 @@ function ServerSettingsCtrl($scope, $http, socket){
     };
 
     $scope.partChannel = function (channel){
-        $http.put('/api/channel/', {srvkey: $scope.server.key, channels: channel, type: "part"}).success(function (data){
+        $http.put('/api/channel/', {srvkey: $scope.server.key, channels: channel, type: "part"}).then(function (response){
             $scope.server.channels.splice($scope.server.channels.indexOf(channel), 1);
             if ($scope.isObserved(channel)){
                 $scope.server.observchannels.splice($scope.server.observchannels.indexOf(channel), 1);
@@ -64,24 +67,24 @@ function ServerSettingsCtrl($scope, $http, socket){
 
     $scope.toggleObserv = function (channel){
         if ($scope.isObserved(channel)){
-            $http.put('/api/channel/', {srvkey: $scope.server.key, channels: channel, type: "unobserv"}).success(function (data){
+            $http.put('/api/channel/', {srvkey: $scope.server.key, channels: channel, type: "unobserv"}).then(function (response){
                 $scope.server.observchannels.splice($scope.server.observchannels.indexOf(channel), 1);
             });
         }else{
-            $http.put('/api/channel/', {srvkey: $scope.server.key, channels: channel, type: "observ"}).success(function (data){
+            $http.put('/api/channel/', {srvkey: $scope.server.key, channels: channel, type: "observ"}).then(function (response){
                 $scope.server.observchannels.push(channel);
             });
         }
     };
 
     $scope.hasErrors = function (){
-        return ($scope.server.error.length > 0)
+        return ($scope.server.error.length > 0);
     };
 
     $scope.isObserved = function (channel){
-        return ($scope.server.observchannels.indexOf(channel) != -1);
+        return ($scope.server.observchannels.indexOf(channel) !== -1);
     };
 
-}
+}]);
 
-ServerSettingsCtrl.$inject = ['$scope', '$http', 'socket'];
+//ServerSettingsCtrl.$inject = ['$scope', '$http', 'socket'];

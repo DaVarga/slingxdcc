@@ -9,8 +9,8 @@
 'use strict';
 
 /* Serveraddcontroller for creating a new server in settings */
-
-function ServerAddCtrl($scope, $http){
+angular.module('myApp')
+  .controller('ServerAddCtrl', ['$scope', '$http', function ($scope, $http){
     $scope.joinChanStr = "";
     $scope.nServConf = {
         key           : "",
@@ -22,7 +22,9 @@ function ServerAddCtrl($scope, $http){
     };
 
     $scope.addServer = function (){
-        if ($scope.nServConf.key.length == 0 || $scope.nServConf.host.length == 0 || parseInt($scope.nServConf.port) > 65535 || parseInt($scope.nServConf.port) < 0 || $scope.nServConf.nick.length == 0) return;
+        if ($scope.nServConf.key.length === 0 || $scope.nServConf.host.length === 0 || parseInt($scope.nServConf.port) > 65535 || parseInt($scope.nServConf.port) < 0 || $scope.nServConf.nick.length === 0){
+        	return;
+        }
 
         var server = {
             srvkey        : $scope.nServConf.key,
@@ -31,10 +33,10 @@ function ServerAddCtrl($scope, $http){
             nick          : $scope.nServConf.nick,
             channels      : $scope.nServConf.channels.length > 0 ? $scope.nServConf.channels.join(' ') : "",
             observchannels: $scope.nServConf.observchannels.length > 0 ? $scope.nServConf.observchannels.join(' ') : ""
-        }
+        };
 
-        $http.post('/api/server/', server).success(function (data){
-                $scope.servers[$scope.nServConf.key] = {}
+        $http.post('/api/server/', server).then(function (data){
+                $scope.servers[$scope.nServConf.key] = {};
                 $scope.nServConf.connected = false;
                 angular.copy($scope.nServConf, $scope.servers[$scope.nServConf.key]);
                 $scope.joinChanStr = "";
@@ -48,7 +50,7 @@ function ServerAddCtrl($scope, $http){
                 };
 
                 $scope.getData();
-            })
+            });
     };
 
     $scope.joinChannels = function (){
@@ -56,11 +58,11 @@ function ServerAddCtrl($scope, $http){
             $scope.nServConf.channels = $scope.nServConf.channels.concat($scope.joinChanStr.split(" "));
             $scope.joinChanStr = "";
         }
-    }
+    };
 
     $scope.partChannel = function (channel){
         $scope.nServConf.channels.splice($scope.nServConf.channels.indexOf(channel), 1);
-    }
+    };
 
     $scope.toggleObserv = function (channel){
         if ($scope.isObserved(channel)){
@@ -68,21 +70,20 @@ function ServerAddCtrl($scope, $http){
         }else{
             $scope.nServConf.observchannels.push(channel);
         }
-    }
+    };
 
     $scope.isObserved = function (channel){
-        if ($scope.nServConf.observchannels.indexOf(channel) != -1){
+        if ($scope.nServConf.observchannels.indexOf(channel) !== -1){
             return true;
         }else{
             return false;
         }
-    }
+    };
 
     $scope.isKeyUniqe = function (){
-        if(typeof $scope.nServConf.key !== "undefined" && $scope.nServConf.key.length > 0)
+        if(typeof $scope.nServConf.key !== "undefined" && $scope.nServConf.key.length > 0){
             return (typeof $scope.servers[$scope.nServConf.key] === "undefined");
+        }
         return true;
-    }
-}
-
-ServerAddCtrl.$inject = ['$scope', '$http'];
+    };
+}]);

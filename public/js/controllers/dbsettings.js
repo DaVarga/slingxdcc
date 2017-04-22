@@ -11,7 +11,8 @@
 /* Database settings controller */
 
 
-function DbSettingsCtrl($scope, $http, socket){
+angular.module('myApp')
+  .controller('DbSettingsCtrl', ['$scope', '$http', 'socket', function ($scope, $http, socket){
     socket.on('send:packetCount', function(data){
         angular.extend($scope.packetCount, data);
         $scope.redPercentage = $scope.packetCount.redPackets / ($scope.packetCount.absPackets + $scope.packetCount.redPackets) * 100;
@@ -30,7 +31,7 @@ function DbSettingsCtrl($scope, $http, socket){
 
     $scope.setFilter = function(){
         var hours = isNaN(parseInt($scope.filter.tmpfilter)) ? 24 : parseInt($scope.filter.tmpfilter);
-        $http.put('/api/db/compactingfilter/',{filter: hours}).success(function (data, status, headers, config){
+        $http.put('/api/db/compactingfilter/',{filter: hours}).then(function (response){
             $scope.filter.compactingfilter = hours;
             $scope.filter.autoDeleting = true;
         });
@@ -46,8 +47,8 @@ function DbSettingsCtrl($scope, $http, socket){
 
     $scope.toggleCompacting = function(){
         if($scope.compacting.autoCompacting){
-            $http.delete('/api/db/compacting/').success(function (data, status, headers, config){
-                angular.extend($scope.compacting, data);
+            $http.delete('/api/db/compacting/').then(function (response){
+                angular.extend($scope.compacting, response.data);
                 $('.dbsettings .compactingsettings input').prop('disabled', false);
             });
         }else{
@@ -63,14 +64,12 @@ function DbSettingsCtrl($scope, $http, socket){
             if(percentage > 500)
                 percentage = 500;
 
-            $http.post('/api/db/compacting/',{minutes: interval, percentage: percentage}).success(function (data, status, headers, config){
-                angular.extend($scope.compacting, data);
+            $http.post('/api/db/compacting/',{minutes: interval, percentage: percentage}).then(function (response){
+                angular.extend($scope.compacting, response.data);
                 $('.dbsettings .compactingsettings input').prop('disabled', true);
             });
         }
     };
 
     $('#toggle').button()
-}
-
-DbSettingsCtrl.$inject = ['$scope', '$http', 'socket'];
+}]);

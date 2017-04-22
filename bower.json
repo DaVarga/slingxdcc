@@ -1,0 +1,30 @@
+{
+  "name": "slingxdcc",
+  "version": "0.1.1",
+  "authors": [
+    "Daniel Varga <autor01@email.de>"
+  ],
+  "description": "XDCC download manager with web frontend written in node.js",
+  "keywords": [
+    "XDCC",
+    "downloadmanager",
+    "download",
+    "manager",
+    "dcc",
+    "irc",
+    "angular",
+    "bootstrap"
+  ],
+  "license": "Lizenzangabe, z. B. MIT",
+  "homepage": "Homepage zum Package, falls vorhanden",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "angular": "^1.6.4",
+    "angular-bootstrap": "^2.5.0",
+    "chart.js": "^2.5.0",
+    "angular-route": "^1.6.4",
+    "angular-animate": "^1.6.4",
+    "angular-chart.js": "^1.1.1",
+    "socket.io": "^1.7.3"
+  }
+}

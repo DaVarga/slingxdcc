@@ -26,14 +26,17 @@ nodefs.mkdir(appHome+"config",0775,true,function(){
         morgan = require('morgan'),
         bodyParser = require('body-parser'),
         methodOverride = require('method-override'),
-       errorhandler = require('errorhandler'),
 
         https = require('https'),
         http = require('http'),
         path = require('path'),
         fs = require('fs'),
         io = require('socket.io'),
-        nconf = require('nconf');
+        nconf = require('nconf'),
+    	log4js = require("log4js"),
+    	appLogger = log4js.getLogger('app')
+    	httpLogger = log4js.getLogger('http'),
+    	errors = require('common-errors');
 
     nconf.add('settings', {type: 'file', file: appHome+'/config/settings.json'});
 
@@ -73,22 +76,14 @@ nodefs.mkdir(appHome+"config",0775,true,function(){
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade');
 
-        app.use(morgan('dev'));
+//        app.use(morgan('dev'));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({extended:false}));
+        app.use(errors.middleware.crashProtector());
         app.use(methodOverride());
         app.use(express.static(path.join(__dirname, 'public')));
-
-        // development only
-        if (app.get('env') === 'development'){
-            app.use(errorhandler());
-        }
-
-        // production only
-        if (app.get('env') === 'production'){
-            // TODO
-        }
-
+        app.use(log4js.connectLogger(httpLogger, { level: 'auto', format: ':remote-addr - :method :url HTTP/:http-version :status - :response-time ms',nolog: '\\.gif|\\.jpg$' }));
+        
         /**
          * Routes
          */
@@ -141,7 +136,7 @@ nodefs.mkdir(appHome+"config",0775,true,function(){
 
         app.get('*', routes.index);
 
-
+        app.use(errors.middleware.errorHandler);
 
 
         /**
@@ -154,7 +149,7 @@ nodefs.mkdir(appHome+"config",0775,true,function(){
                 var server;
                 if ((errorcrt || errorkey) && nconf.get('webserver:ssl')){
                     server = http.createServer(app);
-                    console.log('No key or cert found, \n!!!Fallback!!! Http');
+                    appLogger.info('No key or cert found, !!!Fallback!!! to Http');
                 }else if(nconf.get('webserver:ssl')){
                     server = https.createServer({key: key, cert: crt}, app);
                 }else{
@@ -170,7 +165,7 @@ nodefs.mkdir(appHome+"config",0775,true,function(){
                  */
 
                 server.listen(app.get('port'), function (){
-                    console.log('Server listening on port ' + app.get('port'));
+                	appLogger.info('Server listening on port ' + app.get('port'));
                 });
             });
         });

@@ -1,2 +1,3 @@
 td(colspan="8")
-    pagination(total-items="numPackets", items-per-page="pageItemLimit", page="currentPage", max-size="9", boundary-links="true", on-select-page="setPage(page)", previous-text="‹", next-text="›", first-text="«", last-text="»")
+    ul.pagination-sm(uib-pagination="", ng-model="currentPage", total-items="numPackets", force-ellipses="true", ng-change="pageChanged()", items-per-page="pageItemLimit", num-pages="smallnumPages", page="currentPage", boundary-link-numbers="true", max-size="9", boundary-links="true", on-select-page="setPage(page)", previous-text="‹", next-text="›", first-text="«", last-text="»")
+

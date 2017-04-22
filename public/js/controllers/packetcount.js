@@ -9,8 +9,8 @@
 'use strict';
 
 /* Searchbarcontroller handels the searches */
-
-function PacketcountCtrl($scope, socket){
+angular.module('myApp')
+  .controller('PacketcountCtrl',['$scope', 'socket', function ($scope, socket){
 
     socket.on('send:packetCount', function(data){
         $scope.packetCount = data;
@@ -20,6 +20,4 @@ function PacketcountCtrl($scope, socket){
         socket.off('send:packetCount');
     });
 
-}
-
-PacketcountCtrl.$inject = ['$scope', 'socket'];
+}]);

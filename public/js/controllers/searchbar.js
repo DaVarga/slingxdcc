@@ -9,19 +9,19 @@
 'use strict';
 
 /* Searchbarcontroller handels the searches */
-
-function SearchBarCtrl($scope, $rootScope, $http, $location, $timeout){
+angular.module('myApp')
+  .controller('SearchBarCtrl', ['$scope', '$rootScope', '$http', '$location', '$timeout', function($scope, $rootScope, $http, $location, $timeout){
     $scope.history = [];
     $scope.packetCount = 0;
     var rescuedSearch = "";
 
 
-    $http({method: 'GET', url: '/api/packet/'}).success(function (data, status, headers, config){
-        $scope.packetCount = data;
+    $http({method: 'GET', url: '/api/packet/'}).then(function (response){
+        $scope.packetCount = response.data;
     });
 
     $scope.setSearch = function (){
-        if ($scope.history.indexOf($scope.searchString.toLowerCase()) != -1){
+        if ($scope.history.indexOf($scope.searchString.toLowerCase()) !== -1){
             $scope.history.splice($scope.history.indexOf($scope.searchString.toLowerCase()), 1);
         }
 
@@ -34,14 +34,14 @@ function SearchBarCtrl($scope, $rootScope, $http, $location, $timeout){
     $scope.rescueSearch = function(){
         rescuedSearch = $scope.searchString;
         $scope.searchString = "";
-    }
+    };
 
     $scope.restoreSearch = function(){
         $scope.searchString = rescuedSearch;
         $timeout(function(){
             $(".topsearch").select();
         },0);
-    }
+    };
 
     $scope.selectHistory = function (item){
         $scope.searchString = item;
@@ -49,6 +49,4 @@ function SearchBarCtrl($scope, $rootScope, $http, $location, $timeout){
         $rootScope.$emit("setSearch");
     };
 
-}
-
-SearchBarCtrl.$inject = ['$scope', '$rootScope', '$http', '$location', '$timeout'];
+}]);
